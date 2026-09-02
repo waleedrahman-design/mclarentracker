@@ -142,6 +142,7 @@ function setDriver(driverKey) {
     if (rowNorris) rowNorris.classList.remove('active');
   }
   playPitRadioTone();
+  if (typeof updateHeadToHeadComparator === "function") updateHeadToHeadComparator();
 }
 
 if (btnLando) btnLando.addEventListener('click', () => setDriver('norris'));
@@ -571,3 +572,178 @@ if (ahTabs.length > 0) {
     });
   });
 }
+
+// 11. Head-to-Head Gap & Telemetry Comparator Engine
+const rivalData = {
+  verstappen: {
+    name: "MAX VERSTAPPEN #1",
+    team: "RED BULL RACING",
+    lap: "1:21.720",
+    lapSec: 81.720,
+    s1: "27.198",
+    s2: "27.042",
+    s3: "27.480",
+    speed: 343.2,
+    apex: 139.6,
+    tire: "HARD (19L)",
+    color: "#3B82F6"
+  },
+  leclerc: {
+    name: "CHARLES LECLERC #16",
+    team: "SCUDERIA FERRARI",
+    lap: "1:21.854",
+    lapSec: 81.854,
+    s1: "27.240",
+    s2: "27.088",
+    s3: "27.526",
+    speed: 345.6,
+    apex: 138.9,
+    tire: "HARD (18L)",
+    color: "#EF4444"
+  },
+  hamilton: {
+    name: "LEWIS HAMILTON #44",
+    team: "SCUDERIA FERRARI",
+    lap: "1:22.012",
+    lapSec: 82.012,
+    s1: "27.312",
+    s2: "27.140",
+    s3: "27.560",
+    speed: 341.0,
+    apex: 140.2,
+    tire: "MEDIUM (12L)",
+    color: "#EF4444"
+  },
+  russell: {
+    name: "GEORGE RUSSELL #63",
+    team: "MERCEDES-AMG",
+    lap: "1:22.180",
+    lapSec: 82.180,
+    s1: "27.345",
+    s2: "27.195",
+    s3: "27.640",
+    speed: 340.4,
+    apex: 139.8,
+    tire: "MEDIUM (15L)",
+    color: "#06B6D4"
+  },
+  sainz: {
+    name: "CARLOS SAINZ #55",
+    team: "WILLIAMS RACING",
+    lap: "1:22.460",
+    lapSec: 82.460,
+    s1: "27.410",
+    s2: "27.320",
+    s3: "27.730",
+    speed: 339.8,
+    apex: 138.2,
+    tire: "HARD (21L)",
+    color: "#60A5FA"
+  },
+  alonso: {
+    name: "FERNANDO ALONSO #14",
+    team: "ASTON MARTIN",
+    lap: "1:22.610",
+    lapSec: 82.610,
+    s1: "27.480",
+    s2: "27.380",
+    s3: "27.750",
+    speed: 338.5,
+    apex: 137.9,
+    tire: "HARD (22L)",
+    color: "#059669"
+  }
+};
+
+let activeRivalKey = 'verstappen';
+
+function updateHeadToHeadComparator() {
+  const mcl = telemetryState[activeDriver];
+  const riv = rivalData[activeRivalKey];
+  if (!mcl || !riv) return;
+
+  const mclLapSec = activeDriver === 'norris' ? 81.432 : 81.589;
+  const delta = (mclLapSec - riv.lapSec).toFixed(3);
+
+  const compDriver1Name = document.getElementById('compDriver1Name');
+  const compLap1 = document.getElementById('compLap1');
+  const compTire1 = document.getElementById('compTire1');
+  const compS1_1 = document.getElementById('compS1_1');
+  const compS2_1 = document.getElementById('compS2_1');
+  const compS3_1 = document.getElementById('compS3_1');
+
+  const compDriver2Name = document.getElementById('compDriver2Name');
+  const compTeam2 = document.getElementById('compTeam2');
+  const compLap2 = document.getElementById('compLap2');
+  const compTire2 = document.getElementById('compTire2');
+  const compS2_1_val = document.getElementById('compS2_1_val');
+  const compS2_2_val = document.getElementById('compS2_2_val');
+  const compS2_3_val = document.getElementById('compS2_3_val');
+
+  const compNetDelta = document.getElementById('compNetDelta');
+  const compSpeed1 = document.getElementById('compSpeed1');
+  const compSpeed2 = document.getElementById('compSpeed2');
+  const compSpeedDiff = document.getElementById('compSpeedDiff');
+  const compApex1 = document.getElementById('compApex1');
+  const compApex2 = document.getElementById('compApex2');
+  const compApexDiff = document.getElementById('compApexDiff');
+  const compBarFill = document.getElementById('compBarFill');
+
+  if (compDriver1Name) compDriver1Name.textContent = `${mcl.name.toUpperCase()} #${mcl.num}`;
+  if (compLap1) compLap1.textContent = activeDriver === 'norris' ? '1:21.432' : '1:21.589';
+  if (compTire1) compTire1.textContent = 'MEDIUM (14L)';
+  if (compS1_1) compS1_1.textContent = mcl.s1;
+  if (compS2_1) compS2_1.textContent = mcl.s2;
+  if (compS3_1) compS3_1.textContent = mcl.s3;
+
+  if (compDriver2Name) compDriver2Name.textContent = riv.name;
+  if (compTeam2) compTeam2.textContent = riv.team;
+  if (compLap2) compLap2.textContent = riv.lap;
+  if (compTire2) compTire2.textContent = riv.tire;
+  if (compS2_1_val) compS2_1_val.textContent = riv.s1;
+  if (compS2_2_val) compS2_2_val.textContent = riv.s2;
+  if (compS2_3_val) compS2_3_val.textContent = riv.s3;
+
+  if (compNetDelta) {
+    compNetDelta.textContent = `${delta}s`;
+    compNetDelta.className = delta < 0 ? 'text-green' : 'text-red';
+  }
+
+  const mclSpeed = activeDriver === 'norris' ? 344.8 : 342.1;
+  const mclApex = activeDriver === 'norris' ? 142.4 : 141.8;
+  const speedDiff = (mclSpeed - riv.speed).toFixed(1);
+  const apexDiff = (mclApex - riv.apex).toFixed(1);
+
+  if (compSpeed1) compSpeed1.textContent = mclSpeed.toFixed(1);
+  if (compSpeed2) compSpeed2.textContent = riv.speed.toFixed(1);
+  if (compSpeedDiff) {
+    compSpeedDiff.textContent = `${speedDiff > 0 ? '+' : ''}${speedDiff} KM/H`;
+    compSpeedDiff.className = speedDiff >= 0 ? 'cdm-diff text-green' : 'cdm-diff text-red';
+  }
+
+  if (compApex1) compApex1.textContent = mclApex.toFixed(1);
+  if (compApex2) compApex2.textContent = riv.apex.toFixed(1);
+  if (compApexDiff) {
+    compApexDiff.textContent = `${apexDiff > 0 ? '+' : ''}${apexDiff} KM/H`;
+    compApexDiff.className = apexDiff >= 0 ? 'cdm-diff text-green' : 'cdm-diff text-red';
+  }
+
+  if (compBarFill) {
+    const ratio = Math.max(30, Math.min(75, 50 - (parseFloat(delta) * 35)));
+    compBarFill.style.width = `${ratio}%`;
+  }
+}
+
+const rivalRows = document.querySelectorAll('.rival-row');
+rivalRows.forEach(row => {
+  row.addEventListener('click', () => {
+    rivalRows.forEach(r => r.classList.remove('active-rival'));
+    row.classList.add('active-rival');
+    playPitRadioTone();
+
+    activeRivalKey = row.getAttribute('data-rival');
+    updateHeadToHeadComparator();
+  });
+});
+
+updateHeadToHeadComparator();

@@ -1159,6 +1159,170 @@ body {
   }
 }
 
+/* Head-to-Head Gap & Telemetry Comparator */
+.comparator-panel {
+  background-color: var(--panel-bg);
+  border-bottom: 1px solid var(--border-line);
+}
+
+.comp-header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.comp-hint {
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+}
+
+.comp-status-badge {
+  font-size: 0.65rem;
+  background-color: var(--bg-core);
+  border: 1px solid var(--border-subtle);
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+}
+
+.comparator-deck {
+  display: grid;
+  grid-template-columns: 1.1fr 1.8fr 1.1fr;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+}
+
+.comp-driver-card {
+  background-color: var(--bg-core);
+  border: 1px solid var(--border-subtle);
+  padding: 0.65rem 0.75rem;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mclaren-side {
+  border-left: 2px solid var(--papaya);
+}
+
+.rival-side {
+  border-right: 2px solid #3B82F6;
+  text-align: right;
+}
+
+.rival-side .cdc-header, .rival-side .cdc-sectors {
+  justify-content: flex-end;
+}
+
+.cdc-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6rem;
+  margin-bottom: 0.2rem;
+}
+
+.cdc-team {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.cdc-tire {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+.cdc-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-white);
+  margin-bottom: 0.15rem;
+}
+
+.cdc-lap {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 0.35rem;
+}
+
+.cdc-sectors {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+}
+
+.comp-delta-matrix {
+  background-color: var(--bg-core);
+  border: 1px solid var(--border-subtle);
+  padding: 0.65rem 0.75rem;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.cdm-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.65rem;
+  padding: 0.15rem 0;
+  border-bottom: 1px solid rgba(22, 26, 36, 0.6);
+}
+
+.cdm-row:last-of-type {
+  border-bottom: none;
+}
+
+.cdm-label {
+  color: var(--text-muted);
+  font-size: 0.6rem;
+  font-weight: 700;
+}
+
+.cdm-values {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cdm-diff {
+  font-weight: 700;
+  font-size: 0.7rem;
+  background-color: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+.comp-bar-wrapper {
+  height: 4px;
+  background-color: #1E2330;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 0.25rem;
+  display: flex;
+}
+
+.comp-bar-fill {
+  height: 100%;
+  background-color: var(--papaya);
+  transition: width 0.25s ease;
+}
+
+@media (max-width: 1100px) {
+  .comparator-deck {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Active Rival Row */
+.tower-row.active-rival {
+  background-color: rgba(66, 133, 244, 0.08);
+  border-left: 2px solid #3B82F6;
+}
+
 </style>
 </head>
 <body>
@@ -1275,7 +1439,7 @@ body {
         </div>
 
         <!-- P3 Verstappen -->
-        <div class="tower-row">
+        <div class="tower-row rival-row active-rival" data-rival="verstappen">
           <span class="t-pos">3</span>
           <span class="t-badge t-rb"></span>
           <div class="t-driver">
@@ -1288,7 +1452,7 @@ body {
         </div>
 
         <!-- P4 Leclerc -->
-        <div class="tower-row">
+        <div class="tower-row rival-row" data-rival="leclerc">
           <span class="t-pos">4</span>
           <span class="t-badge t-ferrari"></span>
           <div class="t-driver">
@@ -1301,7 +1465,7 @@ body {
         </div>
 
         <!-- P5 Hamilton -->
-        <div class="tower-row">
+        <div class="tower-row rival-row" data-rival="hamilton">
           <span class="t-pos">5</span>
           <span class="t-badge t-ferrari"></span>
           <div class="t-driver">
@@ -1314,7 +1478,7 @@ body {
         </div>
 
         <!-- P6 Russell -->
-        <div class="tower-row">
+        <div class="tower-row rival-row" data-rival="russell">
           <span class="t-pos">6</span>
           <span class="t-badge t-merc"></span>
           <div class="t-driver">
@@ -1327,7 +1491,7 @@ body {
         </div>
 
         <!-- P7 Sainz -->
-        <div class="tower-row">
+        <div class="tower-row rival-row" data-rival="sainz">
           <span class="t-pos">7</span>
           <span class="t-badge t-williams"></span>
           <div class="t-driver">
@@ -1340,7 +1504,7 @@ body {
         </div>
 
         <!-- P8 Alonso -->
-        <div class="tower-row">
+        <div class="tower-row rival-row" data-rival="alonso">
           <span class="t-pos">8</span>
           <span class="t-badge t-aston"></span>
           <div class="t-driver">
@@ -1443,6 +1607,93 @@ body {
           <span class="delta-sub font-mono">VS 1:21.616</span>
         </div>
       </div>
+
+      <!-- Head-to-Head Telemetry & Gap Comparator -->
+      <div class="sub-panel comparator-panel">
+        <div class="sub-panel-bar">
+          <div class="comp-header-left">
+            <span class="sub-title font-mono">HEAD-TO-HEAD GAP & TELEMETRY COMPARATOR</span>
+            <span class="comp-hint font-mono text-muted">SELECT McLAREN DRIVER &bull; CLICK ANY RIVAL IN TIMING TOWER</span>
+          </div>
+          <div class="comp-status-badge font-mono" id="compDeltaBadge">
+            DELTA: <strong class="text-green" id="compNetDelta">-0.288s</strong> (McLAREN ADVANTAGE)
+          </div>
+        </div>
+
+        <div class="comparator-deck font-mono">
+          <!-- Driver 1 (McLaren) -->
+          <div class="comp-driver-card mclaren-side">
+            <div class="cdc-header">
+              <span class="cdc-team text-papaya">McLAREN FORMULA 1</span>
+              <span class="cdc-tire" id="compTire1">MEDIUM (14L)</span>
+            </div>
+            <div class="cdc-name" id="compDriver1Name">LANDO NORRIS #4</div>
+            <div class="cdc-lap" id="compLap1">1:21.432</div>
+            <div class="cdc-sectors">
+              <span>S1: <strong id="compS1_1">27.124</strong></span>
+              <span>S2: <strong id="compS2_1">26.892</strong></span>
+              <span>S3: <strong id="compS3_1">27.416</strong></span>
+            </div>
+          </div>
+
+          <!-- Center Delta Telemetry Grid -->
+          <div class="comp-delta-matrix">
+            <div class="cdm-row">
+              <span class="cdm-label">SPEED TRAP</span>
+              <div class="cdm-values">
+                <span id="compSpeed1">344.8</span>
+                <span class="cdm-diff text-green" id="compSpeedDiff">+1.6 KM/H</span>
+                <span id="compSpeed2">343.2</span>
+              </div>
+            </div>
+            <div class="cdm-row">
+              <span class="cdm-label">MIN APEX (T4)</span>
+              <div class="cdm-values">
+                <span id="compApex1">142.4</span>
+                <span class="cdm-diff text-green" id="compApexDiff">+2.8 KM/H</span>
+                <span id="compApex2">139.6</span>
+              </div>
+            </div>
+            <div class="cdm-row">
+              <span class="cdm-label">BRAKE THRESHOLD</span>
+              <div class="cdm-values">
+                <span>134 BAR</span>
+                <span class="cdm-diff text-green" id="compBrakeDiff">-8m DEEPER</span>
+                <span>128 BAR</span>
+              </div>
+            </div>
+            <div class="cdm-row">
+              <span class="cdm-label">SECTOR ADVANTAGE</span>
+              <div class="cdm-values">
+                <span class="text-purple">S1 S2 S3</span>
+                <span class="cdm-diff text-green">CLEAN SWEEP</span>
+                <span class="text-muted">NONE</span>
+              </div>
+            </div>
+
+            <!-- Dynamic Delta Bar Indicator -->
+            <div class="comp-bar-wrapper">
+              <div class="comp-bar-fill mclaren-fill" id="compBarFill" style="width: 62%;"></div>
+            </div>
+          </div>
+
+          <!-- Driver 2 (Rival) -->
+          <div class="comp-driver-card rival-side">
+            <div class="cdc-header">
+              <span class="cdc-team" id="compTeam2">RED BULL RACING</span>
+              <span class="cdc-tire" id="compTire2">HARD (19L)</span>
+            </div>
+            <div class="cdc-name" id="compDriver2Name">MAX VERSTAPPEN #1</div>
+            <div class="cdc-lap text-secondary" id="compLap2">1:21.720</div>
+            <div class="cdc-sectors text-secondary">
+              <span>S1: <strong id="compS2_1_val">27.198</strong></span>
+              <span>S2: <strong id="compS2_2_val">27.042</strong></span>
+              <span>S3: <strong id="compS2_3_val">27.480</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       <!-- ATLAS Rolling Telemetry Chart -->
       <div class="sub-panel waveform-container">
@@ -2005,6 +2256,7 @@ function setDriver(driverKey) {
     if (rowNorris) rowNorris.classList.remove('active');
   }
   playPitRadioTone();
+  if (typeof updateHeadToHeadComparator === "function") updateHeadToHeadComparator();
 }
 
 if (btnLando) btnLando.addEventListener('click', () => setDriver('norris'));
@@ -2434,6 +2686,181 @@ if (ahTabs.length > 0) {
     });
   });
 }
+
+// 11. Head-to-Head Gap & Telemetry Comparator Engine
+const rivalData = {
+  verstappen: {
+    name: "MAX VERSTAPPEN #1",
+    team: "RED BULL RACING",
+    lap: "1:21.720",
+    lapSec: 81.720,
+    s1: "27.198",
+    s2: "27.042",
+    s3: "27.480",
+    speed: 343.2,
+    apex: 139.6,
+    tire: "HARD (19L)",
+    color: "#3B82F6"
+  },
+  leclerc: {
+    name: "CHARLES LECLERC #16",
+    team: "SCUDERIA FERRARI",
+    lap: "1:21.854",
+    lapSec: 81.854,
+    s1: "27.240",
+    s2: "27.088",
+    s3: "27.526",
+    speed: 345.6,
+    apex: 138.9,
+    tire: "HARD (18L)",
+    color: "#EF4444"
+  },
+  hamilton: {
+    name: "LEWIS HAMILTON #44",
+    team: "SCUDERIA FERRARI",
+    lap: "1:22.012",
+    lapSec: 82.012,
+    s1: "27.312",
+    s2: "27.140",
+    s3: "27.560",
+    speed: 341.0,
+    apex: 140.2,
+    tire: "MEDIUM (12L)",
+    color: "#EF4444"
+  },
+  russell: {
+    name: "GEORGE RUSSELL #63",
+    team: "MERCEDES-AMG",
+    lap: "1:22.180",
+    lapSec: 82.180,
+    s1: "27.345",
+    s2: "27.195",
+    s3: "27.640",
+    speed: 340.4,
+    apex: 139.8,
+    tire: "MEDIUM (15L)",
+    color: "#06B6D4"
+  },
+  sainz: {
+    name: "CARLOS SAINZ #55",
+    team: "WILLIAMS RACING",
+    lap: "1:22.460",
+    lapSec: 82.460,
+    s1: "27.410",
+    s2: "27.320",
+    s3: "27.730",
+    speed: 339.8,
+    apex: 138.2,
+    tire: "HARD (21L)",
+    color: "#60A5FA"
+  },
+  alonso: {
+    name: "FERNANDO ALONSO #14",
+    team: "ASTON MARTIN",
+    lap: "1:22.610",
+    lapSec: 82.610,
+    s1: "27.480",
+    s2: "27.380",
+    s3: "27.750",
+    speed: 338.5,
+    apex: 137.9,
+    tire: "HARD (22L)",
+    color: "#059669"
+  }
+};
+
+let activeRivalKey = 'verstappen';
+
+function updateHeadToHeadComparator() {
+  const mcl = telemetryState[activeDriver];
+  const riv = rivalData[activeRivalKey];
+  if (!mcl || !riv) return;
+
+  const mclLapSec = activeDriver === 'norris' ? 81.432 : 81.589;
+  const delta = (mclLapSec - riv.lapSec).toFixed(3);
+
+  const compDriver1Name = document.getElementById('compDriver1Name');
+  const compLap1 = document.getElementById('compLap1');
+  const compTire1 = document.getElementById('compTire1');
+  const compS1_1 = document.getElementById('compS1_1');
+  const compS2_1 = document.getElementById('compS2_1');
+  const compS3_1 = document.getElementById('compS3_1');
+
+  const compDriver2Name = document.getElementById('compDriver2Name');
+  const compTeam2 = document.getElementById('compTeam2');
+  const compLap2 = document.getElementById('compLap2');
+  const compTire2 = document.getElementById('compTire2');
+  const compS2_1_val = document.getElementById('compS2_1_val');
+  const compS2_2_val = document.getElementById('compS2_2_val');
+  const compS2_3_val = document.getElementById('compS2_3_val');
+
+  const compNetDelta = document.getElementById('compNetDelta');
+  const compSpeed1 = document.getElementById('compSpeed1');
+  const compSpeed2 = document.getElementById('compSpeed2');
+  const compSpeedDiff = document.getElementById('compSpeedDiff');
+  const compApex1 = document.getElementById('compApex1');
+  const compApex2 = document.getElementById('compApex2');
+  const compApexDiff = document.getElementById('compApexDiff');
+  const compBarFill = document.getElementById('compBarFill');
+
+  if (compDriver1Name) compDriver1Name.textContent = `${mcl.name.toUpperCase()} #${mcl.num}`;
+  if (compLap1) compLap1.textContent = activeDriver === 'norris' ? '1:21.432' : '1:21.589';
+  if (compTire1) compTire1.textContent = 'MEDIUM (14L)';
+  if (compS1_1) compS1_1.textContent = mcl.s1;
+  if (compS2_1) compS2_1.textContent = mcl.s2;
+  if (compS3_1) compS3_1.textContent = mcl.s3;
+
+  if (compDriver2Name) compDriver2Name.textContent = riv.name;
+  if (compTeam2) compTeam2.textContent = riv.team;
+  if (compLap2) compLap2.textContent = riv.lap;
+  if (compTire2) compTire2.textContent = riv.tire;
+  if (compS2_1_val) compS2_1_val.textContent = riv.s1;
+  if (compS2_2_val) compS2_2_val.textContent = riv.s2;
+  if (compS2_3_val) compS2_3_val.textContent = riv.s3;
+
+  if (compNetDelta) {
+    compNetDelta.textContent = `${delta}s`;
+    compNetDelta.className = delta < 0 ? 'text-green' : 'text-red';
+  }
+
+  const mclSpeed = activeDriver === 'norris' ? 344.8 : 342.1;
+  const mclApex = activeDriver === 'norris' ? 142.4 : 141.8;
+  const speedDiff = (mclSpeed - riv.speed).toFixed(1);
+  const apexDiff = (mclApex - riv.apex).toFixed(1);
+
+  if (compSpeed1) compSpeed1.textContent = mclSpeed.toFixed(1);
+  if (compSpeed2) compSpeed2.textContent = riv.speed.toFixed(1);
+  if (compSpeedDiff) {
+    compSpeedDiff.textContent = `${speedDiff > 0 ? '+' : ''}${speedDiff} KM/H`;
+    compSpeedDiff.className = speedDiff >= 0 ? 'cdm-diff text-green' : 'cdm-diff text-red';
+  }
+
+  if (compApex1) compApex1.textContent = mclApex.toFixed(1);
+  if (compApex2) compApex2.textContent = riv.apex.toFixed(1);
+  if (compApexDiff) {
+    compApexDiff.textContent = `${apexDiff > 0 ? '+' : ''}${apexDiff} KM/H`;
+    compApexDiff.className = apexDiff >= 0 ? 'cdm-diff text-green' : 'cdm-diff text-red';
+  }
+
+  if (compBarFill) {
+    const ratio = Math.max(30, Math.min(75, 50 - (parseFloat(delta) * 35)));
+    compBarFill.style.width = `${ratio}%`;
+  }
+}
+
+const rivalRows = document.querySelectorAll('.rival-row');
+rivalRows.forEach(row => {
+  row.addEventListener('click', () => {
+    rivalRows.forEach(r => r.classList.remove('active-rival'));
+    row.classList.add('active-rival');
+    playPitRadioTone();
+
+    activeRivalKey = row.getAttribute('data-rival');
+    updateHeadToHeadComparator();
+  });
+});
+
+updateHeadToHeadComparator();
 
 </script>
 </body>

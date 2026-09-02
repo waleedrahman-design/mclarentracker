@@ -123,7 +123,7 @@
         </div>
 
         <!-- P3 Verstappen -->
-        <div class="tower-row">
+        <div class="tower-row rival-row active-rival" data-rival="verstappen">
           <span class="t-pos">3</span>
           <span class="t-badge t-rb"></span>
           <div class="t-driver">
@@ -136,7 +136,7 @@
         </div>
 
         <!-- P4 Leclerc -->
-        <div class="tower-row">
+        <div class="tower-row rival-row" data-rival="leclerc">
           <span class="t-pos">4</span>
           <span class="t-badge t-ferrari"></span>
           <div class="t-driver">
@@ -149,7 +149,7 @@
         </div>
 
         <!-- P5 Hamilton -->
-        <div class="tower-row">
+        <div class="tower-row rival-row" data-rival="hamilton">
           <span class="t-pos">5</span>
           <span class="t-badge t-ferrari"></span>
           <div class="t-driver">
@@ -162,7 +162,7 @@
         </div>
 
         <!-- P6 Russell -->
-        <div class="tower-row">
+        <div class="tower-row rival-row" data-rival="russell">
           <span class="t-pos">6</span>
           <span class="t-badge t-merc"></span>
           <div class="t-driver">
@@ -175,7 +175,7 @@
         </div>
 
         <!-- P7 Sainz -->
-        <div class="tower-row">
+        <div class="tower-row rival-row" data-rival="sainz">
           <span class="t-pos">7</span>
           <span class="t-badge t-williams"></span>
           <div class="t-driver">
@@ -188,7 +188,7 @@
         </div>
 
         <!-- P8 Alonso -->
-        <div class="tower-row">
+        <div class="tower-row rival-row" data-rival="alonso">
           <span class="t-pos">8</span>
           <span class="t-badge t-aston"></span>
           <div class="t-driver">
@@ -291,6 +291,93 @@
           <span class="delta-sub font-mono">VS 1:21.616</span>
         </div>
       </div>
+
+      <!-- Head-to-Head Telemetry & Gap Comparator -->
+      <div class="sub-panel comparator-panel">
+        <div class="sub-panel-bar">
+          <div class="comp-header-left">
+            <span class="sub-title font-mono">HEAD-TO-HEAD GAP & TELEMETRY COMPARATOR</span>
+            <span class="comp-hint font-mono text-muted">SELECT McLAREN DRIVER &bull; CLICK ANY RIVAL IN TIMING TOWER</span>
+          </div>
+          <div class="comp-status-badge font-mono" id="compDeltaBadge">
+            DELTA: <strong class="text-green" id="compNetDelta">-0.288s</strong> (McLAREN ADVANTAGE)
+          </div>
+        </div>
+
+        <div class="comparator-deck font-mono">
+          <!-- Driver 1 (McLaren) -->
+          <div class="comp-driver-card mclaren-side">
+            <div class="cdc-header">
+              <span class="cdc-team text-papaya">McLAREN FORMULA 1</span>
+              <span class="cdc-tire" id="compTire1">MEDIUM (14L)</span>
+            </div>
+            <div class="cdc-name" id="compDriver1Name">LANDO NORRIS #4</div>
+            <div class="cdc-lap" id="compLap1">1:21.432</div>
+            <div class="cdc-sectors">
+              <span>S1: <strong id="compS1_1">27.124</strong></span>
+              <span>S2: <strong id="compS2_1">26.892</strong></span>
+              <span>S3: <strong id="compS3_1">27.416</strong></span>
+            </div>
+          </div>
+
+          <!-- Center Delta Telemetry Grid -->
+          <div class="comp-delta-matrix">
+            <div class="cdm-row">
+              <span class="cdm-label">SPEED TRAP</span>
+              <div class="cdm-values">
+                <span id="compSpeed1">344.8</span>
+                <span class="cdm-diff text-green" id="compSpeedDiff">+1.6 KM/H</span>
+                <span id="compSpeed2">343.2</span>
+              </div>
+            </div>
+            <div class="cdm-row">
+              <span class="cdm-label">MIN APEX (T4)</span>
+              <div class="cdm-values">
+                <span id="compApex1">142.4</span>
+                <span class="cdm-diff text-green" id="compApexDiff">+2.8 KM/H</span>
+                <span id="compApex2">139.6</span>
+              </div>
+            </div>
+            <div class="cdm-row">
+              <span class="cdm-label">BRAKE THRESHOLD</span>
+              <div class="cdm-values">
+                <span>134 BAR</span>
+                <span class="cdm-diff text-green" id="compBrakeDiff">-8m DEEPER</span>
+                <span>128 BAR</span>
+              </div>
+            </div>
+            <div class="cdm-row">
+              <span class="cdm-label">SECTOR ADVANTAGE</span>
+              <div class="cdm-values">
+                <span class="text-purple">S1 S2 S3</span>
+                <span class="cdm-diff text-green">CLEAN SWEEP</span>
+                <span class="text-muted">NONE</span>
+              </div>
+            </div>
+
+            <!-- Dynamic Delta Bar Indicator -->
+            <div class="comp-bar-wrapper">
+              <div class="comp-bar-fill mclaren-fill" id="compBarFill" style="width: 62%;"></div>
+            </div>
+          </div>
+
+          <!-- Driver 2 (Rival) -->
+          <div class="comp-driver-card rival-side">
+            <div class="cdc-header">
+              <span class="cdc-team" id="compTeam2">RED BULL RACING</span>
+              <span class="cdc-tire" id="compTire2">HARD (19L)</span>
+            </div>
+            <div class="cdc-name" id="compDriver2Name">MAX VERSTAPPEN #1</div>
+            <div class="cdc-lap text-secondary" id="compLap2">1:21.720</div>
+            <div class="cdc-sectors text-secondary">
+              <span>S1: <strong id="compS2_1_val">27.198</strong></span>
+              <span>S2: <strong id="compS2_2_val">27.042</strong></span>
+              <span>S3: <strong id="compS2_3_val">27.480</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       <!-- ATLAS Rolling Telemetry Chart -->
       <div class="sub-panel waveform-container">
