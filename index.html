@@ -8,7 +8,7 @@
   <link rel="manifest" href="manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -72,7 +72,7 @@
         <span class="pill-v text-papaya font-mono" id="headerCountdown">02D 14H 28M 10S</span>
       </div>
 
-      <button class="comms-btn" id="radioMuteBtn" title="Toggle Radio Squelch Audio">
+      <button class="comms-btn" id="radioMuteBtn" title="Toggle Radio Audio (HotKey: M)">
         <span class="dot-indicator green" id="radioDot"></span>
         <span id="radioLabel">COMMS: ON</span>
       </button>
@@ -101,7 +101,7 @@
         <span class="dl-num">01</span>
         <div class="dl-body">
           <strong class="dl-text">LIVE TELEMETRY & TIMING</strong>
-          <span class="dl-sub">MCL38 cockpit HUD, ATLAS waveform & Monza GPS track</span>
+          <span class="dl-sub">MCL38 cockpit HUD, multi-track GPS, engine modes & ATLAS waveforms</span>
         </div>
       </button>
 
@@ -109,7 +109,7 @@
         <span class="dl-num">02</span>
         <div class="dl-body">
           <strong class="dl-text">HEAD-TO-HEAD GAP COMPARATOR</strong>
-          <span class="dl-sub">Instant delta analysis against Verstappen, Leclerc, Hamilton</span>
+          <span class="dl-sub">Dual-trace telemetry overlay, braking deltas & corner micro-analysis</span>
         </div>
       </button>
 
@@ -117,7 +117,7 @@
         <span class="dl-num">03</span>
         <div class="dl-body">
           <strong class="dl-text">STRATEGY & PIT WALL RADIO</strong>
-          <span class="dl-sub">Radio stream, tire carcass heatmaps & GDC edge metrics</span>
+          <span class="dl-sub">Undercut simulator, team radio transmit, tyre thermals & GDC edge</span>
         </div>
       </button>
 
@@ -125,7 +125,7 @@
         <span class="dl-num">04</span>
         <div class="dl-body">
           <strong class="dl-text">WHERE TO WATCH & SESSIONS</strong>
-          <span class="dl-sub">Monza schedule, F1 TV Pro, ESPN+ and Sky F1 streams</span>
+          <span class="dl-sub">Global timezone converter, F1 TV Pro, ESPN+, Sky F1 & circuit specs</span>
         </div>
       </button>
 
@@ -133,7 +133,7 @@
         <span class="dl-num">05</span>
         <div class="dl-body">
           <strong class="dl-text">WORLD CHAMPIONSHIP STANDINGS</strong>
-          <span class="dl-sub">2026 Drivers & Constructors championship points & odds</span>
+          <span class="dl-sub">WDC/WCC points tables, odds & interactive points swing calculator</span>
         </div>
       </button>
 
@@ -141,7 +141,7 @@
         <span class="dl-num">06</span>
         <div class="dl-body">
           <strong class="dl-text">HISTORICAL ARCHIVE (2024-2025)</strong>
-          <span class="dl-sub">2024 Miami, Baku, Singapore and 2025 Monza debriefs</span>
+          <span class="dl-sub">Miami, Baku, Singapore and Monza debriefs & aero upgrade logs</span>
         </div>
       </button>
     </div>
@@ -158,17 +158,17 @@
     </div>
   </aside>
 
-  <!-- Content Container: Clean Distinct Pages -->
+  <!-- Content Container: 6 Dedicated Pages -->
   <main class="pages-container">
 
     <!-- PAGE 1: LIVE TELEMETRY & TIMING -->
     <div class="page-view active" id="page-telemetry">
       <div class="telemetry-layout">
-        <!-- Timing & Scoring Tower -->
+        <!-- Left Column: Timing & Scoring Tower -->
         <aside class="timing-tower-card">
           <div class="sub-panel-bar">
             <span class="sub-title font-mono">TIMING & SCORING</span>
-            <span class="sub-meta font-mono">MONZA FP1</span>
+            <span class="sub-meta font-mono" id="currentTrackLabel">MONZA FP1</span>
           </div>
           <div class="timing-tower" id="timingTower">
             <div class="tower-row mclaren-row active" id="rowNorris" data-driver="norris">
@@ -249,23 +249,39 @@
           </div>
         </aside>
 
-        <!-- Cockpit HUD & Waveform & Track Center -->
+        <!-- Right Main Panel: Cockpit HUD, Waveforms & Circuit Switcher -->
         <div class="telemetry-main-panel">
-          <!-- Driver Selector Bar -->
-          <div class="panel-bar">
+          <!-- Control Bar: Driver Tabs, Engine Modes & Circuit Switcher -->
+          <div class="panel-bar control-bar-complex">
             <div class="driver-tab-group">
-              <button class="d-tab active" id="btnLando" data-driver="norris">
+              <button class="d-tab active" id="btnLando" data-driver="norris" title="Shortcut: D">
                 <span class="d-tab-num">04</span>
                 <span class="d-tab-name">NORRIS</span>
                 <span class="d-tab-pos">P1</span>
               </button>
-              <button class="d-tab" id="btnOscar" data-driver="piastri">
+              <button class="d-tab" id="btnOscar" data-driver="piastri" title="Shortcut: D">
                 <span class="d-tab-num">81</span>
                 <span class="d-tab-name">PIASTRI</span>
                 <span class="d-tab-pos">P2</span>
               </button>
             </div>
-            <span class="panel-meta font-mono">CHASSIS: MCL38-01 &bull; 20Hz INGEST</span>
+
+            <!-- Engine Mode Strategy Switcher -->
+            <div class="strat-mode-selector font-mono">
+              <span class="sms-label">ENGINE MODE:</span>
+              <button class="sm-btn active" data-mode="strat1" title="Max Power / Overtake Mode">STRAT 1 (OVERTAKE)</button>
+              <button class="sm-btn" data-mode="strat5" title="Standard Race Stint">STRAT 5 (BALANCED)</button>
+              <button class="sm-btn" data-mode="strat9" title="Lift & Coast / Recharge">STRAT 9 (HARVEST)</button>
+            </div>
+
+            <!-- Circuit GPS Switcher -->
+            <div class="track-switcher-group font-mono">
+              <span class="sms-label">CIRCUIT:</span>
+              <button class="track-btn active" data-track="monza">MONZA</button>
+              <button class="track-btn" data-track="silverstone">SILVERSTONE</button>
+              <button class="track-btn" data-track="spa">SPA</button>
+              <button class="track-btn" data-track="suzuka">SUZUKA</button>
+            </div>
           </div>
 
           <!-- Speed & RPM HUD -->
@@ -284,7 +300,7 @@
             <div class="hud-center-cluster">
               <div class="tach-line font-mono">
                 <span>RPM <strong id="teleRpm">11,980</strong></span>
-                <span class="text-red">LIMIT 12,500</span>
+                <span class="text-red" id="revLimitLabel">LIMIT 12,500</span>
               </div>
               <div class="shift-lights" id="rpmLedBar"></div>
               <div class="linear-gauges">
@@ -316,7 +332,10 @@
           <!-- ATLAS Rolling Telemetry Chart -->
           <div class="sub-panel waveform-container">
             <div class="sub-panel-bar">
-              <span class="sub-title">ATLAS LIVE TELEMETRY TRACE</span>
+              <div class="wb-left">
+                <span class="sub-title font-mono">ATLAS MULTI-CHANNEL TELEMETRY TRACE</span>
+                <span class="tele-hover-stat font-mono" id="teleCursorStat">HOVER CANVAS TO INSPECT DATA</span>
+              </div>
               <div class="trace-legend font-mono">
                 <span class="c-legend papaya">SPD</span>
                 <span class="c-legend green">THR</span>
@@ -326,16 +345,16 @@
             <canvas id="telemetryCanvas" width="760" height="120"></canvas>
           </div>
 
-          <!-- Circuit GPS Track -->
+          <!-- Circuit GPS Track with Multi-Track Rendering -->
           <div class="sub-panel track-container">
             <div class="sub-panel-bar">
-              <span class="sub-title">CIRCUIT GPS TRACE &bull; AUTODROMO NAZIONALE MONZA</span>
+              <span class="sub-title font-mono" id="circuitHeaderTitle">CIRCUIT GPS TRACE &bull; AUTODROMO NAZIONALE MONZA</span>
               <span class="track-flag green">TRACK STATUS: CLEAR</span>
             </div>
             <div class="track-canvas-wrapper">
               <canvas id="circuitCanvas" width="760" height="170"></canvas>
             </div>
-            <div class="corner-legend-bar font-mono">
+            <div class="corner-legend-bar font-mono" id="cornerLegendBar">
               <span>T1 RETTIFILO</span>
               <span>T4 CURVA GRANDE</span>
               <span>T5 ROGGIA</span>
@@ -355,7 +374,7 @@
         <div class="page-header-box">
           <div>
             <h2 class="page-main-heading font-mono">HEAD-TO-HEAD GAP & TELEMETRY COMPARATOR</h2>
-            <span class="page-subheading font-mono">SELECT McLAREN DRIVER & RIVAL TO AUTO-GENERATE TELEMETRY COMPARISON</span>
+            <span class="page-subheading font-mono">DUAL-TRACE OVERLAY, BRAKING DELTAS & CORNER-BY-CORNER TELEMETRY ANALYSIS</span>
           </div>
           <div class="comp-status-badge font-mono" id="compDeltaBadge">
             DELTA: <strong class="text-green" id="compNetDelta">-0.288s</strong> (McLAREN ADVANTAGE)
@@ -365,14 +384,14 @@
         <!-- Driver Switcher for Comparator -->
         <div class="comp-selector-deck font-mono">
           <div class="cs-group">
-            <span class="cs-label">SELECT McLAREN DRIVER:</span>
+            <span class="cs-label">McLAREN CHASSIS:</span>
             <div class="btn-toggle-group">
               <button class="comp-mcl-btn active" data-mcl="norris">04 NORRIS</button>
               <button class="comp-mcl-btn" data-mcl="piastri">81 PIASTRI</button>
             </div>
           </div>
           <div class="cs-group">
-            <span class="cs-label">SELECT GRID RIVAL:</span>
+            <span class="cs-label">GRID RIVAL:</span>
             <div class="btn-toggle-group" id="rivalToggleGroup">
               <button class="comp-riv-btn active" data-rival="verstappen">01 VERSTAPPEN</button>
               <button class="comp-riv-btn" data-rival="leclerc">16 LECLERC</button>
@@ -410,7 +429,7 @@
               </div>
             </div>
             <div class="cdm-row">
-              <span class="cdm-label">MIN APEX (TURN 4)</span>
+              <span class="cdm-label">MIN APEX SPEED</span>
               <div class="cdm-values">
                 <span id="compApex1">142.4</span>
                 <span class="cdm-diff text-green" id="compApexDiff">+2.8 KM/H</span>
@@ -452,6 +471,46 @@
             </div>
           </div>
         </div>
+
+        <!-- Dual Speed Trace Overlay Canvas -->
+        <div class="dual-trace-box font-mono">
+          <div class="sub-panel-bar">
+            <span class="sub-title font-mono">OVERLAY SPEED TRACE: McLAREN (PAPAYA) VS RIVAL (BLUE)</span>
+            <span class="sub-meta font-mono">DISTANCE: 0M - 5,793M (FULL LAP)</span>
+          </div>
+          <canvas id="overlayCanvas" width="1080" height="150"></canvas>
+        </div>
+
+        <!-- Corner-by-Corner Breakdown Table -->
+        <div class="deck-panel font-mono">
+          <div class="deck-bar">
+            <span class="deck-title">CORNER-BY-CORNER TELEMETRY DELTAS</span>
+            <span class="deck-sub">AUTODROMO NAZIONALE MONZA</span>
+          </div>
+          <div class="deck-content">
+            <table class="standings-table">
+              <thead>
+                <tr>
+                  <th>CORNER</th>
+                  <th>SECTION TYPE</th>
+                  <th>McLAREN SPEED</th>
+                  <th>RIVAL SPEED</th>
+                  <th>DELTA TIME</th>
+                  <th>PRIMARY ADVANTAGE</th>
+                </tr>
+              </thead>
+              <tbody id="cornerBreakdownBody">
+                <tr><td>T1 RETTIFILO</td><td>HEAVY BRAKING</td><td>72.4 KM/H</td><td>68.9 KM/H</td><td class="text-green">-0.082s</td><td>Deeper braking threshold & rotation</td></tr>
+                <tr><td>T4 CURVA GRANDE</td><td>HIGH SPEED RIGHT</td><td>298.1 KM/H</td><td>297.2 KM/H</td><td class="text-green">-0.012s</td><td>Low aerodynamic drag profile</td></tr>
+                <tr><td>T5 VARIANTE ROGGIA</td><td>MEDIUM CHICANE</td><td>118.5 KM/H</td><td>115.8 KM/H</td><td class="text-green">-0.065s</td><td>Curb ride compliance (pull-rod suspension)</td></tr>
+                <tr><td>T6 LESMO 1</td><td>MEDIUM SPEED RIGHT</td><td>184.2 KM/H</td><td>181.4 KM/H</td><td class="text-green">-0.048s</td><td>Front-axle aerodynamic downforce</td></tr>
+                <tr><td>T7 LESMO 2</td><td>BLIND APEX RIGHT</td><td>164.8 KM/H</td><td>161.2 KM/H</td><td class="text-green">-0.066s</td><td>Early throttle application point</td></tr>
+                <tr><td>T8-10 ASCARI</td><td>TRIPLE CHICANE COMPLEX</td><td>224.6 KM/H</td><td>221.8 KM/H</td><td class="text-green">-0.098s</td><td>Rapid directional transition stability</td></tr>
+                <tr><td>T11 PARABOLICA</td><td>LONG INCREASING RADIUS</td><td>218.4 KM/H</td><td>216.9 KM/H</td><td class="text-green">-0.017s</td><td>Rear tyre thermal retention onto main straight</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -460,8 +519,55 @@
       <div class="page-wrapper">
         <div class="page-header-box">
           <div>
-            <h2 class="page-main-heading font-mono">PIT STRATEGY & ENGINEERING COMMS</h2>
-            <span class="page-subheading font-mono">REAL-TIME TEAM RADIO TRANSCRIPTS, TYRE THERMAL PROFILES & GDC EDGE</span>
+            <h2 class="page-main-heading font-mono">PIT STRATEGY & RACE OPERATIONS</h2>
+            <span class="page-subheading font-mono">INTERACTIVE UNDERCUT SIMULATOR, REAL-TIME TEAM RADIO & GDC INFRASTRUCTURE</span>
+          </div>
+        </div>
+
+        <!-- Undercut Simulator Card -->
+        <div class="deck-panel font-mono">
+          <div class="deck-bar">
+            <span class="deck-title">INTERACTIVE PIT STOP & UNDERCUT SIMULATOR</span>
+            <span class="deck-sub">DRAG SLIDER TO CALCULATE REJOIN WINDOW</span>
+          </div>
+          <div class="deck-content">
+            <div class="undercut-controls">
+              <div class="uc-slider-box">
+                <div class="uc-slider-head">
+                  <span>TARGET PIT STOP LAP: <strong class="text-papaya font-mono" id="pitLapDisplay">LAP 31</strong></span>
+                  <span class="text-muted font-mono">TOTAL RACE: 53 LAPS</span>
+                </div>
+                <input type="range" id="pitLapSlider" min="15" max="45" value="31" class="pit-range-slider">
+                <div class="uc-ticks">
+                  <span>LAP 15 (AGGRESSIVE)</span>
+                  <span>LAP 31 (PLAN A OPTIMAL)</span>
+                  <span>LAP 45 (OVERCUT)</span>
+                </div>
+              </div>
+
+              <div class="sim-metrics-grid">
+                <div class="bm-card">
+                  <span class="bm-k">PIT LANE LOSS</span>
+                  <strong class="bm-v text-white" id="simPitLoss">22.4s</strong>
+                  <span class="bm-sub">NORMAL RACE SPEED</span>
+                </div>
+                <div class="bm-card">
+                  <span class="bm-k">PROJECTED REJOIN</span>
+                  <strong class="bm-v text-green" id="simRejoinPos">P3</strong>
+                  <span class="bm-sub" id="simRejoinGap">CLEAN AIR (+4.2s TO TRAFFIC)</span>
+                </div>
+                <div class="bm-card">
+                  <span class="bm-k">UNDERCUT DELTA</span>
+                  <strong class="bm-v text-green" id="simUndercutGain">+1.85s / LAP</strong>
+                  <span class="bm-sub">NEW HARD C3 TYRE OVER USED MEDIUM</span>
+                </div>
+                <div class="bm-card">
+                  <span class="bm-k">ESTIMATED WIN PROB</span>
+                  <strong class="bm-v text-papaya" id="simWinPct">94.8%</strong>
+                  <span class="bm-sub">VERTEX AI STRATEGY ENGINE</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -504,7 +610,7 @@
           <div class="strat-card">
             <div class="sub-panel-bar">
               <span class="sub-title font-mono">PIT WALL TEAM RADIO INTERCEPT</span>
-              <button class="comms-action-btn font-mono" id="btnPlayRadio">TRANSMIT</button>
+              <button class="comms-action-btn font-mono" id="btnPlayRadio" title="HotKey: SPACE">TRANSMIT [SPACE]</button>
             </div>
             <div class="radio-stream-box" id="radioLog">
               <div class="radio-entry engineer-entry">
@@ -523,35 +629,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Strategy Plan Table -->
-          <div class="strat-card">
-            <div class="sub-panel-bar">
-              <span class="sub-title font-mono">RACE STRATEGY MATRIX</span>
-              <span class="font-mono text-papaya">PLAN A (OPTIMAL)</span>
-            </div>
-            <div class="strat-table font-mono">
-              <div class="strat-row"><span class="st-k">TARGET PIT STOP:</span> <span class="st-v text-papaya">LAP 31 (WINDOW 29-33)</span></div>
-              <div class="strat-row"><span class="st-k">COMPOUND ON REJOIN:</span> <span class="st-v text-white">HARD C3 (WHITE)</span></div>
-              <div class="strat-row"><span class="st-k">PIT LANE LOSS:</span> <span class="st-v">22.4s (NORMAL) / 11.2s (VSC)</span></div>
-              <div class="strat-row"><span class="st-k">PROJECTED REJOIN:</span> <span class="st-v text-green">P3 (CLEAN AIR +4.2s GAP)</span></div>
-              <div class="strat-row"><span class="st-k">SIM WIN PROBABILITY:</span> <span class="st-v text-green">94.8% (100K SIMS)</span></div>
-            </div>
-          </div>
-
-          <!-- GDC Edge Computing -->
-          <div class="strat-card">
-            <div class="sub-panel-bar">
-              <span class="sub-title font-mono">GOOGLE CLOUD GDC EDGE CLUSTER</span>
-              <span class="font-mono text-green">NOMINAL</span>
-            </div>
-            <div class="edge-data-table font-mono">
-              <div class="edt-row"><span>GDC PIT GARAGE CLUSTER:</span> <strong class="text-green">ONLINE</strong></div>
-              <div class="edt-row"><span>CAR TELEMETRY INGEST:</span> <strong>2.4 GB/S (300+ SENSORS)</strong></div>
-              <div class="edt-row"><span>MTC WOKING ENCRYPTED SYNC:</span> <strong class="text-green">10GBPS BONDED</strong></div>
-              <div class="edt-row"><span>PIT WALL TABLET FLEET:</span> <strong>24/24 ONLINE (ANDROID)</strong></div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -561,51 +638,61 @@
       <div class="page-wrapper">
         <div class="page-header-box">
           <div>
-            <h2 class="page-main-heading font-mono">RACE WEEKEND BROADCAST CENTER</h2>
-            <span class="page-subheading font-mono">SESSION TIMINGS (MONZA) & OFFICIAL LIVE STREAMING CHANNELS</span>
+            <h2 class="page-main-heading font-mono">RACE WEEKEND BROADCAST CENTER &bull; WHERE TO WATCH</h2>
+            <span class="page-subheading font-mono">OFFICIAL STREAMING PORTALS, GLOBAL TIMEZONE CONVERTER & CIRCUIT SPECIFICATIONS</span>
+          </div>
+
+          <!-- Timezone Switcher -->
+          <div class="timezone-picker font-mono">
+            <span class="tz-label">TIMEZONE:</span>
+            <button class="tz-btn active" data-tz="EDT">US EAST (EDT)</button>
+            <button class="tz-btn" data-tz="PDT">US WEST (PDT)</button>
+            <button class="tz-btn" data-tz="BST">UK (BST)</button>
+            <button class="tz-btn" data-tz="CEST">TRACK (CEST)</button>
           </div>
         </div>
 
         <div class="broadcast-page-grid">
+          <!-- Session Schedule -->
           <div class="deck-panel">
             <div class="deck-bar">
               <span class="deck-title">OFFICIAL TRACK SESSION TIMETABLE</span>
-              <span class="deck-sub">EASTERN TIME (EDT) / TRACK LOCAL (CEST)</span>
+              <span class="deck-sub" id="currentTzBadge">TIMEZONE: US EASTERN (EDT)</span>
             </div>
             <div class="deck-content font-mono">
               <div class="session-schedule">
                 <div class="session-row active">
                   <span class="sess-dot green"></span>
                   <span class="sess-name">PRACTICE 1 (FP1)</span>
-                  <span class="sess-time">FRI 07:30 EDT / 13:30 CEST</span>
+                  <span class="sess-time" id="timeFP1">FRI 07:30 EDT</span>
                   <span class="sess-chn">ESPN2 / F1 TV PRO</span>
                   <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sess-action">F1 TV PRO &gt;</a>
                 </div>
                 <div class="session-row">
                   <span class="sess-dot"></span>
                   <span class="sess-name">PRACTICE 2 (FP2)</span>
-                  <span class="sess-time">FRI 11:00 EDT / 17:00 CEST</span>
+                  <span class="sess-time" id="timeFP2">FRI 11:00 EDT</span>
                   <span class="sess-chn">ESPN2 / F1 TV PRO</span>
                   <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sess-action">F1 TV PRO &gt;</a>
                 </div>
                 <div class="session-row">
                   <span class="sess-dot"></span>
                   <span class="sess-name">PRACTICE 3 (FP3)</span>
-                  <span class="sess-time">SAT 06:30 EDT / 12:30 CEST</span>
+                  <span class="sess-time" id="timeFP3">SAT 06:30 EDT</span>
                   <span class="sess-chn">ESPN2 / F1 TV PRO</span>
                   <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sess-action">F1 TV PRO &gt;</a>
                 </div>
                 <div class="session-row">
                   <span class="sess-dot"></span>
                   <span class="sess-name">QUALIFYING</span>
-                  <span class="sess-time">SAT 10:00 EDT / 16:00 CEST</span>
+                  <span class="sess-time" id="timeQual">SAT 10:00 EDT</span>
                   <span class="sess-chn">ESPN / F1 TV PRO</span>
                   <a href="https://www.espn.com/watch/" target="_blank" rel="noopener" class="sess-action">ESPN+ &gt;</a>
                 </div>
                 <div class="session-row race-row">
                   <span class="sess-dot papaya"></span>
                   <span class="sess-name">GRAND PRIX (53 LAPS)</span>
-                  <span class="sess-time">SUN 09:00 EDT / 15:00 CEST</span>
+                  <span class="sess-time" id="timeRace">SUN 09:00 EDT</span>
                   <span class="sess-chn">ESPN / ABC / F1 TV</span>
                   <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sess-action race-action">WATCH RACE &gt;</a>
                 </div>
@@ -613,30 +700,51 @@
             </div>
           </div>
 
+          <!-- Direct Streaming Hubs -->
           <div class="deck-panel">
             <div class="deck-bar">
               <span class="deck-title">DIRECT STREAMING PORTALS</span>
-              <span class="deck-sub">VERIFIED BROADCAST FEEDS</span>
+              <span class="deck-sub">OFFICIAL BROADCAST FEEDS</span>
             </div>
             <div class="deck-content font-mono">
               <div class="broadcast-links-list">
                 <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="b-link-card">
                   <strong>F1 TV PRO (OFFICIAL STREAM)</strong>
-                  <span>Onboard cameras, live timing, team radio & driver tracker</span>
+                  <span>Onboard camera feeds, raw pit radio, live timing & driver GPS map</span>
                 </a>
                 <a href="https://www.espn.com/watch/f1" target="_blank" rel="noopener" class="b-link-card">
                   <strong>ESPN / ESPN+ (US BROADCAST)</strong>
-                  <span>Official live 4K coverage and qualifying replays</span>
+                  <span>Commercial-free Sky Sports commentary & 4K qualifying broadcast</span>
                 </a>
                 <a href="https://www.skysports.com/f1" target="_blank" rel="noopener" class="b-link-card">
                   <strong>SKY SPORTS F1 (UK COVERAGE)</strong>
-                  <span>Martin Brundle grid walks & paddock analysis</span>
+                  <span>Martin Brundle grid walks, Ted Kravitz notebook & tech analyses</span>
                 </a>
                 <a href="https://www.formula1.com/en/f1-live.html" target="_blank" rel="noopener" class="b-link-card">
                   <strong>FORMULA 1 OFFICIAL LIVE TIMING</strong>
-                  <span>Telemetry speed traps & mini-sector deltas</span>
+                  <span>Real-time micro-sector speeds & tyre history records</span>
                 </a>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Circuit Technical Specs -->
+        <div class="deck-panel font-mono">
+          <div class="deck-bar">
+            <span class="deck-title">AUTODROMO NAZIONALE MONZA &bull; TECHNICAL SPECIFICATIONS</span>
+            <span class="deck-sub">TEMPLE OF SPEED</span>
+          </div>
+          <div class="deck-content">
+            <div class="circuit-specs-grid">
+              <div class="cs-spec-cell"><span>CIRCUIT LENGTH</span><strong>5.793 KM</strong></div>
+              <div class="cs-spec-cell"><span>RACE DISTANCE</span><strong>53 LAPS (306.72 KM)</strong></div>
+              <div class="cs-spec-cell"><span>ALL-TIME LAP RECORD</span><strong>1:21.046 (BARRICHELLO)</strong></div>
+              <div class="cs-spec-cell"><span>FULL THROTTLE %</span><strong>76% OF LAP</strong></div>
+              <div class="cs-spec-cell"><span>DRS ZONES</span><strong>2 (MAIN STRAIGHT & SERRAGLIO)</strong></div>
+              <div class="cs-spec-cell"><span>DOWNFORCE LEVEL</span><strong>LOWEST ON CALENDAR</strong></div>
+              <div class="cs-spec-cell"><span>GEAR CHANGES / LAP</span><strong>40 SHIFTS</strong></div>
+              <div class="cs-spec-cell"><span>BRAKING HARSHNESS</span><strong>VERY HIGH (T1 5.4G)</strong></div>
             </div>
           </div>
         </div>
@@ -648,12 +756,56 @@
       <div class="page-wrapper">
         <div class="page-header-box">
           <div>
-            <h2 class="page-main-heading font-mono">2026 WORLD CHAMPIONSHIP STANDINGS & ODDS</h2>
-            <span class="page-subheading font-mono">OFFICIAL WDC & WCC LEADERBOARD WITH BETTING MARKET ODDS</span>
+            <h2 class="page-main-heading font-mono">2026 WORLD CHAMPIONSHIP STANDINGS & POINTS SIMULATOR</h2>
+            <span class="page-subheading font-mono">OFFICIAL WDC/WCC LEADERBOARDS & INTERACTIVE TITLE POINTS CALCULATOR</span>
+          </div>
+        </div>
+
+        <!-- Title Points Swing Simulator -->
+        <div class="deck-panel font-mono">
+          <div class="deck-bar">
+            <span class="deck-title">INTERACTIVE TITLE POINTS SWING SIMULATOR</span>
+            <span class="deck-sub">CALCULATE CHAMPIONSHIP DELTA FOR MONZA</span>
+          </div>
+          <div class="deck-content">
+            <div class="points-sim-deck">
+              <div class="ps-column">
+                <span class="ps-label">LANDO NORRIS MONZA FINISH:</span>
+                <select id="simNorrisFinish" class="ps-select font-mono">
+                  <option value="26">P1 + FASTEST LAP (26 PTS)</option>
+                  <option value="25" selected>P1 WIN (25 PTS)</option>
+                  <option value="18">P2 (18 PTS)</option>
+                  <option value="15">P3 (15 PTS)</option>
+                  <option value="12">P4 (12 PTS)</option>
+                  <option value="10">P5 (10 PTS)</option>
+                  <option value="0">DNF / NO POINTS (0 PTS)</option>
+                </select>
+              </div>
+
+              <div class="ps-column">
+                <span class="ps-label">MAX VERSTAPPEN MONZA FINISH:</span>
+                <select id="simVerstappenFinish" class="ps-select font-mono">
+                  <option value="26">P1 + FASTEST LAP (26 PTS)</option>
+                  <option value="25">P1 WIN (25 PTS)</option>
+                  <option value="18">P2 (18 PTS)</option>
+                  <option value="15" selected>P3 (15 PTS)</option>
+                  <option value="12">P4 (12 PTS)</option>
+                  <option value="10">P5 (10 PTS)</option>
+                  <option value="0">DNF / NO POINTS (0 PTS)</option>
+                </select>
+              </div>
+
+              <div class="ps-result-card">
+                <span class="ps-res-k">NEW TITLE LEAD</span>
+                <strong class="ps-res-v text-green" id="simTitleLead">+18 PTS LEAD</strong>
+                <span class="ps-res-sub" id="simTotalPoints">NORRIS 309 PTS vs VERSTAPPEN 291 PTS</span>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="standings-page-grid">
+          <!-- WDC Table -->
           <div class="deck-panel">
             <div class="deck-bar">
               <span class="deck-title">DRIVERS WORLD CHAMPIONSHIP (WDC)</span>
@@ -676,6 +828,7 @@
             </div>
           </div>
 
+          <!-- WCC Table -->
           <div class="deck-panel">
             <div class="deck-bar">
               <span class="deck-title">CONSTRUCTORS WORLD CHAMPIONSHIP (WCC)</span>
@@ -779,10 +932,13 @@
 
   </main>
 
-  <!-- Industrial Technical Footer -->
+  <!-- Industrial Technical Footer with Keyboard Shortcut Legend -->
   <footer class="console-footer font-mono">
     <div class="cf-left">
-      SYSTEM: MCLAREN-F1-OPS-V5 &bull; ARCHITECT: WALEED RAHMAN (EFS / IMPLEMENTATION ENG) &bull; SHORTLINK: go/formula1
+      SYSTEM: MCLAREN-F1-OPS-V6 &bull; ARCHITECT: WALEED RAHMAN (EFS / IMPLEMENTATION ENG) &bull; SHORTLINK: go/formula1
+    </div>
+    <div class="cf-center">
+      HOTKEYS: <span class="hk-badge">1-6</span> PAGES &bull; <span class="hk-badge">SPACE</span> RADIO &bull; <span class="hk-badge">D</span> DRIVER &bull; <span class="hk-badge">M</span> MUTE
     </div>
     <div class="cf-right">
       WORKSPACE: <a href="https://waleedrahman-design.github.io/mclarentracker/" target="_blank">waleedrahman-design.github.io/mclarentracker</a>

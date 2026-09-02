@@ -103,7 +103,6 @@ body {
   height: 2px;
   background-color: var(--text-primary);
   border-radius: 1px;
-  transition: all 0.2s ease;
 }
 
 .logo-anchor {
@@ -128,7 +127,7 @@ body {
   letter-spacing: 0.05em;
 }
 
-/* Quick Nav Bar on Desktop */
+/* Quick Nav Bar */
 .quick-nav-bar {
   display: flex;
   gap: 0.25rem;
@@ -265,10 +264,7 @@ body {
   transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
-.burger-backdrop.open {
-  opacity: 1;
-  visibility: visible;
-}
+.burger-backdrop.open { opacity: 1; visibility: visible; }
 
 .burger-drawer {
   position: fixed;
@@ -286,9 +282,7 @@ body {
   flex-direction: column;
 }
 
-.burger-drawer.open {
-  transform: translateX(0);
-}
+.burger-drawer.open { transform: translateX(0); }
 
 .drawer-header {
   display: flex;
@@ -313,12 +307,9 @@ body {
   line-height: 1;
   color: var(--text-muted);
   cursor: pointer;
-  transition: color 0.15s ease;
 }
 
-.drawer-close-btn:hover {
-  color: var(--papaya);
-}
+.drawer-close-btn:hover { color: var(--papaya); }
 
 .drawer-nav-list {
   display: flex;
@@ -361,26 +352,10 @@ body {
   margin-top: 2px;
 }
 
-.drawer-link.active .dl-num {
-  color: var(--papaya);
-}
-
-.dl-body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.dl-text {
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-.dl-sub {
-  font-size: 0.65rem;
-  color: var(--text-muted);
-  line-height: 1.35;
-}
+.drawer-link.active .dl-num { color: var(--papaya); }
+.dl-body { display: flex; flex-direction: column; gap: 0.2rem; }
+.dl-text { font-size: 0.85rem; font-weight: 700; }
+.dl-sub { font-size: 0.65rem; color: var(--text-muted); line-height: 1.35; }
 
 .drawer-footer {
   padding: 1rem 1.25rem;
@@ -391,37 +366,12 @@ body {
   gap: 0.5rem;
 }
 
-.df-label {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--text-muted);
-}
-
-.df-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  font-size: 0.7rem;
-}
-
-.df-links a {
-  color: var(--text-secondary);
-  text-decoration: none;
-}
-
-.df-links a:hover {
-  color: var(--papaya);
-}
-
-.df-golink {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  margin-top: 0.25rem;
-}
-
-.df-golink strong {
-  color: var(--papaya);
-}
+.df-label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); }
+.df-links { display: flex; flex-wrap: wrap; gap: 0.75rem; font-size: 0.7rem; }
+.df-links a { color: var(--text-secondary); text-decoration: none; }
+.df-links a:hover { color: var(--papaya); }
+.df-golink { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.25rem; }
+.df-golink strong { color: var(--papaya); }
 
 /* 3. Multi-Page Container */
 .pages-container {
@@ -455,6 +405,8 @@ body {
   background-color: var(--panel-bg);
   border: 1px solid var(--border-line);
   border-radius: 3px;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .page-main-heading {
@@ -490,7 +442,63 @@ body {
   flex-direction: column;
 }
 
-/* Reused Technical Components */
+/* Control Bar Complex */
+.control-bar-complex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0.85rem;
+  background-color: var(--panel-elevated);
+  border-bottom: 1px solid var(--border-line);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.strat-mode-selector, .track-switcher-group {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.sms-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-right: 0.2rem;
+}
+
+.sm-btn, .track-btn {
+  background-color: var(--bg-core);
+  border: 1px solid var(--border-line);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sm-btn:hover, .track-btn:hover {
+  background-color: var(--panel-active);
+  color: var(--text-white);
+  border-color: var(--papaya);
+}
+
+.sm-btn.active {
+  background-color: var(--papaya-dim);
+  border-color: var(--papaya);
+  color: var(--papaya);
+}
+
+.track-btn.active {
+  background-color: rgba(66, 133, 244, 0.15);
+  border-color: #3B82F6;
+  color: #60A5FA;
+}
+
+/* Timing Tower */
 .panel-bar, .sub-panel-bar {
   display: flex;
   justify-content: space-between;
@@ -569,22 +577,11 @@ body {
   background-color: var(--bg-core);
 }
 
-.tf-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.65rem;
-  margin-bottom: 0.4rem;
-}
-
+.tf-row { display: flex; justify-content: space-between; font-size: 0.65rem; margin-bottom: 0.4rem; }
 .tf-label { color: var(--text-muted); font-weight: 700; }
 .tf-drs { font-weight: 700; }
 
-.sectors-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 0.4rem;
-}
-
+.sectors-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.4rem; }
 .sec-cell {
   background-color: var(--panel-elevated);
   border: 1px solid var(--border-line);
@@ -619,12 +616,7 @@ body {
   gap: 0.4rem;
 }
 
-.d-tab.active {
-  background-color: var(--papaya-dim);
-  border-color: var(--papaya);
-  color: var(--papaya);
-}
-
+.d-tab.active { background-color: var(--papaya-dim); border-color: var(--papaya); color: var(--papaya); }
 .d-tab-num { font-size: 0.65rem; color: var(--text-muted); }
 .d-tab.active .d-tab-num { color: var(--papaya); }
 .d-tab-pos { font-size: 0.65rem; padding: 1px 3px; background-color: var(--panel-elevated); border-radius: 2px; }
@@ -697,11 +689,10 @@ body {
 .delta-v { font-size: 1.25rem; font-weight: 700; line-height: 1.2; }
 .delta-sub { font-size: 0.6rem; color: var(--text-muted); margin-top: 0.15rem; }
 
-/* Sub Panels: Waveform & Track */
-.sub-panel {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--border-line);
-}
+/* Sub Panels */
+.sub-panel { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-line); }
+.wb-left { display: flex; align-items: baseline; gap: 0.75rem; }
+.tele-hover-stat { font-size: 0.65rem; color: var(--papaya); font-weight: 700; }
 
 .trace-legend { display: flex; gap: 0.75rem; font-size: 0.65rem; }
 .c-legend { font-weight: 700; }
@@ -844,7 +835,77 @@ body {
 
 .comp-bar-fill { height: 100%; background-color: var(--papaya); transition: width 0.25s ease; }
 
-/* Page 3: Strategy Grid */
+/* Dual Overlay Trace */
+.dual-trace-box {
+  background-color: var(--panel-bg);
+  border: 1px solid var(--border-line);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+#overlayCanvas {
+  width: 100%;
+  height: 140px;
+  background-color: var(--bg-core);
+  display: block;
+}
+
+/* Page 3: Strategy & Undercut Simulator */
+.undercut-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.uc-slider-box {
+  background-color: var(--bg-core);
+  border: 1px solid var(--border-subtle);
+  padding: 1rem;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.uc-slider-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+}
+
+.pit-range-slider {
+  width: 100%;
+  height: 8px;
+  background-color: #1E2330;
+  border-radius: 4px;
+  outline: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.pit-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--papaya);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(255, 128, 0, 0.6);
+}
+
+.uc-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+.sim-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
 .strategy-page-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -897,13 +958,31 @@ body {
 .re-ch { font-weight: 700; }
 .re-msg { font-size: 0.8rem; color: var(--text-primary); line-height: 1.4; }
 
-.strat-table, .edge-data-table { padding: 0.85rem; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.75rem; }
-.strat-row, .edt-row { display: flex; justify-content: space-between; }
-.st-k { color: var(--text-muted); }
-.st-v { font-weight: 600; text-align: right; }
-.edt-row span { color: var(--text-muted); }
+/* Page 4: Broadcast & Timezone */
+.timezone-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
 
-/* Page 4: Broadcast */
+.tz-label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); margin-right: 0.2rem; }
+
+.tz-btn {
+  background-color: var(--panel-elevated);
+  border: 1px solid var(--border-line);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tz-btn:hover { background-color: var(--panel-active); color: var(--text-white); border-color: var(--papaya); }
+.tz-btn.active { background-color: var(--papaya-dim); border-color: var(--papaya); color: var(--papaya); }
+
 .broadcast-page-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1rem; }
 .deck-panel { background-color: var(--panel-bg); border: 1px solid var(--border-line); border-radius: 3px; display: flex; flex-direction: column; }
 .deck-bar { display: flex; justify-content: space-between; align-items: baseline; padding: 0.65rem 0.85rem; background-color: var(--panel-elevated); border-bottom: 1px solid var(--border-line); }
@@ -933,7 +1012,66 @@ body {
 .b-link-card strong { font-size: 0.75rem; color: var(--papaya); }
 .b-link-card span { font-size: 0.65rem; color: var(--text-muted); margin-top: 0.2rem; }
 
-/* Page 5: Standings */
+.circuit-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.65rem;
+}
+
+.cs-spec-cell {
+  background-color: var(--bg-core);
+  border: 1px solid var(--border-subtle);
+  padding: 0.6rem 0.75rem;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cs-spec-cell span { font-size: 0.6rem; color: var(--text-muted); font-weight: 700; }
+.cs-spec-cell strong { font-size: 0.85rem; color: var(--text-white); margin-top: 0.2rem; }
+
+/* Page 5: Standings & Simulator */
+.points-sim-deck {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.ps-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ps-label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); }
+
+.ps-select {
+  background-color: var(--bg-core);
+  border: 1px solid var(--border-line);
+  color: var(--text-white);
+  padding: 0.45rem 0.65rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  outline: none;
+}
+
+.ps-select:focus { border-color: var(--papaya); }
+
+.ps-result-card {
+  background-color: var(--bg-core);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--papaya);
+  padding: 0.65rem 0.85rem;
+  border-radius: 0 3px 3px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ps-res-k { font-size: 0.6rem; color: var(--text-muted); font-weight: 700; }
+.ps-res-v { font-size: 1.35rem; font-weight: 700; line-height: 1.2; margin: 0.15rem 0; }
+.ps-res-sub { font-size: 0.65rem; color: var(--text-secondary); }
+
 .standings-page-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .standings-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
 .standings-table th { text-align: left; font-size: 0.65rem; color: var(--text-muted); font-weight: 700; padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--border-subtle); }
@@ -988,10 +1126,20 @@ body {
   color: var(--text-muted);
 }
 
+.cf-center { display: flex; align-items: center; gap: 0.35rem; color: var(--text-secondary); }
+.hk-badge {
+  background-color: var(--panel-elevated);
+  border: 1px solid var(--border-line);
+  color: var(--papaya);
+  padding: 1px 5px;
+  border-radius: 2px;
+  font-weight: 700;
+}
+
 .console-footer a { color: var(--g-blue); text-decoration: none; }
 .console-footer a:hover { text-decoration: underline; }
 
-/* Responsive */
+/* Responsive Breakpoints */
 @media (max-width: 1100px) {
   .quick-nav-bar { display: none; }
   .telemetry-layout { grid-template-columns: 1fr; }
@@ -1000,4 +1148,7 @@ body {
   .broadcast-page-grid { grid-template-columns: 1fr; }
   .standings-page-grid { grid-template-columns: 1fr; }
   .archive-grid { grid-template-columns: 1fr; }
+  .points-sim-deck { grid-template-columns: 1fr; }
+  .sim-metrics-grid { grid-template-columns: 1fr 1fr; }
+  .circuit-specs-grid { grid-template-columns: 1fr 1fr; }
 }
