@@ -1,11 +1,12 @@
-// McLaren Formula 1 x Google Cloud Trackside Telemetry Portal (go/formula1)
+// McLaren Formula 1 Trackside Operations Console (go/formula1)
 // Architect: Waleed Rahman (EFS / Implementation Engineering)
 
-// 1. Driver Telemetry Data
-const driverState = {
+// 1. Driver State & Telemetry Profiles
+const telemetryState = {
   norris: {
     name: "Lando Norris",
-    number: "4",
+    code: "NOR",
+    num: "4",
     pos: "P1",
     speed: 324,
     gear: 7,
@@ -14,15 +15,16 @@ const driverState = {
     throttle: 96,
     brake: 0,
     ers: 78,
-    s1: "27.124s",
-    s2: "26.892s",
-    s3: "27.416s",
+    s1: "27.124",
+    s2: "26.892",
+    s3: "27.416",
     tires: { fl: 102.4, fr: 104.1, rl: 98.6, rr: 99.2, wearFL: 88, wearFR: 86, wearRL: 91, wearRR: 89 },
     trackProgress: 0.12
   },
   piastri: {
     name: "Oscar Piastri",
-    number: "81",
+    code: "PIA",
+    num: "81",
     pos: "P2",
     speed: 319,
     gear: 7,
@@ -31,16 +33,16 @@ const driverState = {
     throttle: 92,
     brake: 0,
     ers: 83,
-    s1: "27.210s",
-    s2: "26.945s",
-    s3: "27.434s",
+    s1: "27.210",
+    s2: "26.945",
+    s3: "27.434",
     tires: { fl: 101.8, fr: 103.5, rl: 97.9, rr: 98.4, wearFL: 89, wearFR: 87, wearRL: 92, wearRR: 90 },
     trackProgress: 0.08
   }
 };
 
-let activeDriverKey = 'norris';
-let audioEnabled = true;
+let activeDriver = 'norris';
+let audioMuted = false;
 
 // 2. Audio Comms Engine (Web Audio API Synthesizer)
 let audioCtx = null;
@@ -51,8 +53,8 @@ function initAudio() {
   }
 }
 
-function playF1RadioChirp() {
-  if (!audioEnabled) return;
+function playPitRadioTone() {
+  if (audioMuted) return;
   try {
     initAudio();
     if (audioCtx.state === 'suspended') {
@@ -64,28 +66,28 @@ function playF1RadioChirp() {
     osc.type = 'sine';
     const now = audioCtx.currentTime;
 
-    // Iconic Formula 1 pit radio dual-frequency squelch tone
     osc.frequency.setValueAtTime(1950, now);
     osc.frequency.setValueAtTime(2400, now + 0.04);
     osc.frequency.setValueAtTime(1750, now + 0.08);
 
-    gain.gain.setValueAtTime(0.06, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+    gain.gain.setValueAtTime(0.05, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
 
     osc.connect(gain);
     gain.connect(audioCtx.destination);
 
     osc.start(now);
-    osc.stop(now + 0.18);
+    osc.stop(now + 0.16);
   } catch (e) {
-    console.log("Audio not allowed yet:", e);
+    console.log("Audio not enabled yet:", e);
   }
 }
 
-// 3. Shift Lights / RPM LEDs Generator
+// 3. Shift Lights Array Generator
 const rpmLedBar = document.getElementById('rpmLedBar');
 const TOTAL_LEDS = 18;
 if (rpmLedBar) {
+  rpmLedBar.innerHTML = '';
   for (let i = 0; i < TOTAL_LEDS; i++) {
     const led = document.createElement('div');
     led.classList.add('rpm-led');
@@ -97,7 +99,7 @@ if (rpmLedBar) {
   }
 }
 
-// 4. DOM References
+// 4. DOM Elements
 const teleSpeed = document.getElementById('teleSpeed');
 const teleGear = document.getElementById('teleGear');
 const teleRpm = document.getElementById('teleRpm');
@@ -118,165 +120,146 @@ const valS1 = document.getElementById('valS1');
 const valS2 = document.getElementById('valS2');
 const valS3 = document.getElementById('valS3');
 const drsState = document.getElementById('drsState');
-const edgeLatencyVal = document.getElementById('edgeLatencyVal');
 const latencyDisplay = document.getElementById('latencyDisplay');
 
-// Driver Buttons
+// Driver Buttons & Rows
 const btnLando = document.getElementById('btnLando');
 const btnOscar = document.getElementById('btnOscar');
+const rowNorris = document.getElementById('rowNorris');
+const rowPiastri = document.getElementById('rowPiastri');
 
-function switchDriver(driver) {
-  activeDriverKey = driver;
-  if (driver === 'norris') {
-    btnLando.classList.add('active');
-    btnOscar.classList.remove('active');
+function setDriver(driverKey) {
+  activeDriver = driverKey;
+  if (driverKey === 'norris') {
+    if (btnLando) btnLando.classList.add('active');
+    if (btnOscar) btnOscar.classList.remove('active');
+    if (rowNorris) rowNorris.classList.add('active');
+    if (rowPiastri) rowPiastri.classList.remove('active');
   } else {
-    btnOscar.classList.add('active');
-    btnLando.classList.remove('active');
+    if (btnOscar) btnOscar.classList.add('active');
+    if (btnLando) btnLando.classList.remove('active');
+    if (rowPiastri) rowPiastri.classList.add('active');
+    if (rowNorris) rowNorris.classList.remove('active');
   }
-  playF1RadioChirp();
+  playPitRadioTone();
 }
 
-btnLando.addEventListener('click', () => switchDriver('norris'));
-btnOscar.addEventListener('click', () => switchDriver('piastri'));
+if (btnLando) btnLando.addEventListener('click', () => setDriver('norris'));
+if (btnOscar) btnOscar.addEventListener('click', () => setDriver('piastri'));
+if (rowNorris) rowNorris.addEventListener('click', () => setDriver('norris'));
+if (rowPiastri) rowPiastri.addEventListener('click', () => setDriver('piastri'));
 
-// Radio Comms Button
+// Radio Comms
 const btnPlayRadio = document.getElementById('btnPlayRadio');
 const radioLog = document.getElementById('radioLog');
-
-const radioArchive = [
-  {
-    speaker: "WILL JOSEPH (RACE ENG) → LANDO",
-    time: "LAP 16 • 13:44:02",
-    msg: "Lando, radio check. DRS available down the main straight. Push to pass mode 8 is primed.",
-    type: "mclaren-msg"
-  },
-  {
-    speaker: "TOM STALLARD → OSCAR",
-    time: "LAP 16 • 13:44:15",
-    msg: "Oscar, tire delta to Verstappen is +0.4s. Great exit out of Parabolica. Maintain strat 3.",
-    type: "mclaren-msg"
-  },
-  {
-    speaker: "LANDO NORRIS → PIT WALL",
-    time: "LAP 17 • 13:45:10",
-    msg: "Understood Will. Front wing balance is spot on. Rear tires are in the sweet spot.",
-    type: "driver-msg"
-  },
-  {
-    speaker: "ANDREA STELLA (TEAM PRINCIPAL)",
-    time: "LAP 18 • 13:46:22",
-    msg: "Both cars are running P1 and P2 with clean air. Google Cloud simulations show 95% victory window.",
-    type: "mclaren-msg"
-  }
-];
-
-let radioIndex = 0;
-function triggerRadioBroadcast() {
-  playF1RadioChirp();
-  const comm = radioArchive[radioIndex % radioArchive.length];
-  radioIndex++;
-
-  const entry = document.createElement('div');
-  entry.className = `radio-msg ${comm.type}`;
-  entry.innerHTML = `
-    <div class="rm-header">
-      <span class="rm-speaker">${comm.speaker}</span>
-      <span class="rm-time">${comm.time}</span>
-    </div>
-    <p class="rm-body">"${comm.msg}"</p>
-  `;
-
-  if (radioLog) {
-    radioLog.insertBefore(entry, radioLog.firstChild);
-    while (radioLog.children.length > 5) {
-      radioLog.removeChild(radioLog.lastChild);
-    }
-  }
-}
-
-if (btnPlayRadio) {
-  btnPlayRadio.addEventListener('click', triggerRadioBroadcast);
-}
-
-// Comms Audio Toggle
 const radioMuteBtn = document.getElementById('radioMuteBtn');
-const radioIcon = document.getElementById('radioIcon');
+const radioDot = document.getElementById('radioDot');
 const radioLabel = document.getElementById('radioLabel');
 
 if (radioMuteBtn) {
   radioMuteBtn.addEventListener('click', () => {
-    audioEnabled = !audioEnabled;
-    if (audioEnabled) {
-      radioIcon.className = 'radio-status-dot active';
-      radioLabel.textContent = 'PIT COMMS: ON';
-      playF1RadioChirp();
+    audioMuted = !audioMuted;
+    if (audioMuted) {
+      if (radioDot) radioDot.classList.remove('green');
+      if (radioLabel) radioLabel.textContent = 'COMMS: MUTED';
     } else {
-      radioIcon.className = 'radio-status-dot';
-      radioLabel.textContent = 'PIT COMMS: MUTED';
+      if (radioDot) radioDot.classList.add('green');
+      if (radioLabel) radioLabel.textContent = 'COMMS: ACTIVE';
+      playPitRadioTone();
     }
   });
 }
 
-// 5. Real-Time Rolling Waveform Canvas (ATLAS-Style Telemetry)
-const teleCanvas = document.getElementById('telemetryCanvas');
-let teleCtx = null;
-if (teleCanvas) {
-  teleCtx = teleCanvas.getContext('2d');
+const commsFeed = [
+  { ch: "WILL JOSEPH (RACE ENG) > LANDO", t: "LAP 16", msg: "Lando, radio check. DRS available out of Ascari. Strat 7 when ready." },
+  { ch: "TOM STALLARD > OSCAR", t: "LAP 16", msg: "Oscar, pace in sector 2 is +0.2s to leader. Tyre temps optimal. Maintain delta." },
+  { ch: "LANDO NORRIS > PIT WALL", t: "LAP 17", msg: "Understood Will. Balance feels sharp. Front axle biting well on entry." },
+  { ch: "ANDREA STELLA (TEAM PRINCIPAL)", t: "LAP 18", msg: "Both cars executing Plan A. Strategy simulations indicate 95% victory window." }
+];
+
+let commIndex = 0;
+if (btnPlayRadio) {
+  btnPlayRadio.addEventListener('click', () => {
+    playPitRadioTone();
+    const c = commsFeed[commIndex % commsFeed.length];
+    commIndex++;
+
+    const row = document.createElement('div');
+    row.className = 'radio-entry engineer-entry font-mono';
+    row.innerHTML = `
+      <div class="re-header">
+        <span class="re-ch">${c.ch}</span>
+        <span class="re-t">${c.t}</span>
+      </div>
+      <div class="re-msg">"${c.msg}"</div>
+    `;
+
+    if (radioLog) {
+      radioLog.insertBefore(row, radioLog.firstChild);
+      while (radioLog.children.length > 5) {
+        radioLog.removeChild(radioLog.lastChild);
+      }
+    }
+  });
 }
 
-const HISTORY_LENGTH = 120;
-const speedHistory = new Array(HISTORY_LENGTH).fill(315);
-const throttleHistory = new Array(HISTORY_LENGTH).fill(90);
-const brakeHistory = new Array(HISTORY_LENGTH).fill(0);
+// 5. Rolling Waveform Canvas (ATLAS Multi-Channel Telemetry)
+const teleCanvas = document.getElementById('telemetryCanvas');
+let teleCtx = null;
+if (teleCanvas) teleCtx = teleCanvas.getContext('2d');
 
-function drawTelemetryWaveform() {
+const HISTORY_LEN = 120;
+const speedHistory = new Array(HISTORY_LEN).fill(320);
+const throttleHistory = new Array(HISTORY_LEN).fill(95);
+const brakeHistory = new Array(HISTORY_LEN).fill(0);
+
+function renderWaveform() {
   if (!teleCtx || !teleCanvas) return;
   const w = teleCanvas.width;
   const h = teleCanvas.height;
 
   teleCtx.clearRect(0, 0, w, h);
 
-  // Background Grid Lines
-  teleCtx.strokeStyle = '#1C2433';
+  // Subtle Grid Lines
+  teleCtx.strokeStyle = '#161A24';
   teleCtx.lineWidth = 1;
-  for (let y = 30; y < h; y += 35) {
+  for (let y = 25; y < h; y += 30) {
     teleCtx.beginPath();
     teleCtx.moveTo(0, y);
     teleCtx.lineTo(w, y);
     teleCtx.stroke();
   }
 
-  // Draw Speed (Papaya) - Normalized 0 to 350 km/h
+  // Speed Trace (Papaya)
   teleCtx.strokeStyle = '#FF8000';
-  teleCtx.lineWidth = 2;
+  teleCtx.lineWidth = 1.8;
   teleCtx.beginPath();
-  for (let i = 0; i < HISTORY_LENGTH; i++) {
-    const x = (i / (HISTORY_LENGTH - 1)) * w;
+  for (let i = 0; i < HISTORY_LEN; i++) {
+    const x = (i / (HISTORY_LEN - 1)) * w;
     const y = h - ((speedHistory[i] / 350) * (h - 20) + 10);
     if (i === 0) teleCtx.moveTo(x, y);
     else teleCtx.lineTo(x, y);
   }
   teleCtx.stroke();
 
-  // Draw Throttle (Green) - Normalized 0 to 100%
+  // Throttle (Green)
   teleCtx.strokeStyle = '#10B981';
-  teleCtx.lineWidth = 1.5;
+  teleCtx.lineWidth = 1.2;
   teleCtx.beginPath();
-  for (let i = 0; i < HISTORY_LENGTH; i++) {
-    const x = (i / (HISTORY_LENGTH - 1)) * w;
+  for (let i = 0; i < HISTORY_LEN; i++) {
+    const x = (i / (HISTORY_LEN - 1)) * w;
     const y = h - ((throttleHistory[i] / 100) * (h * 0.4) + 10);
     if (i === 0) teleCtx.moveTo(x, y);
     else teleCtx.lineTo(x, y);
   }
   teleCtx.stroke();
 
-  // Draw Brake (Red)
-  teleCtx.strokeStyle = '#EF4444';
-  teleCtx.lineWidth = 2;
+  // Brake (Red)
+  teleCtx.strokeStyle = '#EA4335';
+  teleCtx.lineWidth = 1.5;
   teleCtx.beginPath();
-  for (let i = 0; i < HISTORY_LENGTH; i++) {
-    const x = (i / (HISTORY_LENGTH - 1)) * w;
+  for (let i = 0; i < HISTORY_LEN; i++) {
+    const x = (i / (HISTORY_LEN - 1)) * w;
     const y = h - ((brakeHistory[i] / 100) * (h * 0.4) + 10);
     if (i === 0) teleCtx.moveTo(x, y);
     else teleCtx.lineTo(x, y);
@@ -284,37 +267,34 @@ function drawTelemetryWaveform() {
   teleCtx.stroke();
 }
 
-// 6. Interactive 2D Monza Circuit GPS Tracker
+// 6. Monza GPS Circuit Canvas
 const circuitCanvas = document.getElementById('circuitCanvas');
 let cCtx = null;
-if (circuitCanvas) {
-  cCtx = circuitCanvas.getContext('2d');
-}
+if (circuitCanvas) cCtx = circuitCanvas.getContext('2d');
 
-// Monza Circuit Coordinates (Normalized Path)
-const monzaPath = [
-  { x: 50, y: 70 },    // Start/Finish Straight
-  { x: 380, y: 70 },   // End of Main Straight
-  { x: 400, y: 95 },   // Variante del Rettifilo Chicane T1/T2
-  { x: 410, y: 140 },  // Curva Biassono / Curva Grande T4
-  { x: 390, y: 190 },  // Variante della Roggia T5
-  { x: 360, y: 220 },  // Lesmo 1 T6
-  { x: 300, y: 245 },  // Lesmo 2 T7
-  { x: 220, y: 220 },  // Curva del Serraglio T8
-  { x: 150, y: 200 },  // Variante Ascari Entrance
-  { x: 110, y: 175 },  // Ascari Exit
-  { x: 70, y: 130 },   // Parabolica (Curva Alboreto)
-  { x: 50, y: 70 }     // Back to Start/Finish
+const monzaCoords = [
+  { x: 50, y: 50 },
+  { x: 620, y: 50 },  // Main Straight
+  { x: 650, y: 75 },  // Rettifilo
+  { x: 670, y: 115 }, // Curva Grande
+  { x: 630, y: 145 }, // Roggia
+  { x: 560, y: 160 }, // Lesmo 1
+  { x: 480, y: 165 }, // Lesmo 2
+  { x: 340, y: 140 }, // Serraglio
+  { x: 220, y: 125 }, // Ascari Entry
+  { x: 160, y: 105 }, // Ascari Exit
+  { x: 90, y: 80 },   // Parabolica Entry
+  { x: 50, y: 50 }    // Finish
 ];
 
-function getPointOnTrack(progress) {
-  const numSegments = monzaPath.length - 1;
-  const scaled = (progress % 1) * numSegments;
-  const index = Math.floor(scaled);
-  const frac = scaled - index;
+function getTrackPoint(progress) {
+  const segments = monzaCoords.length - 1;
+  const scaled = (progress % 1) * segments;
+  const idx = Math.floor(scaled);
+  const frac = scaled - idx;
 
-  const p1 = monzaPath[index];
-  const p2 = monzaPath[index + 1] || monzaPath[0];
+  const p1 = monzaCoords[idx];
+  const p2 = monzaCoords[idx + 1] || monzaCoords[0];
 
   return {
     x: p1.x + (p2.x - p1.x) * frac,
@@ -322,114 +302,112 @@ function getPointOnTrack(progress) {
   };
 }
 
-function drawMonzaCircuit() {
+function renderCircuit() {
   if (!cCtx || !circuitCanvas) return;
   const w = circuitCanvas.width;
   const h = circuitCanvas.height;
 
   cCtx.clearRect(0, 0, w, h);
 
-  // Draw Circuit Road
-  cCtx.strokeStyle = '#263147';
-  cCtx.lineWidth = 14;
+  // Road Base
+  cCtx.strokeStyle = '#1A1F2C';
+  cCtx.lineWidth = 10;
   cCtx.lineCap = 'round';
   cCtx.lineJoin = 'round';
   cCtx.beginPath();
-  monzaPath.forEach((pt, idx) => {
-    if (idx === 0) cCtx.moveTo(pt.x, pt.y);
+  monzaCoords.forEach((pt, i) => {
+    if (i === 0) cCtx.moveTo(pt.x, pt.y);
     else cCtx.lineTo(pt.x, pt.y);
   });
   cCtx.closePath();
   cCtx.stroke();
 
-  // Draw Racing Line (Subtle Gray Inner Line)
-  cCtx.strokeStyle = '#374663';
+  // Racing Centerline
+  cCtx.strokeStyle = '#273147';
   cCtx.lineWidth = 2;
   cCtx.stroke();
 
-  // DRS Zones Highlighting (Main Straight: x=50 to 380, y=70)
+  // DRS Zone Main Straight
   cCtx.strokeStyle = '#10B981';
-  cCtx.lineWidth = 4;
+  cCtx.lineWidth = 3;
   cCtx.beginPath();
-  cCtx.moveTo(70, 70);
-  cCtx.lineTo(360, 70);
+  cCtx.moveTo(80, 50);
+  cCtx.lineTo(580, 50);
   cCtx.stroke();
 
-  // Start / Finish Line Checkered Bar
+  // Finish Line
   cCtx.strokeStyle = '#FFFFFF';
-  cCtx.lineWidth = 4;
+  cCtx.lineWidth = 3;
   cCtx.beginPath();
-  cCtx.moveTo(50, 60);
-  cCtx.lineTo(50, 80);
+  cCtx.moveTo(50, 42);
+  cCtx.lineTo(50, 58);
   cCtx.stroke();
 
-  // Draw Car Markers
-  const landoPos = getPointOnTrack(driverState.norris.trackProgress);
-  const oscarPos = getPointOnTrack(driverState.piastri.trackProgress);
+  // Car Markers
+  const lando = getTrackPoint(telemetryState.norris.trackProgress);
+  const oscar = getTrackPoint(telemetryState.piastri.trackProgress);
 
-  // Draw Oscar #81 (Yellow)
+  // Oscar #81
   cCtx.fillStyle = '#FCD34D';
   cCtx.beginPath();
-  cCtx.arc(oscarPos.x, oscarPos.y, 7, 0, Math.PI * 2);
+  cCtx.arc(oscar.x, oscar.y, 6, 0, Math.PI * 2);
   cCtx.fill();
-  cCtx.fillStyle = '#080A0F';
+  cCtx.fillStyle = '#000000';
+  cCtx.font = 'bold 7px JetBrains Mono';
+  cCtx.textAlign = 'center';
+  cCtx.textBaseline = 'middle';
+  cCtx.fillText('81', oscar.x, oscar.y);
+
+  // Lando #4
+  cCtx.fillStyle = '#FF8000';
+  cCtx.beginPath();
+  cCtx.arc(lando.x, lando.y, 7, 0, Math.PI * 2);
+  cCtx.fill();
+  cCtx.fillStyle = '#FFFFFF';
   cCtx.font = 'bold 8px JetBrains Mono';
   cCtx.textAlign = 'center';
   cCtx.textBaseline = 'middle';
-  cCtx.fillText('81', oscarPos.x, oscarPos.y);
-
-  // Draw Lando #4 (McLaren Papaya)
-  cCtx.fillStyle = '#FF8000';
-  cCtx.beginPath();
-  cCtx.arc(landoPos.x, landoPos.y, 8, 0, Math.PI * 2);
-  cCtx.fill();
-  cCtx.fillStyle = '#FFFFFF';
-  cCtx.font = 'bold 9px JetBrains Mono';
-  cCtx.textAlign = 'center';
-  cCtx.textBaseline = 'middle';
-  cCtx.fillText('4', landoPos.x, landoPos.y);
+  cCtx.fillText('4', lando.x, lando.y);
 }
 
-// 7. Master Simulation Loop (20Hz Telemetry Tick)
-let tickCounter = 0;
+// 7. Telemetry Engine Loop (20Hz)
+let cycle = 0;
 setInterval(() => {
-  tickCounter++;
-  const active = driverState[activeDriverKey];
+  cycle++;
+  const active = telemetryState[activeDriver];
 
-  // Move cars on track
-  driverState.norris.trackProgress += 0.0035;
-  driverState.piastri.trackProgress += 0.0034;
+  // Advance Cars
+  telemetryState.norris.trackProgress += 0.0035;
+  telemetryState.piastri.trackProgress += 0.0034;
 
-  // Telemetry physics state machine
-  const cyclePos = tickCounter % 40;
-  const isHeavyBraking = cyclePos > 32;
+  const isBraking = (cycle % 38) > 30;
 
-  if (isHeavyBraking) {
-    active.speed = Math.max(110, active.speed - 22);
-    active.gear = active.speed > 220 ? 5 : active.speed > 160 ? 4 : 3;
-    active.rpm = Math.max(7600, 8400 + Math.floor(Math.random() * 900));
+  if (isBraking) {
+    active.speed = Math.max(115, active.speed - 22);
+    active.gear = active.speed > 210 ? 5 : active.speed > 150 ? 4 : 3;
+    active.rpm = Math.max(7600, 8500 + Math.floor(Math.random() * 800));
     active.throttle = 0;
-    active.brake = 96 - Math.floor(Math.random() * 12);
-    active.ers = Math.min(96, active.ers + 0.3);
+    active.brake = 95 - Math.floor(Math.random() * 10);
+    active.ers = Math.min(95, active.ers + 0.25);
     if (drsState) {
-      drsState.textContent = "CLOSED • BRAKING ZONE";
-      drsState.classList.remove('active');
+      drsState.textContent = "DRS CLOSED";
+      drsState.className = "tf-drs text-red font-mono";
     }
   } else {
-    active.speed = Math.min(348, active.speed + Math.floor(Math.random() * 6) - 1);
+    active.speed = Math.min(346, active.speed + Math.floor(Math.random() * 5) - 1);
     if (active.speed < 230) active.speed = 318;
     active.gear = active.speed > 310 ? 8 : 7;
-    active.rpm = Math.min(12450, 11500 + Math.floor(Math.random() * 850));
+    active.rpm = Math.min(12450, 11600 + Math.floor(Math.random() * 750));
     active.throttle = 94 + Math.floor(Math.random() * 6);
     active.brake = 0;
-    active.ers = Math.max(48, active.ers - 0.25);
+    active.ers = Math.max(48, active.ers - 0.2);
     if (drsState) {
-      drsState.textContent = "AVAILABLE • DEPLOYED";
-      drsState.classList.add('active');
+      drsState.textContent = "DRS AVAILABLE";
+      drsState.className = "tf-drs text-green font-mono";
     }
   }
 
-  // Rolling history update
+  // History shift
   speedHistory.push(active.speed);
   speedHistory.shift();
   throttleHistory.push(active.throttle);
@@ -437,20 +415,13 @@ setInterval(() => {
   brakeHistory.push(active.brake);
   brakeHistory.shift();
 
-  // Dynamic tire temperatures
-  active.tires.fl = Math.round((102.4 + Math.sin(tickCounter * 0.15) * 2.2) * 10) / 10;
-  active.tires.fr = Math.round((104.1 + Math.cos(tickCounter * 0.15) * 2.4) * 10) / 10;
-  active.tires.rl = Math.round((98.6 + Math.sin(tickCounter * 0.1) * 1.6) * 10) / 10;
-  active.tires.rr = Math.round((99.2 + Math.cos(tickCounter * 0.1) * 1.8) * 10) / 10;
+  // Tyre Thermal Oscillations
+  active.tires.fl = Math.round((102.4 + Math.sin(cycle * 0.15) * 2.1) * 10) / 10;
+  active.tires.fr = Math.round((104.1 + Math.cos(cycle * 0.15) * 2.3) * 10) / 10;
+  active.tires.rl = Math.round((98.6 + Math.sin(cycle * 0.1) * 1.5) * 10) / 10;
+  active.tires.rr = Math.round((99.2 + Math.cos(cycle * 0.1) * 1.7) * 10) / 10;
 
-  // Sub-millisecond latency jitter
-  if (edgeLatencyVal && latencyDisplay) {
-    const lat = (0.72 + Math.random() * 0.09).toFixed(2);
-    edgeLatencyVal.textContent = `${lat} ms`;
-    latencyDisplay.textContent = `GDC EDGE • ${lat}ms`;
-  }
-
-  // Update UI Elements
+  // DOM Updates
   if (teleSpeed) teleSpeed.textContent = active.speed;
   if (teleGear) teleGear.textContent = active.gear;
   if (teleRpm) teleRpm.textContent = Number(active.rpm).toLocaleString();
@@ -470,7 +441,7 @@ setInterval(() => {
   if (tempRL) tempRL.textContent = `${active.tires.rl}°C`;
   if (tempRR) tempRR.textContent = `${active.tires.rr}°C`;
 
-  // Update Shift Lights (LEDs)
+  // Shift LEDs
   if (rpmLedBar) {
     const pct = (active.rpm - 7500) / (12500 - 7500);
     const activeLeds = Math.floor(pct * TOTAL_LEDS);
@@ -481,72 +452,51 @@ setInterval(() => {
     }
   }
 
-  // Render Graphics
-  drawTelemetryWaveform();
-  drawMonzaCircuit();
+  // Edge Ping Jitter
+  if (latencyDisplay) {
+    const lat = (0.72 + Math.random() * 0.08).toFixed(2);
+    latencyDisplay.textContent = `EDGE ${lat}ms`;
+  }
+
+  renderWaveform();
+  renderCircuit();
 }, 200);
 
-// 8. Grand Prix Countdown Timer
-function startCountdown() {
+// 8. Session Countdown Clock
+function initCountdown() {
   const target = new Date();
   target.setDate(target.getDate() + 2);
   target.setHours(13, 30, 0, 0);
 
-  function update() {
-    const now = new Date();
-    const diff = target - now;
+  function tick() {
+    const diff = target - new Date();
     if (diff <= 0) return;
-
     const d = Math.floor(diff / (1000 * 60 * 60 * 24));
     const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
     const m = Math.floor((diff / (1000 * 60)) % 60);
     const s = Math.floor((diff / 1000) % 60);
 
     const pad = (n) => String(n).padStart(2, '0');
-    const cdD = document.getElementById('cdDays');
-    const cdH = document.getElementById('cdHours');
-    const cdM = document.getElementById('cdMins');
-    const cdS = document.getElementById('cdSecs');
-
-    if (cdD) cdD.textContent = pad(d);
-    if (cdH) cdH.textContent = pad(h);
-    if (cdM) cdM.textContent = pad(m);
-    if (cdS) cdS.textContent = pad(s);
+    const elem = document.getElementById('headerCountdown');
+    if (elem) elem.textContent = `${pad(d)}D ${pad(h)}H ${pad(m)}M ${pad(s)}S`;
   }
 
-  update();
-  setInterval(update, 1000);
+  tick();
+  setInterval(tick, 1000);
 }
-startCountdown();
+initCountdown();
 
-// 9. Interactive Strategy Simulator Logic
-const pitLapInput = document.getElementById('pitLapInput');
-const pitLapDisplay = document.getElementById('pitLapDisplay');
-const rejoinPos = document.getElementById('rejoinPos');
-
-if (pitLapInput) {
-  pitLapInput.addEventListener('input', (e) => {
-    const lap = e.target.value;
-    if (pitLapDisplay) pitLapDisplay.textContent = `Lap ${lap}`;
-    if (rejoinPos) {
-      if (lap < 25) rejoinPos.textContent = "P5 (Traffic / Dirty Air)";
-      else if (lap <= 34) rejoinPos.textContent = "P3 (Clean Air / Optimal)";
-      else rejoinPos.textContent = "P2 (Overcut / Risk of Deg)";
-    }
-  });
-}
-
-// 10. Copy go/formula1 Chip
+// 9. Copy go/formula1
 const goLinkChip = document.getElementById('goLinkChip');
 if (goLinkChip) {
   goLinkChip.addEventListener('click', () => {
     navigator.clipboard.writeText('http://go/formula1').then(() => {
-      const original = goLinkChip.innerHTML;
-      goLinkChip.innerHTML = '<span>COPIED</span>';
-      playF1RadioChirp();
+      const orig = goLinkChip.innerHTML;
+      goLinkChip.innerHTML = '<code>COPIED</code>';
+      playPitRadioTone();
       setTimeout(() => {
-        goLinkChip.innerHTML = original;
-      }, 1500);
+        goLinkChip.innerHTML = orig;
+      }, 1400);
     });
   });
 }

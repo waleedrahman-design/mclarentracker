@@ -3,931 +3,575 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="McLaren Formula 1 Team Trackside Telemetry & Google Cloud Edge Pit Wall Dashboard. Live vehicle telemetry, circuit GPS tracker, broadcast streaming links, championship odds, and team radio. go/formula1.">
-  <title>McLaren F1 • Google Cloud Trackside Telemetry (go/formula1)</title>
+  <title>MCLAREN F1 • PIT WALL TELEMETRY (go/formula1)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Top Navigation & Global Ops Bar -->
-  <header class="top-nav">
-    <div class="nav-left">
+  <!-- System Command Header -->
+  <header class="console-header">
+    <div class="header-cluster-left">
       <!-- Official McLaren Racing Logo -->
-      <a href="https://www.mclaren.com/racing/" target="_blank" rel="noopener" class="brand-link" title="McLaren Racing">
-        <svg class="mclaren-logo-svg" viewBox="0 0 175 32" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <text x="0" y="24" font-family="'Space Grotesk', -apple-system, sans-serif" font-weight="800" font-size="24" fill="#FFFFFF" letter-spacing="-0.03em">McLAREN</text>
-          <!-- Official Papaya Speedmark -->
-          <path d="M142 5C135.5 11.5 134.5 18.8 138.8 23.2C141 25.5 145 26.5 149.5 25.8C155.5 24.8 159 20.5 159 17C159 14.8 157.5 13.5 155 13.5C151 13.5 147 17.8 147 20.2C147 21.2 147.8 21.8 149 21.5C146.2 22.2 143 21.2 141.8 19.2C139.5 15.5 141.5 9.5 148 5L142 5Z" fill="#FF8000"/>
+      <a href="https://www.mclaren.com/racing/" target="_blank" rel="noopener" class="logo-anchor" title="McLaren Racing">
+        <svg class="mclaren-svg" viewBox="0 0 160 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="0" y="20" font-family="'Inter', sans-serif" font-weight="800" font-size="20" fill="#FFFFFF" letter-spacing="-0.03em">McLAREN</text>
+          <path d="M136 4C130 9.5 129 16 133 20C135 22 138.5 23 142.5 22.5C148 21.5 151 17.5 151 14.5C151 12.5 149.5 11.5 147.5 11.5C144 11.5 140.5 15.2 140.5 17.2C140.5 18 141.2 18.5 142.2 18.2C139.8 18.8 137 18 136 16.2C134 13 135.5 8 141 4L136 4Z" fill="#FF8000"/>
         </svg>
-        <span class="f1-badge">F1</span>
       </a>
 
-      <div class="partner-divider">/</div>
+      <div class="header-divider">/</div>
 
       <!-- Official Google Cloud Logo -->
-      <a href="https://cloud.google.com/" target="_blank" rel="noopener" class="brand-link" title="Google Cloud">
-        <svg class="google-cloud-logo-svg" viewBox="0 0 190 32" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <g transform="translate(2, 2)">
-            <path fill="#EA4335" d="M14.5 9.8c-.9-.9-2.1-1.5-3.4-1.7l1.9 5 4.9-1.9c-.8-.7-2.2-1.4-3.4-1.4z"/>
-            <path fill="#4285F4" d="M25.2 13.4c-.4-.9-.9-1.8-1.6-2.5l-5.7 2.1c.5.8.7 1.8.6 2.7 0 1.4-.6 2.6-1.6 3.4l3.2 4.1c2.1-1.5 3.4-4 3.4-6.7 0-1.1-.2-2.1-.5-3.1z"/>
-            <path fill="#FBBC04" d="M11.1 8c-2.8.2-5.3 1.8-6.6 4.2-.6 1.1-.8 2.3-.8 3.6 0 1.6.6 3.3 1.6 4.6l4.6-2.7c-.2-.6-.4-1.2-.4-1.9 0-2.1 1.4-3.9 3.4-4.5L11.1 8z"/>
-            <path fill="#34A853" d="M16.8 25.1c2.6 0 4.8-1.3 6.2-3.3l-3.2-4.1c-.7.7-1.8 1.2-3 1.2-1.8 0-3.3-1.1-4-2.6l-4.8 2.8c1.6 3.7 5.4 6 8.8 6z"/>
-            <path fill="#4285F4" d="M12.8 16.3c0-.6.1-1.2.4-1.7l-4.8-2.8c-.9 1.4-1.4 3.1-1.4 4.8 0 .7.1 1.4.2 2.1l4.8-2.7c-.1-.7-.2-1.4-.2-2.1z"/>
+      <a href="https://cloud.google.com/" target="_blank" rel="noopener" class="logo-anchor" title="Google Cloud">
+        <svg class="google-cloud-svg" viewBox="0 0 170 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(0, 1)">
+            <path fill="#EA4335" d="M12.5 8.2c-.8-.8-1.8-1.3-2.9-1.5l1.6 4.3 4.2-1.6c-.7-.6-1.9-1.2-2.9-1.2z"/>
+            <path fill="#4285F4" d="M21.7 11.3c-.3-.8-.8-1.5-1.4-2.1l-4.9 1.8c.4.7.6 1.5.5 2.3 0 1.2-.5 2.2-1.4 2.9l2.7 3.5c1.8-1.3 2.9-3.4 2.9-5.7 0-.9-.2-1.8-.4-2.7z"/>
+            <path fill="#FBBC04" d="M9.6 6.7c-2.4.2-4.5 1.5-5.6 3.6-.5.9-.7 2-.7 3.1 0 1.4.5 2.8 1.4 3.9l3.9-2.3c-.2-.5-.3-1-.3-1.6 0-1.8 1.2-3.3 2.9-3.8L9.6 6.7z"/>
+            <path fill="#34A853" d="M14.5 21.4c2.2 0 4.1-1.1 5.3-2.8l-2.7-3.5c-.6.6-1.5 1-2.6 1-1.5 0-2.8-.9-3.4-2.2L6.3 16.7c1.4 3.2 4.6 5.2 7.5 5.2z"/>
+            <path fill="#4285F4" d="M11.1 13.9c0-.5.1-1 .3-1.4L7.2 10c-.8 1.2-1.2 2.6-1.2 4.1 0 .6.1 1.2.2 1.8l4.1-2.3c-.1-.6-.2-1.2-.2-1.8z"/>
           </g>
-          <text x="36" y="22" font-family="'Space Grotesk', -apple-system, sans-serif" font-weight="700" font-size="16" fill="#FFFFFF">Google <tspan fill="#9CA3AF" font-weight="400">Cloud</tspan></text>
+          <text x="32" y="19" font-family="'Inter', sans-serif" font-weight="600" font-size="14" fill="#FFFFFF">Google <tspan fill="#8E95A5" font-weight="400">Cloud</tspan></text>
         </svg>
       </a>
 
-      <div class="header-tagline">Trackside Engineering & Telemetry Operations</div>
+      <div class="header-divider">/</div>
+      <div class="console-label">TRACKSIDE SYSTEM CONSOLE</div>
     </div>
 
-    <div class="nav-right">
-      <!-- Quick Portal Launcher Dropdown/Links -->
-      <a href="https://www.mclaren.com/racing/formula-1/" target="_blank" rel="noopener" class="header-link-chip" title="McLaren Official Site">
-        <span>McLaren.com</span>
-      </a>
-      <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="header-link-chip watch-chip" title="Watch on F1 TV Pro">
-        <span>F1 TV PRO</span>
-      </a>
+    <!-- Weather & Track State Readout -->
+    <div class="header-cluster-mid">
+      <div class="telemetry-pill">
+        <span class="pill-k">EVENT:</span>
+        <span class="pill-v text-white">ROUND 16 MONZA</span>
+      </div>
+      <div class="telemetry-pill">
+        <span class="pill-k">TRACK:</span>
+        <span class="pill-v" id="valTrackTemp">38.4°C</span>
+      </div>
+      <div class="telemetry-pill">
+        <span class="pill-k">AIR:</span>
+        <span class="pill-v">26.8°C</span>
+      </div>
+      <div class="telemetry-pill">
+        <span class="pill-k">WIND:</span>
+        <span class="pill-v">8.4 KM/H SW</span>
+      </div>
+      <div class="telemetry-pill">
+        <span class="pill-k">SESSION IN:</span>
+        <span class="pill-v text-papaya font-mono" id="headerCountdown">02D 14H 28M 10S</span>
+      </div>
+    </div>
 
-      <!-- Audio Comms Toggle -->
-      <button class="comms-toggle-btn" id="radioMuteBtn" title="Toggle Pit Wall Audio Comms">
-        <span id="radioIcon" class="radio-status-dot active"></span>
-        <span id="radioLabel">PIT COMMS: ON</span>
+    <div class="header-cluster-right">
+      <!-- Audio Toggle -->
+      <button class="comms-btn" id="radioMuteBtn" title="Toggle Radio Squelch Tone">
+        <span class="dot-indicator green" id="radioDot"></span>
+        <span id="radioLabel">COMMS: ACTIVE</span>
       </button>
 
-      <!-- Live Edge Indicator -->
-      <div class="system-status-indicator" title="GDC Edge Pit Garage Cluster">
-        <span class="status-dot pulse"></span>
-        <span class="status-label" id="latencyDisplay">GDC EDGE &bull; 0.76ms</span>
+      <!-- GDC Edge Ping -->
+      <div class="edge-ping-box">
+        <span class="dot-indicator green pulse"></span>
+        <span class="font-mono" id="latencyDisplay">EDGE 0.76ms</span>
       </div>
 
-      <!-- go/link Chip -->
-      <div class="go-link-chip" id="goLinkChip" title="Click to copy internal go/link">
-        <span class="link-icon">GO</span>
+      <!-- go/link Copy -->
+      <button class="golink-button" id="goLinkChip" title="Copy internal shortlink go/formula1">
         <code>go/formula1</code>
-      </div>
+      </button>
     </div>
   </header>
 
-  <!-- Hero Banner: Grand Prix Countdown, Weather & Track Evolution -->
-  <section class="race-hero">
-    <div class="hero-left">
-      <div class="round-badge">ROUND 16 &bull; FIA FORMULA ONE WORLD CHAMPIONSHIP</div>
-      <h1 class="circuit-title">Italian Grand Prix &bull; Autodromo Nazionale Monza</h1>
-      <div class="track-metrics-bar">
-        <div class="track-metric">
-          <span class="tm-label">CIRCUIT LENGTH</span>
-          <span class="tm-val">5.793 km</span>
-        </div>
-        <div class="track-metric">
-          <span class="tm-label">RACE DISTANCE</span>
-          <span class="tm-val">53 Laps (306.7 km)</span>
-        </div>
-        <div class="track-metric">
-          <span class="tm-label">LAP RECORD</span>
-          <span class="tm-val">1:21.046 (Barrichello)</span>
-        </div>
-        <div class="track-metric">
-          <span class="tm-label">DRS ZONES</span>
-          <span class="tm-val">2 (Main & Serraglio)</span>
-        </div>
-        <div class="track-metric">
-          <span class="tm-label">TIRE COMPOUNDS</span>
-          <span class="tm-val text-yellow">C3 Hard &bull; C4 Med &bull; C5 Soft</span>
-        </div>
-      </div>
-    </div>
+  <!-- Main Pit Wall Operations Layout (3-Column Grid) -->
+  <div class="console-grid">
 
-    <div class="hero-right">
-      <div class="countdown-panel">
-        <div class="countdown-title">NEXT TRACK SESSION (PRACTICE 1)</div>
-        <div class="countdown-clock" id="countdownClock">
-          <div class="clock-unit"><span class="clock-num" id="cdDays">02</span><span class="clock-txt">DAYS</span></div>
-          <div class="clock-sep">:</div>
-          <div class="clock-unit"><span class="clock-num" id="cdHours">14</span><span class="clock-txt">HRS</span></div>
-          <div class="clock-sep">:</div>
-          <div class="clock-unit"><span class="clock-num" id="cdMins">28</span><span class="clock-txt">MIN</span></div>
-          <div class="clock-sep">:</div>
-          <div class="clock-unit"><span class="clock-num" id="cdSecs">36</span><span class="clock-txt">SEC</span></div>
-        </div>
-        <div class="weather-strip">
-          <div class="w-item">Track: <strong id="valTrackTemp">38.2°C</strong></div>
-          <div class="w-item">Air: <strong>26.8°C</strong></div>
-          <div class="w-item">Wind: <strong>8.4 km/h SW</strong></div>
-          <div class="w-item">Rain Risk: <strong class="text-green">0%</strong></div>
-        </div>
+    <!-- Column 1: Live Timing Tower (F1 Standard P1-P10) -->
+    <aside class="console-panel timing-tower-panel">
+      <div class="panel-bar">
+        <span class="panel-heading">TIMING & SCORING</span>
+        <span class="panel-meta">LIVE INTERVALS</span>
       </div>
-    </div>
-  </section>
 
-  <!-- Driver Selector & Live Timing Strip -->
-  <section class="driver-bar">
-    <div class="driver-tabs">
-      <button class="driver-btn active" id="btnLando" data-driver="norris">
-        <div class="d-avatar lando-avatar">LN</div>
-        <div class="d-info">
-          <span class="d-number">#4</span>
-          <strong class="d-name">Lando Norris</strong>
-          <span class="d-badge p1-badge">POS: P1</span>
-        </div>
-        <div class="d-times">
-          <span class="d-laptime">LAST: 1:21.432</span>
-          <span class="d-gap text-green">-0.184s vs LEC</span>
-        </div>
-      </button>
-
-      <button class="driver-btn" id="btnOscar" data-driver="piastri">
-        <div class="d-avatar oscar-avatar">OP</div>
-        <div class="d-info">
-          <span class="d-number">#81</span>
-          <strong class="d-name">Oscar Piastri</strong>
-          <span class="d-badge p2-badge">POS: P2</span>
-        </div>
-        <div class="d-times">
-          <span class="d-laptime">LAST: 1:21.589</span>
-          <span class="d-gap text-yellow">+0.157s vs NOR</span>
-        </div>
-      </button>
-    </div>
-
-    <!-- Live Lap Sector Times -->
-    <div class="sectors-ribbon">
-      <div class="sector-chip purple">
-        <span class="chip-sec">SECTOR 1</span>
-        <span class="chip-val" id="valS1">27.124s</span>
-        <span class="chip-flag">PURPLE (FASTEST)</span>
-      </div>
-      <div class="sector-chip green">
-        <span class="chip-sec">SECTOR 2</span>
-        <span class="chip-val" id="valS2">26.892s</span>
-        <span class="chip-flag">GREEN (PB)</span>
-      </div>
-      <div class="sector-chip green">
-        <span class="chip-sec">SECTOR 3</span>
-        <span class="chip-val" id="valS3">27.416s</span>
-        <span class="chip-flag">GREEN (PB)</span>
-      </div>
-      <div class="drs-status-box" id="drsBox">
-        <span class="drs-label">DRS STATUS</span>
-        <span class="drs-val active" id="drsState">AVAILABLE &bull; DEPLOYED</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Master Telemetry & Track Operations Grid -->
-  <main class="master-telemetry-grid">
-    <!-- Center Left: Live Car Cockpit & Dynamics -->
-    <div class="telemetry-column">
-      <!-- Main Digital Dashboard Card -->
-      <div class="card cockpit-card">
-        <div class="card-header">
-          <span class="card-title">MCL38 COCKPIT & LIVE TELEMETRY STREAM</span>
-          <span class="chip-live">LIVE 20Hz</span>
-        </div>
-
-        <div class="cockpit-center">
-          <!-- Big Speed & Gear Block -->
-          <div class="speed-gear-block">
-            <div class="gear-display">
-              <span class="gear-label">GEAR</span>
-              <span class="gear-num" id="teleGear">7</span>
-            </div>
-            <div class="speed-display">
-              <span class="speed-num" id="teleSpeed">324</span>
-              <span class="speed-unit">KM/H</span>
-            </div>
-            <div class="delta-display">
-              <span class="delta-label">DELTA TO POLE</span>
-              <span class="delta-val text-green" id="teleDelta">-0.184s</span>
-            </div>
+      <div class="timing-tower" id="timingTower">
+        <!-- P1 Norris -->
+        <div class="tower-row mclaren-row active" id="rowNorris" data-driver="norris">
+          <span class="t-pos">1</span>
+          <span class="t-badge t-mclaren"></span>
+          <div class="t-driver">
+            <strong class="t-code">NOR</strong>
+            <span class="t-num">4</span>
           </div>
+          <span class="t-tire t-med" title="Medium Tyre (14 Laps)">M</span>
+          <span class="t-gap leader">LEADER</span>
+          <span class="t-laptime text-purple">1:21.432</span>
+        </div>
 
-          <!-- Shift Lights / LED RPM Bar -->
-          <div class="rpm-strip-container">
-            <div class="rpm-hud-header">
-              <span>ENGINE RPM: <strong id="teleRpm">11,980</strong></span>
-              <span class="rev-limit">REV LIMIT: 12,500</span>
-            </div>
-            <div class="rpm-led-bar" id="rpmLedBar"></div>
+        <!-- P2 Piastri -->
+        <div class="tower-row mclaren-row" id="rowPiastri" data-driver="piastri">
+          <span class="t-pos">2</span>
+          <span class="t-badge t-mclaren"></span>
+          <div class="t-driver">
+            <strong class="t-code">PIA</strong>
+            <span class="t-num">81</span>
           </div>
+          <span class="t-tire t-med" title="Medium Tyre (14 Laps)">M</span>
+          <span class="t-gap text-yellow">+0.157</span>
+          <span class="t-laptime text-green">1:21.589</span>
+        </div>
 
-          <!-- Throttle, Brake & ERS Traces -->
-          <div class="pedals-grid">
-            <div class="pedal-box">
-              <div class="pedal-top">
-                <span class="pedal-name">THROTTLE</span>
-                <span class="pedal-pct text-green" id="valThrottle">96%</span>
-              </div>
-              <div class="gauge-track">
-                <div class="gauge-fill throttle-bar" id="fillThrottle" style="width: 96%;"></div>
-              </div>
-            </div>
+        <!-- P3 Verstappen -->
+        <div class="tower-row">
+          <span class="t-pos">3</span>
+          <span class="t-badge t-rb"></span>
+          <div class="t-driver">
+            <strong class="t-code">VER</strong>
+            <span class="t-num">1</span>
+          </div>
+          <span class="t-tire t-hard" title="Hard Tyre (19 Laps)">H</span>
+          <span class="t-gap">+1.842</span>
+          <span class="t-laptime">1:21.720</span>
+        </div>
 
-            <div class="pedal-box">
-              <div class="pedal-top">
-                <span class="pedal-name">BRAKE</span>
-                <span class="pedal-pct text-red" id="valBrake">0%</span>
-              </div>
-              <div class="gauge-track">
-                <div class="gauge-fill brake-bar" id="fillBrake" style="width: 0%;"></div>
-              </div>
-            </div>
+        <!-- P4 Leclerc -->
+        <div class="tower-row">
+          <span class="t-pos">4</span>
+          <span class="t-badge t-ferrari"></span>
+          <div class="t-driver">
+            <strong class="t-code">LEC</strong>
+            <span class="t-num">16</span>
+          </div>
+          <span class="t-tire t-hard" title="Hard Tyre (18 Laps)">H</span>
+          <span class="t-gap">+3.419</span>
+          <span class="t-laptime">1:21.854</span>
+        </div>
 
-            <div class="pedal-box">
-              <div class="pedal-top">
-                <span class="pedal-name">ERS BATTERY (SOC)</span>
-                <span class="pedal-pct text-blue" id="valErs">78%</span>
-              </div>
-              <div class="gauge-track">
-                <div class="gauge-fill ers-bar" id="fillErs" style="width: 78%;"></div>
-              </div>
-            </div>
+        <!-- P5 Hamilton -->
+        <div class="tower-row">
+          <span class="t-pos">5</span>
+          <span class="t-badge t-ferrari"></span>
+          <div class="t-driver">
+            <strong class="t-code">HAM</strong>
+            <span class="t-num">44</span>
+          </div>
+          <span class="t-tire t-med" title="Medium Tyre (12 Laps)">M</span>
+          <span class="t-gap">+5.890</span>
+          <span class="t-laptime">1:22.012</span>
+        </div>
+
+        <!-- P6 Russell -->
+        <div class="tower-row">
+          <span class="t-pos">6</span>
+          <span class="t-badge t-merc"></span>
+          <div class="t-driver">
+            <strong class="t-code">RUS</strong>
+            <span class="t-num">63</span>
+          </div>
+          <span class="t-tire t-med" title="Medium Tyre (15 Laps)">M</span>
+          <span class="t-gap">+7.234</span>
+          <span class="t-laptime">1:22.180</span>
+        </div>
+
+        <!-- P7 Sainz -->
+        <div class="tower-row">
+          <span class="t-pos">7</span>
+          <span class="t-badge t-williams"></span>
+          <div class="t-driver">
+            <strong class="t-code">SAI</strong>
+            <span class="t-num">55</span>
+          </div>
+          <span class="t-tire t-hard" title="Hard Tyre (21 Laps)">H</span>
+          <span class="t-gap">+11.450</span>
+          <span class="t-laptime">1:22.460</span>
+        </div>
+
+        <!-- P8 Alonso -->
+        <div class="tower-row">
+          <span class="t-pos">8</span>
+          <span class="t-badge t-aston"></span>
+          <div class="t-driver">
+            <strong class="t-code">ALO</strong>
+            <span class="t-num">14</span>
+          </div>
+          <span class="t-tire t-hard" title="Hard Tyre (22 Laps)">H</span>
+          <span class="t-gap">+14.120</span>
+          <span class="t-laptime">1:22.610</span>
+        </div>
+      </div>
+
+      <!-- Sector Analysis Footer -->
+      <div class="tower-footer">
+        <div class="tf-row">
+          <span class="tf-label">CURRENT LAP SECTORS</span>
+          <span class="tf-drs text-green" id="drsState">DRS AVAILABLE</span>
+        </div>
+        <div class="sectors-grid">
+          <div class="sec-cell purple">
+            <span class="sc-k">S1</span>
+            <span class="sc-v" id="valS1">27.124</span>
+          </div>
+          <div class="sec-cell green">
+            <span class="sc-k">S2</span>
+            <span class="sc-v" id="valS2">26.892</span>
+          </div>
+          <div class="sec-cell green">
+            <span class="sc-k">S3</span>
+            <span class="sc-v" id="valS3">27.416</span>
           </div>
         </div>
       </div>
+    </aside>
 
-      <!-- Real-Time Rolling Waveform Telemetry Chart -->
-      <div class="card waveform-card">
-        <div class="card-header">
-          <span class="card-title">ATLAS-GRADE ROLLING SPEED & THROTTLE TRACE</span>
-          <div class="waveform-legend">
-            <span class="legend-dot speed-dot"></span> Speed (km/h)
-            <span class="legend-dot throttle-dot"></span> Throttle (%)
-            <span class="legend-dot brake-dot"></span> Brake (%)
-          </div>
-        </div>
-        <div class="canvas-wrapper">
-          <canvas id="telemetryCanvas" width="760" height="150"></canvas>
-        </div>
-      </div>
-
-      <!-- Tire Temperatures, Pressure & Chassis Degradation -->
-      <div class="card tires-card">
-        <div class="card-header">
-          <span class="card-title">TIRE SURFACE TEMPERATURES & TREAD WEAR</span>
-          <span class="compound-badge">PIRELLI MEDIUM (YELLOW) &bull; 14 LAPS</span>
-        </div>
-        <div class="chassis-layout">
-          <div class="tire-widget" id="twFL">
-            <div class="tw-top"><span class="tw-pos">FRONT LEFT</span><span class="tw-wear">88% LIFE</span></div>
-            <div class="tw-temp" id="tempFL">102.4°C</div>
-            <div class="tw-bar"><div class="tw-fill" style="width: 88%;"></div></div>
-            <div class="tw-psi">23.2 PSI</div>
-          </div>
-
-          <div class="tire-widget" id="twFR">
-            <div class="tw-top"><span class="tw-pos">FRONT RIGHT</span><span class="tw-wear">86% LIFE</span></div>
-            <div class="tw-temp" id="tempFR">104.1°C</div>
-            <div class="tw-bar"><div class="tw-fill" style="width: 86%;"></div></div>
-            <div class="tw-psi">23.4 PSI</div>
-          </div>
-
-          <div class="tire-widget" id="twRL">
-            <div class="tw-top"><span class="tw-pos">REAR LEFT</span><span class="tw-wear">91% LIFE</span></div>
-            <div class="tw-temp" id="tempRL">98.6°C</div>
-            <div class="tw-bar"><div class="tw-fill" style="width: 91%;"></div></div>
-            <div class="tw-psi">21.8 PSI</div>
-          </div>
-
-          <div class="tire-widget" id="twRR">
-            <div class="tw-top"><span class="tw-pos">REAR RIGHT</span><span class="tw-wear">89% LIFE</span></div>
-            <div class="tw-temp" id="tempRR">99.2°C</div>
-            <div class="tw-bar"><div class="tw-fill" style="width: 89%;"></div></div>
-            <div class="tw-psi">21.9 PSI</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Center Right: Live Circuit GPS Map & Pit Wall Comms -->
-    <div class="operations-column">
-      <!-- Live Interactive GPS Circuit Map -->
-      <div class="card circuit-card">
-        <div class="card-header">
-          <span class="card-title">LIVE GPS TRACK POSITION & CORNERS (MONZA)</span>
-          <span class="track-status green-flag">GREEN FLAG</span>
-        </div>
-        <div class="circuit-canvas-box">
-          <canvas id="circuitCanvas" width="460" height="280"></canvas>
-          <div class="circuit-corner-pills">
-            <span class="cp">T1 Variante del Rettifilo</span>
-            <span class="cp">T4 Curva Grande</span>
-            <span class="cp">T8 Variante Ascari</span>
-            <span class="cp">T11 Curva Parabolica</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pit Wall Team Radio Comms Stream -->
-      <div class="card radio-card">
-        <div class="card-header">
-          <span class="card-title">PIT WALL TEAM RADIO INTERCEPT</span>
-          <button class="radio-ping-btn" id="btnPlayRadio" title="Play live radio communication">
-            PLAY TRANSMISSION
+    <!-- Column 2: Live Cockpit Telemetry, Waveform & Track GPS -->
+    <main class="console-panel center-telemetry-panel">
+      <!-- Driver Telemetry Header Switcher -->
+      <div class="panel-bar">
+        <div class="driver-tab-group">
+          <button class="d-tab active" id="btnLando" data-driver="norris">
+            <span class="d-tab-num">04</span>
+            <span class="d-tab-name">NORRIS</span>
+            <span class="d-tab-pos">P1</span>
+          </button>
+          <button class="d-tab" id="btnOscar" data-driver="piastri">
+            <span class="d-tab-num">81</span>
+            <span class="d-tab-name">PIASTRI</span>
+            <span class="d-tab-pos">P2</span>
           </button>
         </div>
-        <div class="radio-transcript-log" id="radioLog">
-          <div class="radio-msg mclaren-msg">
-            <div class="rm-header">
-              <span class="rm-speaker">WILL JOSEPH (RACE ENGINEER) &rarr; LANDO</span>
-              <span class="rm-time">LAP 14 &bull; 13:42:18</span>
-            </div>
-            <p class="rm-body">"Lando, gap to Leclerc is 1.8 seconds. Mode overtake available out of Ascari. Strat 7 when ready."</p>
+        <span class="panel-meta font-mono">CHASSIS: MCL38-01 &bull; 20Hz INGEST</span>
+      </div>
+
+      <!-- Primary Cockpit Gauge Deck -->
+      <div class="cockpit-hud">
+        <div class="gauge-block-speed">
+          <div class="speed-readout">
+            <span class="speed-digits font-mono" id="teleSpeed">324</span>
+            <span class="speed-unit">KM/H</span>
           </div>
-          <div class="radio-msg driver-msg">
-            <div class="rm-header">
-              <span class="rm-speaker">LANDO NORRIS &rarr; PIT WALL</span>
-              <span class="rm-time">LAP 14 &bull; 13:42:25</span>
-            </div>
-            <p class="rm-body">"Copy that. Balance feels strong. Front-left tire temp is coming right into the window."</p>
+          <div class="gear-readout">
+            <span class="gear-sub">GEAR</span>
+            <span class="gear-digit font-mono" id="teleGear">7</span>
           </div>
-          <div class="radio-msg mclaren-msg">
-            <div class="rm-header">
-              <span class="rm-speaker">TOM STALLARD &rarr; OSCAR</span>
-              <span class="rm-time">LAP 13 &bull; 13:41:50</span>
+        </div>
+
+        <!-- Shift Lights Array -->
+        <div class="hud-center-cluster">
+          <div class="tach-line font-mono">
+            <span>RPM <strong id="teleRpm">11,980</strong></span>
+            <span class="text-red">LIMIT 12,500</span>
+          </div>
+          <div class="shift-lights" id="rpmLedBar"></div>
+
+          <!-- Throttle, Brake, ERS Gauges -->
+          <div class="linear-gauges">
+            <div class="lin-gauge">
+              <span class="lg-k">THR</span>
+              <div class="lg-track"><div class="lg-fill throttle" id="fillThrottle" style="width: 96%;"></div></div>
+              <span class="lg-v font-mono" id="valThrottle">96%</span>
             </div>
-            <p class="rm-body">"Oscar, good pace in sector 2. We are on Plan A, undercut window opens lap 31."</p>
+            <div class="lin-gauge">
+              <span class="lg-k">BRK</span>
+              <div class="lg-track"><div class="lg-fill brake" id="fillBrake" style="width: 0%;"></div></div>
+              <span class="lg-v font-mono" id="valBrake">0%</span>
+            </div>
+            <div class="lin-gauge">
+              <span class="lg-k">ERS</span>
+              <div class="lg-track"><div class="lg-fill ers" id="fillErs" style="width: 78%;"></div></div>
+              <span class="lg-v font-mono" id="valErs">78%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delta to Pole -->
+        <div class="delta-box">
+          <span class="delta-k">DELTA POLE</span>
+          <span class="delta-v font-mono text-green" id="teleDelta">-0.184s</span>
+          <span class="delta-sub font-mono">VS 1:21.616</span>
+        </div>
+      </div>
+
+      <!-- ATLAS Rolling Telemetry Chart -->
+      <div class="sub-panel waveform-container">
+        <div class="sub-panel-bar">
+          <span class="sub-title">ATLAS LIVE TELEMETRY TRACE</span>
+          <div class="trace-legend font-mono">
+            <span class="c-legend papaya">SPD</span>
+            <span class="c-legend green">THR</span>
+            <span class="c-legend red">BRK</span>
+          </div>
+        </div>
+        <canvas id="telemetryCanvas" width="720" height="130"></canvas>
+      </div>
+
+      <!-- Monza 2D GPS Circuit & Corner Tracker -->
+      <div class="sub-panel track-container">
+        <div class="sub-panel-bar">
+          <span class="sub-title">CIRCUIT GPS TRACE &bull; AUTODROMO NAZIONALE MONZA</span>
+          <span class="track-flag green">TRACK STATUS: CLEAR</span>
+        </div>
+        <div class="track-canvas-wrapper">
+          <canvas id="circuitCanvas" width="720" height="180"></canvas>
+        </div>
+        <div class="corner-legend-bar font-mono">
+          <span>T1 RETTIFILO</span>
+          <span>T4 CURVA GRANDE</span>
+          <span>T5 ROGGIA</span>
+          <span>T6 LESMO 1</span>
+          <span>T7 LESMO 2</span>
+          <span>T8 ASCARI</span>
+          <span>T11 PARABOLICA</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- Column 3: Race Strategy, Tyre Heatmap & Comms -->
+    <aside class="console-panel operations-panel">
+      <!-- Tyre Surface Temperatures & Deg -->
+      <div class="ops-section">
+        <div class="panel-bar">
+          <span class="panel-heading">TYRE CARCASS & SURFACE</span>
+          <span class="panel-meta font-mono">C4 MEDIUM &bull; 14 LAPS</span>
+        </div>
+        <div class="tyre-grid">
+          <div class="tyre-cell">
+            <div class="tc-pos">FRONT LEFT</div>
+            <div class="tc-temp font-mono text-green" id="tempFL">102.4°C</div>
+            <div class="tc-wear"><div class="tc-bar" style="width: 88%;"></div></div>
+            <div class="tc-meta font-mono">88% &bull; 23.2 PSI</div>
+          </div>
+          <div class="tyre-cell">
+            <div class="tc-pos">FRONT RIGHT</div>
+            <div class="tc-temp font-mono text-green" id="tempFR">104.1°C</div>
+            <div class="tc-wear"><div class="tc-bar" style="width: 86%;"></div></div>
+            <div class="tc-meta font-mono">86% &bull; 23.4 PSI</div>
+          </div>
+          <div class="tyre-cell">
+            <div class="tc-pos">REAR LEFT</div>
+            <div class="tc-temp font-mono text-green" id="tempRL">98.6°C</div>
+            <div class="tc-wear"><div class="tc-bar" style="width: 91%;"></div></div>
+            <div class="tc-meta font-mono">91% &bull; 21.8 PSI</div>
+          </div>
+          <div class="tyre-cell">
+            <div class="tc-pos">REAR RIGHT</div>
+            <div class="tc-temp font-mono text-green" id="tempRR">99.2°C</div>
+            <div class="tc-wear"><div class="tc-bar" style="width: 89%;"></div></div>
+            <div class="tc-meta font-mono">89% &bull; 21.9 PSI</div>
           </div>
         </div>
       </div>
 
-      <!-- Google Cloud Edge Systems & Vertex AI -->
-      <div class="card infra-card">
-        <div class="card-header">
-          <span class="card-title">GOOGLE CLOUD GDC EDGE TELEMETRY</span>
-          <span class="chip-healthy">ONLINE</span>
+      <!-- Live Pit Radio Comms Transcript -->
+      <div class="ops-section radio-ops-section">
+        <div class="panel-bar">
+          <span class="panel-heading">PIT WALL TEAM RADIO</span>
+          <button class="comms-action-btn font-mono" id="btnPlayRadio">TRANSMIT</button>
         </div>
-        <div class="edge-specs-grid">
-          <div class="edge-spec">
-            <span class="es-key">Pit Garage Edge Cluster</span>
-            <strong class="es-val text-green">GDC Rack 01 &bull; Active</strong>
+        <div class="radio-stream-box" id="radioLog">
+          <div class="radio-entry engineer-entry">
+            <div class="re-header font-mono">
+              <span class="re-ch">WILL JOSEPH (RACE ENG) &gt; LANDO</span>
+              <span class="re-t">LAP 14</span>
+            </div>
+            <div class="re-msg font-mono">"Gap to Leclerc is 1.8s. Mode overtake available out of Ascari. Strat 7 when ready."</div>
           </div>
-          <div class="edge-spec">
-            <span class="es-key">Telemetry Ingestion</span>
-            <strong class="es-val">300+ Sensors &bull; 2.4 GB/s</strong>
+          <div class="radio-entry driver-entry">
+            <div class="re-header font-mono">
+              <span class="re-ch">LANDO NORRIS &gt; PIT WALL</span>
+              <span class="re-t">LAP 14</span>
+            </div>
+            <div class="re-msg font-mono">"Copy Will. Balance feels strong. Front-left tyre is right in the operating window."</div>
           </div>
-          <div class="edge-spec">
-            <span class="es-key">Trackside Link Latency</span>
-            <strong class="es-val text-green" id="edgeLatencyVal">0.76 ms</strong>
+        </div>
+      </div>
+
+      <!-- Race Strategy Plan -->
+      <div class="ops-section">
+        <div class="panel-bar">
+          <span class="panel-heading">RACE STRATEGY MATRIX</span>
+          <span class="panel-meta font-mono">PLAN A (OPTIMAL)</span>
+        </div>
+        <div class="strat-table font-mono">
+          <div class="strat-row">
+            <span class="st-k">TARGET PIT STOP:</span>
+            <span class="st-v text-papaya">LAP 31 (WINDOW 29-33)</span>
           </div>
-          <div class="edge-spec">
-            <span class="es-key">MTC Woking Encrypted Sync</span>
-            <strong class="es-val text-green">Dual 10G Bonded 5G</strong>
+          <div class="strat-row">
+            <span class="st-k">COMPOUND ON REJOIN:</span>
+            <span class="st-v text-white">HARD C3 (WHITE)</span>
           </div>
-          <div class="edge-spec">
-            <span class="es-key">Pit Wall Android Fleet</span>
-            <strong class="es-val">24/24 Online (Android 15)</strong>
+          <div class="strat-row">
+            <span class="st-k">PIT LANE LOSS:</span>
+            <span class="st-v">22.4s (NORMAL) / 11.2s (VSC)</span>
           </div>
-          <div class="edge-spec">
-            <span class="es-key">Vertex AI Strategy Models</span>
-            <strong class="es-val text-blue">148,000 sims/sec</strong>
+          <div class="strat-row">
+            <span class="st-k">PROJECTED REJOIN:</span>
+            <span class="st-v text-green">P3 (CLEAN AIR +4.2s GAP)</span>
+          </div>
+          <div class="strat-row">
+            <span class="st-k">SIM WIN PROBABILITY:</span>
+            <span class="st-v text-green">94.8% (100K SIMS)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Google Cloud Edge Systems Status -->
+      <div class="ops-section edge-ops-section">
+        <div class="panel-bar">
+          <span class="panel-heading">EDGE COMPUTING INFRASTRUCTURE</span>
+          <span class="panel-meta font-mono text-green">NOMINAL</span>
+        </div>
+        <div class="edge-data-table font-mono">
+          <div class="edt-row"><span>GDC PIT GARAGE CLUSTER:</span> <strong class="text-green">ONLINE</strong></div>
+          <div class="edt-row"><span>CAR TELEMETRY INGEST:</span> <strong>2.4 GB/S (300+ SENSORS)</strong></div>
+          <div class="edt-row"><span>MTC WOKING ENCRYPTED SYNC:</span> <strong class="text-green">10GBPS BONDED</strong></div>
+          <div class="edt-row"><span>PIT WALL TABLET FLEET:</span> <strong>24/24 ONLINE (ANDROID)</strong></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Lower Deck: Broadcast Schedule, World Championship Odds & McLaren Hub -->
+  <section class="lower-deck">
+    <!-- Weekend Broadcast Hub -->
+    <div class="deck-panel">
+      <div class="deck-bar">
+        <span class="deck-title">BROADCAST SCHEDULE & LIVE STREAMING (MONZA)</span>
+        <span class="deck-sub">US EASTERN TIME / LOCAL TRACK TIME</span>
+      </div>
+      <div class="deck-content">
+        <div class="session-schedule font-mono">
+          <div class="session-row active">
+            <span class="sess-dot green"></span>
+            <span class="sess-name">PRACTICE 1 (FP1)</span>
+            <span class="sess-time">FRI 07:30 EDT / 13:30 CEST</span>
+            <span class="sess-chn">ESPN2 / F1 TV PRO</span>
+            <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sess-action">F1 TV PRO &gt;</a>
+          </div>
+          <div class="session-row">
+            <span class="sess-dot"></span>
+            <span class="sess-name">PRACTICE 2 (FP2)</span>
+            <span class="sess-time">FRI 11:00 EDT / 17:00 CEST</span>
+            <span class="sess-chn">ESPN2 / F1 TV PRO</span>
+            <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sess-action">F1 TV PRO &gt;</a>
+          </div>
+          <div class="session-row">
+            <span class="sess-dot"></span>
+            <span class="sess-name">PRACTICE 3 (FP3)</span>
+            <span class="sess-time">SAT 06:30 EDT / 12:30 CEST</span>
+            <span class="sess-chn">ESPN2 / F1 TV PRO</span>
+            <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sess-action">F1 TV PRO &gt;</a>
+          </div>
+          <div class="session-row">
+            <span class="sess-dot"></span>
+            <span class="sess-name">QUALIFYING</span>
+            <span class="sess-time">SAT 10:00 EDT / 16:00 CEST</span>
+            <span class="sess-chn">ESPN / F1 TV PRO</span>
+            <a href="https://www.espn.com/watch/" target="_blank" rel="noopener" class="sess-action">ESPN+ &gt;</a>
+          </div>
+          <div class="session-row race-row">
+            <span class="sess-dot papaya"></span>
+            <span class="sess-name">GRAND PRIX (53 LAPS)</span>
+            <span class="sess-time">SUN 09:00 EDT / 15:00 CEST</span>
+            <span class="sess-chn">ESPN / ABC / F1 TV</span>
+            <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sess-action race-action">WATCH RACE &gt;</a>
           </div>
         </div>
 
-        <div class="strategy-banner">
-          <div class="sb-title">VERTEX AI RACE STRATEGY: PLAN A (OPTIMAL)</div>
-          <div class="sb-metrics">
-            <div class="sb-m"><span>TARGET PIT:</span> <strong>LAP 31</strong></div>
-            <div class="sb-m"><span>COMPOUND:</span> <strong class="text-white">HARD (WHITE)</strong></div>
-            <div class="sb-m"><span>WIN PROBABILITY:</span> <strong class="text-green">94.8%</strong></div>
-          </div>
+        <div class="stream-links-strip">
+          <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="quick-link">F1 TV PRO</a>
+          <a href="https://www.espn.com/watch/f1" target="_blank" rel="noopener" class="quick-link">ESPN+ US</a>
+          <a href="https://www.skysports.com/f1" target="_blank" rel="noopener" class="quick-link">SKY SPORTS F1</a>
+          <a href="https://www.formula1.com/en/f1-live.html" target="_blank" rel="noopener" class="quick-link">OFFICIAL LIVE TIMING</a>
         </div>
       </div>
     </div>
-  </main>
 
-  <!-- Broadcast Center: Where to Watch & Official Streams -->
-  <section class="broadcast-section">
-    <div class="broadcast-header">
-      <div class="bh-left">
-        <h3>RACE WEEKEND BROADCAST CENTER &bull; WHERE TO WATCH</h3>
-        <span>Official live broadcast feeds, track session schedules, and streaming portals</span>
+    <!-- Championship Standings & Market Odds -->
+    <div class="deck-panel">
+      <div class="deck-bar">
+        <span class="deck-title">2026 WORLD CHAMPIONSHIP STANDINGS & ODDS</span>
+        <span class="deck-sub">WDC & WCC LEADERBOARD</span>
       </div>
-      <div class="bh-badge">OFFICIAL BROADCAST PARTNERS</div>
-    </div>
+      <div class="deck-content font-mono">
+        <table class="standings-table">
+          <thead>
+            <tr>
+              <th>POS</th>
+              <th>DRIVER</th>
+              <th>TEAM</th>
+              <th>PTS</th>
+              <th>ODDS</th>
+              <th>WIN PROB</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight-row">
+              <td>1</td>
+              <td class="driver-bold">L. NORRIS</td>
+              <td class="text-papaya">McLAREN</td>
+              <td>284</td>
+              <td class="text-green">-140</td>
+              <td>58.4%</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td class="driver-bold">M. VERSTAPPEN</td>
+              <td>RED BULL</td>
+              <td>276</td>
+              <td>+160</td>
+              <td>26.8%</td>
+            </tr>
+            <tr class="highlight-row">
+              <td>3</td>
+              <td class="driver-bold">O. PIASTRI</td>
+              <td class="text-papaya">McLAREN</td>
+              <td>242</td>
+              <td>+450</td>
+              <td>11.2%</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td class="driver-bold">C. LECLERC</td>
+              <td>FERRARI</td>
+              <td>218</td>
+              <td>+1200</td>
+              <td>3.6%</td>
+            </tr>
+          </tbody>
+        </table>
 
-    <div class="broadcast-grid">
-      <!-- Session Schedule with Watch Links -->
-      <div class="broadcast-schedule-card">
-        <h4>SESSION TIMES & CHANNELS (MONZA)</h4>
-        <div class="schedule-table">
-          <div class="sch-row active-session">
-            <div class="sch-left">
-              <span class="sch-dot live-pulse"></span>
-              <strong>Practice 1 (FP1)</strong>
-            </div>
-            <span class="sch-time">Fri 07:30 EDT / 13:30 CEST</span>
-            <span class="sch-channel">ESPN2 &bull; F1 TV Pro</span>
-            <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sch-btn">WATCH &rarr;</a>
-          </div>
-          <div class="sch-row">
-            <div class="sch-left">
-              <span class="sch-dot"></span>
-              <strong>Practice 2 (FP2)</strong>
-            </div>
-            <span class="sch-time">Fri 11:00 EDT / 17:00 CEST</span>
-            <span class="sch-channel">ESPN2 &bull; F1 TV Pro</span>
-            <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sch-btn">WATCH &rarr;</a>
-          </div>
-          <div class="sch-row">
-            <div class="sch-left">
-              <span class="sch-dot"></span>
-              <strong>Practice 3 (FP3)</strong>
-            </div>
-            <span class="sch-time">Sat 06:30 EDT / 12:30 CEST</span>
-            <span class="sch-channel">ESPN2 &bull; F1 TV Pro</span>
-            <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sch-btn">WATCH &rarr;</a>
-          </div>
-          <div class="sch-row">
-            <div class="sch-left">
-              <span class="sch-dot"></span>
-              <strong>Qualifying</strong>
-            </div>
-            <span class="sch-time">Sat 10:00 EDT / 16:00 CEST</span>
-            <span class="sch-channel">ESPN &bull; F1 TV Pro</span>
-            <a href="https://www.espn.com/watch/" target="_blank" rel="noopener" class="sch-btn espn-btn">ESPN+ &rarr;</a>
-          </div>
-          <div class="sch-row highlight-race">
-            <div class="sch-left">
-              <span class="sch-dot race-dot"></span>
-              <strong>Italian Grand Prix (Race)</strong>
-            </div>
-            <span class="sch-time">Sun 09:00 EDT / 15:00 CEST</span>
-            <span class="sch-channel">ESPN / ABC &bull; F1 TV</span>
-            <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sch-btn live-race-btn">STREAM LIVE &rarr;</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quick Streaming Portals -->
-      <div class="broadcast-links-card">
-        <h4>DIRECT STREAMING HUBS</h4>
-        <div class="stream-portals-grid">
-          <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="portal-card f1tv-portal">
-            <div class="pc-icon">F1TV</div>
-            <div class="pc-content">
-              <strong>F1 TV Pro</strong>
-              <span>Onboard cameras, team radio, live pit wall timing & multi-screen</span>
-            </div>
-            <span class="pc-arrow">&rarr;</span>
-          </a>
-
-          <a href="https://www.espn.com/watch/f1" target="_blank" rel="noopener" class="portal-card espn-portal">
-            <div class="pc-icon">ESPN</div>
-            <div class="pc-content">
-              <strong>ESPN / ESPN+ (US)</strong>
-              <span>Sky Sports F1 broadcast feed & 4K live coverage</span>
-            </div>
-            <span class="pc-arrow">&rarr;</span>
-          </a>
-
-          <a href="https://www.skysports.com/f1" target="_blank" rel="noopener" class="portal-card skysports-portal">
-            <div class="pc-icon">SKY</div>
-            <div class="pc-content">
-              <strong>Sky Sports F1 (UK)</strong>
-              <span>Martin Brundle pit walks, Ted's notebook & paddock analysis</span>
-            </div>
-            <span class="pc-arrow">&rarr;</span>
-          </a>
-
-          <a href="https://www.formula1.com/en/f1-live.html" target="_blank" rel="noopener" class="portal-card timing-portal">
-            <div class="pc-icon">LIVE</div>
-            <div class="pc-content">
-              <strong>Formula 1 Live Timing</strong>
-              <span>Official sector speed traps, mini-sectors & tire age</span>
-            </div>
-            <span class="pc-arrow">&rarr;</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Championship Standings & Vertex AI World Title Odds -->
-  <section class="standings-odds-section">
-    <div class="section-title-bar">
-      <div>
-        <h3>2026 WORLD CHAMPIONSHIP STANDINGS & VERTEX AI TITLE ODDS</h3>
-        <span>Real-time championship leaderboard and Monte Carlo championship probability engine</span>
-      </div>
-      <div class="odds-model-badge">VERTEX AI &bull; 100,000 MONTE CARLO SIMS</div>
-    </div>
-
-    <div class="standings-odds-grid">
-      <!-- Drivers Leaderboard & Odds -->
-      <div class="so-card">
-        <div class="so-card-header">
-          <h4>DRIVERS' WORLD CHAMPIONSHIP (WDC)</h4>
-          <span class="so-sub">Points &bull; Betting Odds &bull; Win Probability</span>
-        </div>
-        <div class="so-table">
-          <div class="so-row highlight-norris">
-            <div class="so-pos-col">
-              <span class="pos-badge">1</span>
-              <div class="driver-lead">
-                <strong>Lando Norris</strong>
-                <span class="mclaren-text">McLaren &bull; #4</span>
-              </div>
-            </div>
-            <div class="so-stat-col">
-              <span class="stat-label">POINTS</span>
-              <strong class="stat-num">284</strong>
-            </div>
-            <div class="so-odds-col">
-              <span class="stat-label">ODDS</span>
-              <span class="odds-val text-green">-140 (1.71)</span>
-            </div>
-            <div class="so-prob-col">
-              <span class="stat-label">TITLE PROBABILITY</span>
-              <div class="prob-bar-container">
-                <div class="prob-fill mclaren-fill" style="width: 58.4%;"></div>
-              </div>
-              <span class="prob-pct">58.4%</span>
-            </div>
-          </div>
-
-          <div class="so-row">
-            <div class="so-pos-col">
-              <span class="pos-badge">2</span>
-              <div class="driver-lead">
-                <strong>Max Verstappen</strong>
-                <span>Red Bull &bull; #1</span>
-              </div>
-            </div>
-            <div class="so-stat-col">
-              <span class="stat-label">POINTS</span>
-              <strong class="stat-num">276</strong>
-            </div>
-            <div class="so-odds-col">
-              <span class="stat-label">ODDS</span>
-              <span class="odds-val text-yellow">+160 (2.60)</span>
-            </div>
-            <div class="so-prob-col">
-              <span class="stat-label">TITLE PROBABILITY</span>
-              <div class="prob-bar-container">
-                <div class="prob-fill rb-fill" style="width: 26.8%;"></div>
-              </div>
-              <span class="prob-pct">26.8%</span>
-            </div>
-          </div>
-
-          <div class="so-row highlight-piastri">
-            <div class="so-pos-col">
-              <span class="pos-badge">3</span>
-              <div class="driver-lead">
-                <strong>Oscar Piastri</strong>
-                <span class="mclaren-text">McLaren &bull; #81</span>
-              </div>
-            </div>
-            <div class="so-stat-col">
-              <span class="stat-label">POINTS</span>
-              <strong class="stat-num">242</strong>
-            </div>
-            <div class="so-odds-col">
-              <span class="stat-label">ODDS</span>
-              <span class="odds-val text-yellow">+450 (5.50)</span>
-            </div>
-            <div class="so-prob-col">
-              <span class="stat-label">TITLE PROBABILITY</span>
-              <div class="prob-bar-container">
-                <div class="prob-fill mclaren-fill" style="width: 11.2%;"></div>
-              </div>
-              <span class="prob-pct">11.2%</span>
-            </div>
-          </div>
-
-          <div class="so-row">
-            <div class="so-pos-col">
-              <span class="pos-badge">4</span>
-              <div class="driver-lead">
-                <strong>Charles Leclerc</strong>
-                <span>Ferrari &bull; #16</span>
-              </div>
-            </div>
-            <div class="so-stat-col">
-              <span class="stat-label">POINTS</span>
-              <strong class="stat-num">218</strong>
-            </div>
-            <div class="so-odds-col">
-              <span class="stat-label">ODDS</span>
-              <span class="odds-val text-muted">+1200 (13.0)</span>
-            </div>
-            <div class="so-prob-col">
-              <span class="stat-label">TITLE PROBABILITY</span>
-              <div class="prob-bar-container">
-                <div class="prob-fill ferrari-fill" style="width: 3.6%;"></div>
-              </div>
-              <span class="prob-pct">3.6%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Constructors Leaderboard & Odds -->
-      <div class="so-card">
-        <div class="so-card-header">
-          <h4>CONSTRUCTORS' WORLD CHAMPIONSHIP (WCC)</h4>
-          <span class="so-sub">Points &bull; Title Odds &bull; Championship Probability</span>
-        </div>
-        <div class="so-table">
-          <div class="so-row highlight-norris">
-            <div class="so-pos-col">
-              <span class="pos-badge">1</span>
-              <div class="driver-lead">
-                <strong class="mclaren-text">McLaren Formula 1 Team</strong>
-                <span>Google Cloud Strategic Partner</span>
-              </div>
-            </div>
-            <div class="so-stat-col">
-              <span class="stat-label">POINTS</span>
-              <strong class="stat-num">526</strong>
-            </div>
-            <div class="so-odds-col">
-              <span class="stat-label">ODDS</span>
-              <span class="odds-val text-green">-450 (1.22)</span>
-            </div>
-            <div class="so-prob-col">
-              <span class="stat-label">TITLE PROBABILITY</span>
-              <div class="prob-bar-container">
-                <div class="prob-fill mclaren-fill" style="width: 84.2%;"></div>
-              </div>
-              <span class="prob-pct">84.2%</span>
-            </div>
-          </div>
-
-          <div class="so-row">
-            <div class="so-pos-col">
-              <span class="pos-badge">2</span>
-              <div class="driver-lead">
-                <strong>Red Bull Racing</strong>
-                <span>Honda RBPT</span>
-              </div>
-            </div>
-            <div class="so-stat-col">
-              <span class="stat-label">POINTS</span>
-              <strong class="stat-num">498</strong>
-            </div>
-            <div class="so-odds-col">
-              <span class="stat-label">ODDS</span>
-              <span class="odds-val text-yellow">+380 (4.80)</span>
-            </div>
-            <div class="so-prob-col">
-              <span class="stat-label">TITLE PROBABILITY</span>
-              <div class="prob-bar-container">
-                <div class="prob-fill rb-fill" style="width: 12.5%;"></div>
-              </div>
-              <span class="prob-pct">12.5%</span>
-            </div>
-          </div>
-
-          <div class="so-row">
-            <div class="so-pos-col">
-              <span class="pos-badge">3</span>
-              <div class="driver-lead">
-                <strong>Scuderia Ferrari</strong>
-                <span>Ferrari Power Unit</span>
-              </div>
-            </div>
-            <div class="so-stat-col">
-              <span class="stat-label">POINTS</span>
-              <strong class="stat-num">412</strong>
-            </div>
-            <div class="so-odds-col">
-              <span class="stat-label">ODDS</span>
-              <span class="odds-val text-muted">+900 (10.0)</span>
-            </div>
-            <div class="so-prob-col">
-              <span class="stat-label">TITLE PROBABILITY</span>
-              <div class="prob-bar-container">
-                <div class="prob-fill ferrari-fill" style="width: 3.3%;"></div>
-              </div>
-              <span class="prob-pct">3.3%</span>
-            </div>
-          </div>
-
-          <div class="so-row">
-            <div class="so-pos-col">
-              <span class="pos-badge">4</span>
-              <div class="driver-lead">
-                <strong>Mercedes-AMG Petronas</strong>
-                <span>Mercedes Power Unit</span>
-              </div>
-            </div>
-            <div class="so-stat-col">
-              <span class="stat-label">POINTS</span>
-              <strong class="stat-num">318</strong>
-            </div>
-            <div class="so-odds-col">
-              <span class="stat-label">ODDS</span>
-              <span class="odds-val text-muted">+3500 (36.0)</span>
-            </div>
-            <div class="so-prob-col">
-              <span class="stat-label">TITLE PROBABILITY</span>
-              <div class="prob-bar-container">
-                <div class="prob-fill" style="width: 0.8%; background-color: #06B6D4;"></div>
-              </div>
-              <span class="prob-pct">&lt; 1%</span>
-            </div>
-          </div>
+        <div class="wcc-banner font-mono">
+          <span>CONSTRUCTORS:</span>
+          <strong>1. McLAREN (526 PTS / -450)</strong>
+          <span>2. RED BULL (498 PTS)</span>
+          <span>3. FERRARI (412 PTS)</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Official McLaren Racing & Google Cloud Portals Dock -->
-  <section class="mclaren-portals-section">
-    <div class="portals-header">
-      <div class="ph-left">
-        <h3>McLAREN RACING & GOOGLE STRATEGIC PARTNERSHIP DOCK</h3>
-        <span>Official portals, fan memberships, team merchandise, and enterprise case studies</span>
-      </div>
-      <div class="ph-right">
-        <code>go/mclaren</code> &bull; <code>go/formula1</code>
-      </div>
+  <!-- Paddock Resource Bar -->
+  <nav class="paddock-dock font-mono">
+    <div class="dock-title">PADDOCK RESOURCES:</div>
+    <a href="https://www.mclaren.com/racing/formula-1/" target="_blank" rel="noopener">McLAREN.COM</a>
+    <a href="https://www.mclaren.com/racing/mclaren-plus/" target="_blank" rel="noopener">McLAREN PLUS</a>
+    <a href="https://www.mclarenstore.com/" target="_blank" rel="noopener">TEAM STORE</a>
+    <a href="https://www.mclaren.com/racing/app/" target="_blank" rel="noopener">OFFICIAL APP</a>
+    <a href="https://www.mclaren.com/racing/partners/google/" target="_blank" rel="noopener">GOOGLE PARTNERSHIP</a>
+    <a href="https://cloud.google.com/customers/mclaren-racing" target="_blank" rel="noopener">GDC EDGE STUDY</a>
+    <div class="dock-spacer"></div>
+    <div class="dock-golink">GO LINK: <strong>go/formula1</strong></div>
+  </nav>
+
+  <!-- Industrial Technical Footer -->
+  <footer class="console-footer font-mono">
+    <div class="cf-left">
+      SYSTEM: MCLAREN-F1-OPS-V4 &bull; ARCHITECT: WALEED RAHMAN (EFS / IMPLEMENTATION ENG) &bull; SHORTLINK: go/formula1
     </div>
-
-    <div class="portals-grid">
-      <a href="https://www.mclaren.com/racing/formula-1/" target="_blank" rel="noopener" class="dock-card">
-        <span class="dock-label">HUB</span>
-        <div class="dock-meta">
-          <strong>McLaren.com Official Hub</strong>
-          <span>Latest race reports, driver interviews & car specs</span>
-        </div>
-        <span class="dock-external">&nearr;</span>
-      </a>
-
-      <a href="https://www.mclaren.com/racing/mclaren-plus/" target="_blank" rel="noopener" class="dock-card">
-        <span class="dock-label">PLUS</span>
-        <div class="dock-meta">
-          <strong>McLaren Plus Fan Hub</strong>
-          <span>Exclusive fan giveaways, paddock passes & race access</span>
-        </div>
-        <span class="dock-external">&nearr;</span>
-      </a>
-
-      <a href="https://www.mclarenstore.com/" target="_blank" rel="noopener" class="dock-card">
-        <span class="dock-label">SHOP</span>
-        <div class="dock-meta">
-          <strong>McLaren F1 Team Store</strong>
-          <span>Official 2026 driver caps, team wear & scale models</span>
-        </div>
-        <span class="dock-external">&nearr;</span>
-      </a>
-
-      <a href="https://www.mclaren.com/racing/app/" target="_blank" rel="noopener" class="dock-card">
-        <span class="dock-label">APP</span>
-        <div class="dock-meta">
-          <strong>Official McLaren App</strong>
-          <span>Pit wall commentary, driver radio & live telemetry</span>
-        </div>
-        <span class="dock-external">&nearr;</span>
-      </a>
-
-      <a href="https://www.mclaren.com/racing/partners/google/" target="_blank" rel="noopener" class="dock-card partner-card">
-        <span class="dock-label">GCP</span>
-        <div class="dock-meta">
-          <strong>Google &bull; McLaren Partnership</strong>
-          <span>Android on the pit wall & Chrome speed at trackside</span>
-        </div>
-        <span class="dock-external">&nearr;</span>
-      </a>
-
-      <a href="https://cloud.google.com/customers/mclaren-racing" target="_blank" rel="noopener" class="dock-card partner-card">
-        <span class="dock-label">EDGE</span>
-        <div class="dock-meta">
-          <strong>Google Cloud Enterprise Case Study</strong>
-          <span>How McLaren uses Google Distributed Cloud & Vertex AI</span>
-        </div>
-        <span class="dock-external">&nearr;</span>
-      </a>
-    </div>
-  </section>
-
-  <!-- Interactive Pit Strategy & Undercut Simulator -->
-  <section class="strategy-simulator-section">
-    <div class="sim-header">
-      <h3>PIT STRATEGY & UNDERCUT SIMULATOR</h3>
-      <span>Interactive model calculating pit stop loss and track rejoin position</span>
-    </div>
-    <div class="sim-grid">
-      <div class="sim-controls">
-        <div class="control-group">
-          <label for="pitLapInput">Pit Stop Lap Target: <strong id="pitLapDisplay">Lap 31</strong></label>
-          <input type="range" id="pitLapInput" min="15" max="45" value="31">
-        </div>
-        <div class="control-group">
-          <label>Starting Compound:</label>
-          <div class="btn-group">
-            <button class="pill-btn" data-compound="soft">Soft (C5)</button>
-            <button class="pill-btn active" data-compound="med">Medium (C4)</button>
-            <button class="pill-btn" data-compound="hard">Hard (C3)</button>
-          </div>
-        </div>
-      </div>
-      <div class="sim-results">
-        <div class="res-card">
-          <span class="rc-label">PIT DELTA LOSS</span>
-          <span class="rc-val">22.4s</span>
-          <span class="rc-sub">Pit Lane Speed Limit 80 km/h</span>
-        </div>
-        <div class="res-card">
-          <span class="rc-label">VSC / SAFETY CAR GAIN</span>
-          <span class="rc-val text-green">-11.2s</span>
-          <span class="rc-sub">Net pit loss reduced to 11.2s</span>
-        </div>
-        <div class="res-card">
-          <span class="rc-label">PROJECTED REJOIN POS</span>
-          <span class="rc-val text-yellow" id="rejoinPos">P3 (Clean Air)</span>
-          <span class="rc-sub">Gap to leader: +4.2s</span>
-        </div>
-        <div class="res-card">
-          <span class="rc-label">TIRE ADVANTAGE</span>
-          <span class="rc-val text-green">+0.42s/lap</span>
-          <span class="rc-sub">Fresh rubber delta against rival</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 2026 Season Calendar & US Corridor Focus -->
-  <section class="calendar-section">
-    <div class="cal-header">
-      <h3>2026 GRAND PRIX CALENDAR & IMPLEMENTATION TARGETS</h3>
-      <span class="cal-legend">McLaren Target Races &bull; US Grand Prix Corridor</span>
-    </div>
-    <div class="cal-cards-strip">
-      <div class="c-card active">
-        <span class="c-rnd">ROUND 16</span>
-        <strong class="c-name">Italian GP</strong>
-        <span class="c-circuit">Monza</span>
-        <span class="c-date">Sep 4–6</span>
-        <span class="c-badge live-badge">LIVE TELEMETRY</span>
-      </div>
-      <div class="c-card">
-        <span class="c-rnd">ROUND 17</span>
-        <strong class="c-name">Azerbaijan GP</strong>
-        <span class="c-circuit">Baku City</span>
-        <span class="c-date">Sep 18–20</span>
-        <span class="c-badge">STREET TRACK</span>
-      </div>
-      <div class="c-card">
-        <span class="c-rnd">ROUND 18</span>
-        <strong class="c-name">Singapore GP</strong>
-        <span class="c-circuit">Marina Bay</span>
-        <span class="c-date">Oct 2–4</span>
-        <span class="c-badge">NIGHT RACE</span>
-      </div>
-      <div class="c-card us-target">
-        <span class="c-rnd">ROUND 19</span>
-        <strong class="c-name">United States GP</strong>
-        <span class="c-circuit">Austin (COTA)</span>
-        <span class="c-date">Oct 16–18</span>
-        <span class="c-badge us-badge">US CORRIDOR</span>
-      </div>
-      <div class="c-card">
-        <span class="c-rnd">ROUND 20</span>
-        <strong class="c-name">Mexico City GP</strong>
-        <span class="c-circuit">Hermanos Rodríguez</span>
-        <span class="c-date">Oct 23–25</span>
-        <span class="c-badge">HIGH ALTITUDE</span>
-      </div>
-      <div class="c-card">
-        <span class="c-rnd">ROUND 21</span>
-        <strong class="c-name">São Paulo GP</strong>
-        <span class="c-circuit">Interlagos</span>
-        <span class="c-date">Nov 6–8</span>
-        <span class="c-badge">SPRINT WEEKEND</span>
-      </div>
-      <div class="c-card us-target">
-        <span class="c-rnd">ROUND 22</span>
-        <strong class="c-name">Las Vegas GP</strong>
-        <span class="c-circuit">Vegas Strip</span>
-        <span class="c-date">Nov 19–21</span>
-        <span class="c-badge us-badge">US CORRIDOR</span>
-      </div>
-      <div class="c-card us-target">
-        <span class="c-rnd">CORRIDOR</span>
-        <strong class="c-name">Miami Grand Prix</strong>
-        <span class="c-circuit">Miami Autodrome</span>
-        <span class="c-date">May 2027</span>
-        <span class="c-badge miami-badge">EFS TARGET</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Professional Footer -->
-  <footer class="app-footer">
-    <div class="footer-left">
-      <span>Architected & Developed by <strong>Waleed Rahman</strong></span> &bull;
-      <span>Google Technical Operations / Engineering Field Services (EFS)</span> &bull;
-      <span>Internal Shortlink: <code>go/formula1</code></span>
-    </div>
-    <div class="footer-right">
-      <span>Live Production Site: <a href="https://waleedrahman-design.github.io/mclarentracker/" target="_blank">waleedrahman-design.github.io/mclarentracker</a></span> &bull;
-      <span>Google Cloud Strategic Sports Partnerships</span>
+    <div class="cf-right">
+      WORKSPACE: <a href="https://waleedrahman-design.github.io/mclarentracker/" target="_blank">waleedrahman-design.github.io/mclarentracker</a>
     </div>
   </footer>
 
