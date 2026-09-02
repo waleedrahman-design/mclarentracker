@@ -500,3 +500,74 @@ if (goLinkChip) {
     });
   });
 }
+
+// 10. Historical Session Telemetry Rewatch Database
+const archiveSessions = {
+  miami2024: {
+    title: "2024 MIAMI GRAND PRIX • LAP 57 (NORRIS P1)",
+    speed: "341.8 KM/H",
+    apex: "142.4 KM/H",
+    brake: "134 BAR",
+    throttle: "0.18s ADVANCE",
+    chassis: "SPEC: MCL38 MIAMI UPGRADE PKG",
+    debrief: "Lando Norris managed the safety car restart on Lap 33 with exceptional thermal tire retention. The revised front floor edge wing delivered +14 points of downforce through high-speed turns 4-7, eliminating the mid-corner understeer seen in previous races. Pull-rod front suspension geometry reduced pitch under braking into Turn 17, enabling 0.22s gain per lap in Sector 3 alone. Final victory margin: +7.612s over Max Verstappen."
+  },
+  baku2024: {
+    title: "2024 AZERBAIJAN GRAND PRIX • LAP 51 (PIASTRI P1)",
+    speed: "348.6 KM/H",
+    apex: "118.2 KM/H",
+    brake: "142 BAR",
+    throttle: "0.24s BRAKING DEPTH",
+    chassis: "SPEC: MCL38 BAKU LOW-DRAG PKG",
+    debrief: "Oscar Piastri executed an iconic 30-lap defensive drive against Charles Leclerc at 340+ km/h without making a single lock-up. Low-drag rear wing beam design generated high top-end straight-line speed into Turn 1, neutralizing Ferrari DRS overtake attempts. Front brake temperature balance remained below 620°C throughout the critical battle window."
+  },
+  singapore2024: {
+    title: "2024 SINGAPORE GRAND PRIX • LAP 62 (NORRIS P1)",
+    speed: "306.4 KM/H",
+    apex: "136.8 KM/H",
+    brake: "130 BAR",
+    throttle: "+0.35s TRACTION ADVANTAGE",
+    chassis: "SPEC: MCL38 MAXIMUM DOWNFORCE SPEC",
+    debrief: "Lando Norris delivered an undisputed masterclass at Marina Bay under the night lights, pulling an astonishing +20.945s gap to Max Verstappen. Rear tyre thermal management in Sector 3 (turns 16-19) was over 3°C cooler than the Red Bull RB20, allowing full throttle application 12 meters earlier out of slow traction zones."
+  },
+  monza2025: {
+    title: "2025 ITALIAN GRAND PRIX • QUALIFYING (1-2 LOCKOUT)",
+    speed: "354.2 KM/H",
+    apex: "178.5 KM/H",
+    brake: "145 BAR",
+    throttle: "0.12s EARLIER EXIT",
+    chassis: "SPEC: MCL39 MONZA SPECIAL SPEC",
+    debrief: "Front row lockout for McLaren at the Temple of Speed. Lando Norris (1:19.327) and Oscar Piastri (1:19.412) locked out P1 and P2 with sub-1:19.5 lap times. Slipstream synergy through Curva Grande and superior aerodynamic efficiency through the Ascari chicane yielded a 0.38s margin over Ferrari and Mercedes."
+  }
+};
+
+const ahTabs = document.querySelectorAll('.ah-tab');
+const archSessionTitle = document.getElementById('archSessionTitle');
+const archSpeed = document.getElementById('archSpeed');
+const archApex = document.getElementById('archApex');
+const archBrake = document.getElementById('archBrake');
+const archThrottle = document.getElementById('archThrottle');
+const archChassis = document.getElementById('archChassis');
+const archDebriefText = document.getElementById('archDebriefText');
+
+if (ahTabs.length > 0) {
+  ahTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      ahTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      playPitRadioTone();
+
+      const key = tab.getAttribute('data-archive');
+      const data = archiveSessions[key];
+      if (data) {
+        if (archSessionTitle) archSessionTitle.textContent = data.title;
+        if (archSpeed) archSpeed.textContent = data.speed;
+        if (archApex) archApex.textContent = data.apex;
+        if (archBrake) archBrake.textContent = data.brake;
+        if (archThrottle) archThrottle.textContent = data.throttle;
+        if (archChassis) archChassis.textContent = data.chassis;
+        if (archDebriefText) archDebriefText.textContent = data.debrief;
+      }
+    });
+  });
+}

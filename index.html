@@ -432,6 +432,139 @@
     </aside>
   </div>
 
+  <!-- Historical Season Telemetry, Standings & Technical Debrief -->
+  <section class="archive-section">
+    <div class="archive-header-bar">
+      <div class="ah-left">
+        <span class="ah-title font-mono">SEASON TELEMETRY ARCHIVE & TECHNICAL DEBRIEF</span>
+        <span class="ah-sub font-mono">HISTORICAL SESSIONS 2024 - 2025 &bull; BENCHMARK COMPARISONS</span>
+      </div>
+      <div class="ah-selector-tabs font-mono">
+        <button class="ah-tab active" data-archive="miami2024">2024 MIAMI (NORRIS P1)</button>
+        <button class="ah-tab" data-archive="baku2024">2024 BAKU (PIASTRI P1)</button>
+        <button class="ah-tab" data-archive="singapore2024">2024 SINGAPORE (NORRIS P1)</button>
+        <button class="ah-tab" data-archive="monza2025">2025 MONZA (1-2 LOCKOUT)</button>
+      </div>
+    </div>
+
+    <div class="archive-grid">
+      <!-- Session Rewatch Telemetry Metrics -->
+      <div class="archive-panel">
+        <div class="ap-bar font-mono">
+          <span>BENCHMARK TELEMETRY READOUT</span>
+          <span class="text-papaya font-mono" id="archSessionTitle">2024 MIAMI GRAND PRIX &bull; LAP 57</span>
+        </div>
+        <div class="ap-content">
+          <div class="telemetry-benchmark-grid font-mono">
+            <div class="bm-card">
+              <span class="bm-k">SPEED TRAP (MAX)</span>
+              <strong class="bm-v font-mono text-white" id="archSpeed">341.8 KM/H</strong>
+              <span class="bm-sub">MAIN STRAIGHT DRS</span>
+            </div>
+            <div class="bm-card">
+              <span class="bm-k">MIN APEX SPEED</span>
+              <strong class="bm-v font-mono text-green" id="archApex">142.4 KM/H</strong>
+              <span class="bm-sub">TURN 17 CHICANE ENTRY</span>
+            </div>
+            <div class="bm-card">
+              <span class="bm-k">BRAKE PRESSURE</span>
+              <strong class="bm-v font-mono text-white" id="archBrake">134 BAR</strong>
+              <span class="bm-sub">PEAK RETARDATION 5.4G</span>
+            </div>
+            <div class="bm-card">
+              <span class="bm-k">THROTTLE PICKUP</span>
+              <strong class="bm-v font-mono text-green" id="archThrottle">0.18s ADVANCE</strong>
+              <span class="bm-sub">DELTA OVER VERSTAPPEN</span>
+            </div>
+          </div>
+
+          <div class="debrief-box font-mono">
+            <div class="db-header">
+              <span class="db-title">POST-RACE ENGINEERING DEBRIEF &bull; CHASSIS NOTES</span>
+              <span class="db-spec text-muted" id="archChassis">SPEC: MCL38 MIAMI UPGRADE PKG</span>
+            </div>
+            <p class="db-text" id="archDebriefText">
+              Lando Norris managed the safety car restart on Lap 33 with exceptional thermal tire retention. The revised front floor edge wing delivered +14 points of downforce through high-speed turns 4-7, eliminating the mid-corner understeer seen in previous races. Pull-rod front suspension geometry reduced pitch under braking into Turn 17, enabling 0.22s gain per lap in Sector 3 alone. Final victory margin: +7.612s over Max Verstappen.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Historical Constructors Championship Progression -->
+      <div class="archive-panel">
+        <div class="ap-bar font-mono">
+          <span>HISTORICAL CONSTRUCTORS CHAMPIONSHIP (WCC)</span>
+          <span class="text-green font-mono">TITLE DEFENSE TRAJECTORY</span>
+        </div>
+        <div class="ap-content font-mono">
+          <div class="hist-standings-deck">
+            <!-- 2024 Season Final -->
+            <div class="hist-season-block">
+              <div class="hsb-head">
+                <strong>2024 WORLD CHAMPIONS</strong>
+                <span class="text-papaya font-mono">FINAL: 666 PTS</span>
+              </div>
+              <div class="hsb-rows">
+                <div class="hsb-row champion">
+                  <span>1. McLAREN FORMULA 1 TEAM</span>
+                  <strong>666 PTS</strong>
+                </div>
+                <div class="hsb-row">
+                  <span>2. SCUDERIA FERRARI</span>
+                  <span>652 PTS (-14)</span>
+                </div>
+                <div class="hsb-row">
+                  <span>3. RED BULL RACING</span>
+                  <span>589 PTS (-77)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2025 Season Final -->
+            <div class="hist-season-block">
+              <div class="hsb-head">
+                <strong>2025 WORLD CHAMPIONS</strong>
+                <span class="text-papaya font-mono">FINAL: 712 PTS</span>
+              </div>
+              <div class="hsb-rows">
+                <div class="hsb-row champion">
+                  <span>1. McLAREN FORMULA 1 TEAM</span>
+                  <strong>712 PTS</strong>
+                </div>
+                <div class="hsb-row">
+                  <span>2. SCUDERIA FERRARI</span>
+                  <span>678 PTS (-34)</span>
+                </div>
+                <div class="hsb-row">
+                  <span>3. RED BULL RACING</span>
+                  <span>540 PTS (-172)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upgrade Trajectory Feed -->
+          <div class="upgrade-timeline">
+            <div class="ut-title">TECHNICAL UPGRADE & BENCHMARK LOG:</div>
+            <div class="ut-item">
+              <span class="ut-date">2024 R06 MIA</span>
+              <span class="ut-desc">Floor Edge Wing V3: +14 pts downforce, resolved high-speed pitch sensitivity.</span>
+            </div>
+            <div class="ut-item">
+              <span class="ut-date">2024 R17 BAK</span>
+              <span class="ut-desc">Low-Drag Beam Wing: +8 km/h top speed trap, enabling defensive hold against Leclerc.</span>
+            </div>
+            <div class="ut-item">
+              <span class="ut-date">2025 R16 MON</span>
+              <span class="ut-desc">Ultra Low-Drag Monza Package: Front row 1-2 lockout, sub-1:19.4 qualifying run.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
   <!-- Lower Deck: Broadcast Schedule, World Championship Odds & McLaren Hub -->
   <section class="lower-deck">
     <!-- Weekend Broadcast Hub -->

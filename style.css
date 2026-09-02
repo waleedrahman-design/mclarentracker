@@ -902,3 +902,249 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Historical Telemetry & Season Archive Section */
+.archive-section {
+  background-color: var(--panel-bg);
+  border-top: 1px solid var(--border-line);
+  display: flex;
+  flex-direction: column;
+}
+
+.archive-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 1.25rem;
+  background-color: var(--panel-elevated);
+  border-bottom: 1px solid var(--border-line);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.ah-left {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.ah-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-white);
+  letter-spacing: 0.05em;
+}
+
+.ah-sub {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.ah-selector-tabs {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.ah-tab {
+  background-color: var(--bg-core);
+  border: 1px solid var(--border-line);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.3rem 0.65rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ah-tab:hover {
+  background-color: var(--panel-active);
+  color: var(--text-white);
+  border-color: var(--papaya);
+}
+
+.ah-tab.active {
+  background-color: var(--papaya-dim);
+  border-color: var(--papaya);
+  color: var(--papaya);
+}
+
+.archive-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1px;
+  background-color: var(--border-line);
+}
+
+.archive-panel {
+  background-color: var(--panel-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.ap-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: var(--bg-core);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.ap-content {
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.telemetry-benchmark-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.bm-card {
+  background-color: var(--bg-core);
+  border: 1px solid var(--border-subtle);
+  padding: 0.6rem 0.75rem;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bm-k {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.bm-v {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0.2rem 0;
+}
+
+.bm-sub {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+.debrief-box {
+  background-color: var(--bg-core);
+  border: 1px solid var(--border-subtle);
+  border-left: 2px solid var(--papaya);
+  padding: 0.75rem;
+  border-radius: 0 2px 2px 0;
+}
+
+.db-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.db-title {
+  color: var(--papaya);
+}
+
+.db-text {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.hist-standings-deck {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.hist-season-block {
+  background-color: var(--bg-core);
+  border: 1px solid var(--border-subtle);
+  padding: 0.6rem 0.75rem;
+  border-radius: 2px;
+}
+
+.hsb-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+
+.hsb-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+}
+
+.hsb-row {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-muted);
+}
+
+.hsb-row.champion {
+  color: var(--text-white);
+  font-weight: 700;
+}
+
+.upgrade-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background-color: var(--bg-core);
+  border: 1px solid var(--border-subtle);
+  padding: 0.6rem 0.75rem;
+  border-radius: 2px;
+}
+
+.ut-title {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.15rem;
+}
+
+.ut-item {
+  display: grid;
+  grid-template-columns: 85px 1fr;
+  font-size: 0.65rem;
+  line-height: 1.35;
+}
+
+.ut-date {
+  color: var(--papaya);
+  font-weight: 700;
+}
+
+.ut-desc {
+  color: var(--text-secondary);
+}
+
+@media (max-width: 1200px) {
+  .archive-grid {
+    grid-template-columns: 1fr;
+  }
+  .telemetry-benchmark-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .hist-standings-deck {
+    grid-template-columns: 1fr;
+  }
+}
