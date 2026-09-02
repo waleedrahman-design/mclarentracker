@@ -1,4 +1,4 @@
-// McLaren Formula 1 x Google Cloud Trackside Telemetry Portal (go/waleed-f1)
+// McLaren Formula 1 x Google Cloud Trackside Telemetry Portal (go/formula1)
 // Architect: Waleed Rahman (EFS / Implementation Engineering)
 
 // 1. Driver Telemetry Data
@@ -208,11 +208,11 @@ if (radioMuteBtn) {
   radioMuteBtn.addEventListener('click', () => {
     audioEnabled = !audioEnabled;
     if (audioEnabled) {
-      radioIcon.textContent = '🔊';
+      radioIcon.className = 'radio-status-dot active';
       radioLabel.textContent = 'PIT COMMS: ON';
       playF1RadioChirp();
     } else {
-      radioIcon.textContent = '🔇';
+      radioIcon.className = 'radio-status-dot';
       radioLabel.textContent = 'PIT COMMS: MUTED';
     }
   });
@@ -536,13 +536,13 @@ if (pitLapInput) {
   });
 }
 
-// 10. Copy go/waleed-f1 Chip
+// 10. Copy go/formula1 Chip
 const goLinkChip = document.getElementById('goLinkChip');
 if (goLinkChip) {
   goLinkChip.addEventListener('click', () => {
-    navigator.clipboard.writeText('http://go/waleed-f1').then(() => {
+    navigator.clipboard.writeText('http://go/formula1').then(() => {
       const original = goLinkChip.innerHTML;
-      goLinkChip.innerHTML = '<span>✅ Copied!</span>';
+      goLinkChip.innerHTML = '<span>COPIED</span>';
       playF1RadioChirp();
       setTimeout(() => {
         goLinkChip.innerHTML = original;

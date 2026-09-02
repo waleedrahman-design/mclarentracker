@@ -1584,3 +1584,66 @@ body {
   .sch-row { grid-template-columns: 1fr 1fr; gap: 0.4rem; }
   .so-row { grid-template-columns: 1fr 1fr; gap: 0.4rem; }
 }
+
+/* Official Vector Logos */
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.brand-link:hover {
+  opacity: 0.85;
+}
+
+.mclaren-logo-svg {
+  height: 24px;
+  width: auto;
+  display: block;
+}
+
+.google-cloud-logo-svg {
+  height: 24px;
+  width: auto;
+  display: block;
+}
+
+/* Minimalist Non-Emoji Indicators */
+.radio-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #6B7280;
+  display: inline-block;
+  margin-right: 0.25rem;
+}
+
+.radio-status-dot.active {
+  background-color: var(--google-green);
+  box-shadow: 0 0 6px var(--google-green);
+}
+
+.dock-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--mclaren-papaya);
+  background-color: var(--mclaren-papaya-subtle);
+  border: 1px solid rgba(255, 128, 0, 0.25);
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+.pc-icon {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background-color: var(--surface-3);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
