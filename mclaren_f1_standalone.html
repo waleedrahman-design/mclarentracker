@@ -139,39 +139,6 @@ body {
   letter-spacing: 0.05em;
 }
 
-/* Quick Nav Bar */
-.quick-nav-bar {
-  display: flex;
-  gap: 0.25rem;
-  background-color: var(--bg-core);
-  padding: 2px;
-  border-radius: 3px;
-  border: 1px solid var(--border-subtle);
-}
-
-.qn-item {
-  background-color: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 0.3rem 0.65rem;
-  border-radius: 2px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.qn-item:hover {
-  color: var(--text-white);
-  background-color: var(--panel-elevated);
-}
-
-.qn-item.active {
-  background-color: var(--panel-elevated);
-  color: var(--papaya);
-}
-
 .header-right {
   display: flex;
   align-items: center;
@@ -1153,7 +1120,7 @@ body {
 
 /* Responsive Breakpoints */
 @media (max-width: 1100px) {
-  .quick-nav-bar { display: none; }
+  
   .telemetry-layout { grid-template-columns: 1fr; }
   .comparator-deck { grid-template-columns: 1fr; }
   .strategy-page-grid { grid-template-columns: 1fr; }
@@ -1186,157 +1153,7 @@ body {
   -webkit-backdrop-filter: blur(8px);
 }
 
-/* 2. Quick Nav Bar Enhancements */
-.quick-nav-bar {
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  white-space: nowrap;
-}
 
-.quick-nav-bar::-webkit-scrollbar {
-  display: none;
-}
-
-.qn-idx {
-  font-size: 0.6rem;
-  color: var(--text-muted);
-  margin-right: 0.15rem;
-}
-
-.qn-hk {
-  font-size: 0.55rem;
-  color: var(--text-muted);
-  background-color: var(--bg-core);
-  padding: 1px 3px;
-  border-radius: 2px;
-  margin-left: 0.25rem;
-}
-
-.qn-item.active .qn-idx,
-.qn-item.active .qn-hk {
-  color: var(--papaya);
-}
-
-/* 3. Page Sequential Step Navigation (Footer) */
-.page-step-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.25rem 0 0.5rem 0;
-  margin-top: 0.5rem;
-  border-top: 1px solid var(--border-line);
-}
-
-.psn-spacer {
-  flex: 1;
-}
-
-.psn-btn {
-  background-color: var(--panel-bg);
-  border: 1px solid var(--border-line);
-  color: var(--text-secondary);
-  padding: 0.75rem 1.25rem;
-  border-radius: 3px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.15s ease;
-}
-
-.psn-btn.next {
-  text-align: right;
-  margin-left: auto;
-}
-
-.psn-btn span {
-  font-size: 0.6rem;
-  color: var(--text-muted);
-  letter-spacing: 0.05em;
-  margin-bottom: 0.2rem;
-}
-
-.psn-btn strong {
-  font-size: 0.8rem;
-  color: var(--text-white);
-}
-
-.psn-btn:hover {
-  background-color: var(--panel-elevated);
-  border-color: var(--papaya);
-}
-
-.psn-btn:hover strong {
-  color: var(--papaya);
-}
-
-/* 4. Mobile Bottom Application Dock */
-.mobile-bottom-dock {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
-  height: 56px;
-  background-color: rgba(17, 20, 28, 0.96);
-  border-top: 1px solid var(--border-line);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  z-index: 150;
-  justify-content: space-around;
-  align-items: center;
-  padding: 0 0.5rem;
-}
-
-.mbd-btn {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  cursor: pointer;
-  padding: 0.35rem 0.5rem;
-  border-radius: 3px;
-  font-family: var(--font-mono);
-  transition: all 0.15s ease;
-}
-
-.mbd-icon {
-  font-size: 0.7rem;
-  font-weight: 700;
-  background-color: var(--bg-core);
-  border: 1px solid var(--border-subtle);
-  padding: 2px 6px;
-  border-radius: 3px;
-}
-
-.mbd-label {
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.mbd-btn.active {
-  color: var(--papaya);
-}
-
-.mbd-btn.active .mbd-icon {
-  background-color: var(--papaya-dim);
-  border-color: var(--papaya);
-  color: var(--papaya);
-}
-
-@media (max-width: 900px) {
-  .mobile-bottom-dock {
-    display: flex;
-  }
-  body {
-    padding-bottom: 60px;
-  }
-}
 
 </style>
 </head>
@@ -1380,17 +1197,7 @@ body {
       <div class="active-page-title font-mono" id="activePageTitle">01. LIVE TELEMETRY</div>
     </div>
 
-    <!-- Quick Navigation Bar (Desktop Shortcuts) -->
-    <nav class="quick-nav-bar font-mono" id="quickNavBar">
-      <button class="qn-item active" data-target="page-telemetry"><span class="qn-idx">01</span> TELEMETRY <span class="qn-hk">[1]</span></button>
-      <button class="qn-item" data-target="page-compare"><span class="qn-idx">02</span> COMPARE <span class="qn-hk">[2]</span></button>
-      <button class="qn-item" data-target="page-strategy"><span class="qn-idx">03</span> STRATEGY <span class="qn-hk">[3]</span></button>
-      <button class="qn-item" data-target="page-broadcast"><span class="qn-idx">04</span> BROADCAST <span class="qn-hk">[4]</span></button>
-      <button class="qn-item" data-target="page-standings"><span class="qn-idx">05</span> STANDINGS <span class="qn-hk">[5]</span></button>
-      <button class="qn-item" data-target="page-archive"><span class="qn-idx">06</span> ARCHIVE <span class="qn-hk">[6]</span></button>
-    </nav>
-
-    <!-- Header Operations Status -->
+<!-- Header Operations Status -->
     <div class="header-right">
       <div class="telemetry-pill">
         <span class="pill-k">TRACK:</span>
@@ -1695,14 +1502,6 @@ body {
           </div>
         </div>
       </div>
-        <!-- Page 1 Bottom Navigation Bar -->
-        <nav class="page-step-nav font-mono">
-          <div class="psn-spacer"></div>
-          <button class="psn-btn next" data-target="page-compare">
-            <span>NEXT SECTION:</span>
-            <strong>02. HEAD-TO-HEAD GAP COMPARATOR &gt;</strong>
-          </button>
-        </nav>
       </div>
     </div>
 
@@ -1849,17 +1648,6 @@ body {
             </table>
           </div>
         </div>
-        <!-- Page 2 Bottom Navigation Bar -->
-        <nav class="page-step-nav font-mono">
-          <button class="psn-btn prev" data-target="page-telemetry">
-            <span>PREVIOUS SECTION:</span>
-            <strong>&lt; 01. LIVE TELEMETRY &amp; TIMING</strong>
-          </button>
-          <button class="psn-btn next" data-target="page-strategy">
-            <span>NEXT SECTION:</span>
-            <strong>03. STRATEGY &amp; PIT WALL RADIO &gt;</strong>
-          </button>
-        </nav>
       </div>
     </div>
 
@@ -1979,17 +1767,6 @@ body {
             </div>
           </div>
         </div>
-        <!-- Page 3 Bottom Navigation Bar -->
-        <nav class="page-step-nav font-mono">
-          <button class="psn-btn prev" data-target="page-compare">
-            <span>PREVIOUS SECTION:</span>
-            <strong>&lt; 02. HEAD-TO-HEAD COMPARATOR</strong>
-          </button>
-          <button class="psn-btn next" data-target="page-broadcast">
-            <span>NEXT SECTION:</span>
-            <strong>04. WHERE TO WATCH &amp; BROADCAST &gt;</strong>
-          </button>
-        </nav>
       </div>
     </div>
 
@@ -2108,17 +1885,6 @@ body {
             </div>
           </div>
         </div>
-        <!-- Page 4 Bottom Navigation Bar -->
-        <nav class="page-step-nav font-mono">
-          <button class="psn-btn prev" data-target="page-strategy">
-            <span>PREVIOUS SECTION:</span>
-            <strong>&lt; 03. STRATEGY &amp; PIT WALL RADIO</strong>
-          </button>
-          <button class="psn-btn next" data-target="page-standings">
-            <span>NEXT SECTION:</span>
-            <strong>05. WORLD CHAMPIONSHIP STANDINGS &gt;</strong>
-          </button>
-        </nav>
       </div>
     </div>
 
@@ -2220,17 +1986,6 @@ body {
             </div>
           </div>
         </div>
-        <!-- Page 5 Bottom Navigation Bar -->
-        <nav class="page-step-nav font-mono">
-          <button class="psn-btn prev" data-target="page-broadcast">
-            <span>PREVIOUS SECTION:</span>
-            <strong>&lt; 04. WHERE TO WATCH &amp; BROADCAST</strong>
-          </button>
-          <button class="psn-btn next" data-target="page-archive">
-            <span>NEXT SECTION:</span>
-            <strong>06. HISTORICAL ARCHIVE (2024-2025) &gt;</strong>
-          </button>
-        </nav>
       </div>
     </div>
 
@@ -2309,46 +2064,10 @@ body {
             </div>
           </div>
         </div>
-        <!-- Page 6 Bottom Navigation Bar -->
-        <nav class="page-step-nav font-mono">
-          <button class="psn-btn prev" data-target="page-standings">
-            <span>PREVIOUS SECTION:</span>
-            <strong>&lt; 05. WORLD CHAMPIONSHIP STANDINGS</strong>
-          </button>
-          <button class="psn-btn next" data-target="page-telemetry">
-            <span>RETURN TO START:</span>
-            <strong>01. LIVE TELEMETRY &amp; TIMING &gt;</strong>
-          </button>
-        </nav>
       </div>
     </div>
 
   </main>
-
-
-  <!-- Mobile Bottom Application Dock -->
-  <nav class="mobile-bottom-dock font-mono" id="mobileBottomDock">
-    <button class="mbd-btn active" data-target="page-telemetry">
-      <span class="mbd-icon">TEL</span>
-      <span class="mbd-label">LIVE</span>
-    </button>
-    <button class="mbd-btn" data-target="page-compare">
-      <span class="mbd-icon">VS</span>
-      <span class="mbd-label">GAP</span>
-    </button>
-    <button class="mbd-btn" data-target="page-strategy">
-      <span class="mbd-icon">OPS</span>
-      <span class="mbd-label">STRAT</span>
-    </button>
-    <button class="mbd-btn" data-target="page-standings">
-      <span class="mbd-icon">PTS</span>
-      <span class="mbd-label">STAND</span>
-    </button>
-    <button class="mbd-btn" id="mobileMenuBtn">
-      <span class="mbd-icon">MENU</span>
-      <span class="mbd-label">MORE</span>
-    </button>
-  </nav>
 
   <!-- Industrial Technical Footer with Keyboard Shortcut Legend -->
   <footer class="console-footer font-mono">
@@ -2412,18 +2131,6 @@ function navigateToPage(targetId) {
     else dl.classList.remove('active');
   });
 
-  // Update Quick Nav items
-  document.querySelectorAll('.qn-item').forEach(qn => {
-    if (qn.getAttribute('data-target') === targetId) qn.classList.add('active');
-    else qn.classList.remove('active');
-  });
-
-  // Update Mobile Bottom Dock items
-  document.querySelectorAll('.mbd-btn').forEach(mb => {
-    if (mb.getAttribute('data-target') === targetId) mb.classList.add('active');
-    else mb.classList.remove('active');
-  });
-
   // Update Title
   if (activePageTitle && pageTitles[targetId]) {
     activePageTitle.textContent = pageTitles[targetId];
@@ -2450,17 +2157,12 @@ function navigateToPage(targetId) {
   }
 }
 
-document.querySelectorAll('.drawer-link, .qn-item, .psn-btn, .mbd-btn').forEach(el => {
+document.querySelectorAll('.drawer-link').forEach(el => {
   el.addEventListener('click', () => {
     const target = el.getAttribute('data-target');
     if (target) navigateToPage(target);
   });
 });
-
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-if (mobileMenuBtn) {
-  mobileMenuBtn.addEventListener('click', openDrawer);
-}
 
 // Escape key to close drawer
 window.addEventListener('keydown', (e) => {

@@ -46,18 +46,6 @@ function navigateToPage(targetId) {
     else dl.classList.remove('active');
   });
 
-  // Update Quick Nav items
-  document.querySelectorAll('.qn-item').forEach(qn => {
-    if (qn.getAttribute('data-target') === targetId) qn.classList.add('active');
-    else qn.classList.remove('active');
-  });
-
-  // Update Mobile Bottom Dock items
-  document.querySelectorAll('.mbd-btn').forEach(mb => {
-    if (mb.getAttribute('data-target') === targetId) mb.classList.add('active');
-    else mb.classList.remove('active');
-  });
-
   // Update Title
   if (activePageTitle && pageTitles[targetId]) {
     activePageTitle.textContent = pageTitles[targetId];
@@ -84,17 +72,12 @@ function navigateToPage(targetId) {
   }
 }
 
-document.querySelectorAll('.drawer-link, .qn-item, .psn-btn, .mbd-btn').forEach(el => {
+document.querySelectorAll('.drawer-link').forEach(el => {
   el.addEventListener('click', () => {
     const target = el.getAttribute('data-target');
     if (target) navigateToPage(target);
   });
 });
-
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-if (mobileMenuBtn) {
-  mobileMenuBtn.addEventListener('click', openDrawer);
-}
 
 // Escape key to close drawer
 window.addEventListener('keydown', (e) => {
