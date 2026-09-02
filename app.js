@@ -20,11 +20,13 @@ const activePageTitle = document.getElementById('activePageTitle');
 function openDrawer() {
   if (burgerDrawer) burgerDrawer.classList.add('open');
   if (burgerBackdrop) burgerBackdrop.classList.add('open');
+  if (burgerBtn) burgerBtn.classList.add('open');
 }
 
 function closeDrawer() {
   if (burgerDrawer) burgerDrawer.classList.remove('open');
   if (burgerBackdrop) burgerBackdrop.classList.remove('open');
+  if (burgerBtn) burgerBtn.classList.remove('open');
 }
 
 if (burgerBtn) burgerBtn.addEventListener('click', openDrawer);
@@ -39,17 +41,21 @@ function navigateToPage(targetId) {
   if (targetPage) targetPage.classList.add('active');
 
   // Update Drawer links
-  const drawerLinks = document.querySelectorAll('.drawer-link');
-  drawerLinks.forEach(dl => {
+  document.querySelectorAll('.drawer-link').forEach(dl => {
     if (dl.getAttribute('data-target') === targetId) dl.classList.add('active');
     else dl.classList.remove('active');
   });
 
   // Update Quick Nav items
-  const qnItems = document.querySelectorAll('.qn-item');
-  qnItems.forEach(qn => {
+  document.querySelectorAll('.qn-item').forEach(qn => {
     if (qn.getAttribute('data-target') === targetId) qn.classList.add('active');
     else qn.classList.remove('active');
+  });
+
+  // Update Mobile Bottom Dock items
+  document.querySelectorAll('.mbd-btn').forEach(mb => {
+    if (mb.getAttribute('data-target') === targetId) mb.classList.add('active');
+    else mb.classList.remove('active');
   });
 
   // Update Title
@@ -64,19 +70,37 @@ function navigateToPage(targetId) {
   }
 
   closeDrawer();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
   playPitRadioTone();
 
-  // If entering compare page, redraw overlay
+  // Redraw canvases if needed
   if (targetId === 'page-compare') {
     setTimeout(renderOverlayCanvas, 50);
+  } else if (targetId === 'page-telemetry') {
+    setTimeout(() => {
+      renderCircuit();
+      renderWaveform();
+    }, 50);
   }
 }
 
-document.querySelectorAll('.drawer-link, .qn-item').forEach(el => {
+document.querySelectorAll('.drawer-link, .qn-item, .psn-btn, .mbd-btn').forEach(el => {
   el.addEventListener('click', () => {
     const target = el.getAttribute('data-target');
     if (target) navigateToPage(target);
   });
+});
+
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+if (mobileMenuBtn) {
+  mobileMenuBtn.addEventListener('click', openDrawer);
+}
+
+// Escape key to close drawer
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && burgerDrawer && burgerDrawer.classList.contains('open')) {
+    closeDrawer();
+  }
 });
 
 function handleHash() {

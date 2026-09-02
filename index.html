@@ -52,13 +52,13 @@
     </div>
 
     <!-- Quick Navigation Bar (Desktop Shortcuts) -->
-    <nav class="quick-nav-bar font-mono">
-      <button class="qn-item active" data-target="page-telemetry">TELEMETRY</button>
-      <button class="qn-item" data-target="page-compare">COMPARE GAP</button>
-      <button class="qn-item" data-target="page-strategy">STRATEGY & RADIO</button>
-      <button class="qn-item" data-target="page-broadcast">WHERE TO WATCH</button>
-      <button class="qn-item" data-target="page-standings">STANDINGS</button>
-      <button class="qn-item" data-target="page-archive">ARCHIVE (2024-25)</button>
+    <nav class="quick-nav-bar font-mono" id="quickNavBar">
+      <button class="qn-item active" data-target="page-telemetry"><span class="qn-idx">01</span> TELEMETRY <span class="qn-hk">[1]</span></button>
+      <button class="qn-item" data-target="page-compare"><span class="qn-idx">02</span> COMPARE <span class="qn-hk">[2]</span></button>
+      <button class="qn-item" data-target="page-strategy"><span class="qn-idx">03</span> STRATEGY <span class="qn-hk">[3]</span></button>
+      <button class="qn-item" data-target="page-broadcast"><span class="qn-idx">04</span> BROADCAST <span class="qn-hk">[4]</span></button>
+      <button class="qn-item" data-target="page-standings"><span class="qn-idx">05</span> STANDINGS <span class="qn-hk">[5]</span></button>
+      <button class="qn-item" data-target="page-archive"><span class="qn-idx">06</span> ARCHIVE <span class="qn-hk">[6]</span></button>
     </nav>
 
     <!-- Header Operations Status -->
@@ -366,6 +366,15 @@
           </div>
         </div>
       </div>
+        <!-- Page 1 Bottom Navigation Bar -->
+        <nav class="page-step-nav font-mono">
+          <div class="psn-spacer"></div>
+          <button class="psn-btn next" data-target="page-compare">
+            <span>NEXT SECTION:</span>
+            <strong>02. HEAD-TO-HEAD GAP COMPARATOR &gt;</strong>
+          </button>
+        </nav>
+      </div>
     </div>
 
     <!-- PAGE 2: HEAD-TO-HEAD GAP COMPARATOR -->
@@ -511,6 +520,17 @@
             </table>
           </div>
         </div>
+        <!-- Page 2 Bottom Navigation Bar -->
+        <nav class="page-step-nav font-mono">
+          <button class="psn-btn prev" data-target="page-telemetry">
+            <span>PREVIOUS SECTION:</span>
+            <strong>&lt; 01. LIVE TELEMETRY &amp; TIMING</strong>
+          </button>
+          <button class="psn-btn next" data-target="page-strategy">
+            <span>NEXT SECTION:</span>
+            <strong>03. STRATEGY &amp; PIT WALL RADIO &gt;</strong>
+          </button>
+        </nav>
       </div>
     </div>
 
@@ -630,6 +650,17 @@
             </div>
           </div>
         </div>
+        <!-- Page 3 Bottom Navigation Bar -->
+        <nav class="page-step-nav font-mono">
+          <button class="psn-btn prev" data-target="page-compare">
+            <span>PREVIOUS SECTION:</span>
+            <strong>&lt; 02. HEAD-TO-HEAD COMPARATOR</strong>
+          </button>
+          <button class="psn-btn next" data-target="page-broadcast">
+            <span>NEXT SECTION:</span>
+            <strong>04. WHERE TO WATCH &amp; BROADCAST &gt;</strong>
+          </button>
+        </nav>
       </div>
     </div>
 
@@ -748,6 +779,17 @@
             </div>
           </div>
         </div>
+        <!-- Page 4 Bottom Navigation Bar -->
+        <nav class="page-step-nav font-mono">
+          <button class="psn-btn prev" data-target="page-strategy">
+            <span>PREVIOUS SECTION:</span>
+            <strong>&lt; 03. STRATEGY &amp; PIT WALL RADIO</strong>
+          </button>
+          <button class="psn-btn next" data-target="page-standings">
+            <span>NEXT SECTION:</span>
+            <strong>05. WORLD CHAMPIONSHIP STANDINGS &gt;</strong>
+          </button>
+        </nav>
       </div>
     </div>
 
@@ -849,6 +891,17 @@
             </div>
           </div>
         </div>
+        <!-- Page 5 Bottom Navigation Bar -->
+        <nav class="page-step-nav font-mono">
+          <button class="psn-btn prev" data-target="page-broadcast">
+            <span>PREVIOUS SECTION:</span>
+            <strong>&lt; 04. WHERE TO WATCH &amp; BROADCAST</strong>
+          </button>
+          <button class="psn-btn next" data-target="page-archive">
+            <span>NEXT SECTION:</span>
+            <strong>06. HISTORICAL ARCHIVE (2024-2025) &gt;</strong>
+          </button>
+        </nav>
       </div>
     </div>
 
@@ -927,10 +980,46 @@
             </div>
           </div>
         </div>
+        <!-- Page 6 Bottom Navigation Bar -->
+        <nav class="page-step-nav font-mono">
+          <button class="psn-btn prev" data-target="page-standings">
+            <span>PREVIOUS SECTION:</span>
+            <strong>&lt; 05. WORLD CHAMPIONSHIP STANDINGS</strong>
+          </button>
+          <button class="psn-btn next" data-target="page-telemetry">
+            <span>RETURN TO START:</span>
+            <strong>01. LIVE TELEMETRY &amp; TIMING &gt;</strong>
+          </button>
+        </nav>
       </div>
     </div>
 
   </main>
+
+
+  <!-- Mobile Bottom Application Dock -->
+  <nav class="mobile-bottom-dock font-mono" id="mobileBottomDock">
+    <button class="mbd-btn active" data-target="page-telemetry">
+      <span class="mbd-icon">TEL</span>
+      <span class="mbd-label">LIVE</span>
+    </button>
+    <button class="mbd-btn" data-target="page-compare">
+      <span class="mbd-icon">VS</span>
+      <span class="mbd-label">GAP</span>
+    </button>
+    <button class="mbd-btn" data-target="page-strategy">
+      <span class="mbd-icon">OPS</span>
+      <span class="mbd-label">STRAT</span>
+    </button>
+    <button class="mbd-btn" data-target="page-standings">
+      <span class="mbd-icon">PTS</span>
+      <span class="mbd-label">STAND</span>
+    </button>
+    <button class="mbd-btn" id="mobileMenuBtn">
+      <span class="mbd-icon">MENU</span>
+      <span class="mbd-label">MORE</span>
+    </button>
+  </nav>
 
   <!-- Industrial Technical Footer with Keyboard Shortcut Legend -->
   <footer class="console-footer font-mono">
