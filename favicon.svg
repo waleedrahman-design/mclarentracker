@@ -1,0 +1,5 @@
+<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="6" fill="#090B10"/>
+  <!-- McLaren Papaya Speedmark Chevron -->
+  <path d="M7 6C13 11 14 18 10 22C8 24 4.5 25 0.5 24.5C-5 23.5 -8 19.5 -8 16.5C-8 14.5 -6.5 13.5 -4.5 13.5C-1 13.5 2.5 17.2 2.5 19.2C2.5 20 1.8 20.5 0.8 20.2C3.2 20.8 6 20 7 18.2C9 15 7.5 10 2 6L7 6Z" transform="translate(14, 2)" fill="#FF8000"/>
+</svg>

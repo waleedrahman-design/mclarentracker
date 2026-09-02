@@ -1,0 +1,15 @@
+{
+  "name": "McLaren F1 Pit Wall Telemetry",
+  "short_name": "McLaren F1",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#090B10",
+  "theme_color": "#090B10",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
