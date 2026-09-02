@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="McLaren Formula 1 Team real-time trackside telemetry, race operations, and Google Distributed Cloud edge deployment dashboard. Internal go/link: go/waleed-f1.">
+  <meta name="description" content="McLaren Formula 1 Team Trackside Telemetry & Google Cloud Edge Pit Wall Dashboard. Live vehicle telemetry, circuit GPS tracker, team radio, and championship standings. go/waleed-f1.">
   <title>McLaren F1 • Google Cloud Trackside Telemetry (go/waleed-f1)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Header Bar -->
+  <!-- Top Navigation & Global Ops Bar -->
   <header class="top-nav">
     <div class="nav-left">
       <div class="brand-badge">
@@ -23,336 +23,552 @@
         <span class="g-color-b">G</span><span class="g-color-r">o</span><span class="g-color-y">o</span><span class="g-color-b">g</span><span class="g-color-g">l</span><span class="g-color-r">e</span>
         <span class="cloud-text">Cloud</span>
       </div>
-      <span class="sub-portal-name">Trackside Telemetry & Edge Operations</span>
+      <div class="header-tagline">Trackside Engineering & Telemetry Operations</div>
     </div>
 
     <div class="nav-right">
+      <!-- Audio Comms Toggle -->
+      <button class="comms-toggle-btn" id="radioMuteBtn" title="Toggle Pit Wall Audio Comms">
+        <span id="radioIcon">🔊</span>
+        <span id="radioLabel">PIT COMMS: ON</span>
+      </button>
+
+      <!-- Live Edge Indicator -->
+      <div class="system-status-indicator" title="GDC Edge Pit Garage Cluster">
+        <span class="status-dot pulse"></span>
+        <span class="status-label" id="latencyDisplay">GDC EDGE &bull; 0.76ms</span>
+      </div>
+
+      <!-- go/link Chip -->
       <div class="go-link-chip" id="goLinkChip" title="Click to copy internal go/link">
         <span class="link-icon">🔗</span>
         <code>go/waleed-f1</code>
       </div>
-      <div class="system-status-indicator">
-        <span class="status-dot pulse"></span>
-        <span class="status-label">GDC EDGE ONLINE • 0.8ms</span>
-      </div>
     </div>
   </header>
 
-  <!-- Hero: Grand Prix Countdown & Circuit Overview -->
+  <!-- Hero Banner: Grand Prix Countdown, Weather & Track Evolution -->
   <section class="race-hero">
-    <div class="race-info-card">
-      <div class="round-indicator">ROUND 16 • FIA FORMULA ONE WORLD CHAMPIONSHIP</div>
-      <h1 class="race-title" id="raceName">Italian Grand Prix • Autodromo Nazionale Monza</h1>
-      <div class="race-meta-pills">
-        <span class="meta-pill">🏁 5.793 km</span>
-        <span class="meta-pill">⏱️ 53 Laps</span>
-        <span class="meta-pill">⚡ 2 DRS Zones</span>
-        <span class="meta-pill">🛞 C3 / C4 / C5 Compounds</span>
+    <div class="hero-left">
+      <div class="round-badge">ROUND 16 &bull; FIA FORMULA ONE WORLD CHAMPIONSHIP</div>
+      <h1 class="circuit-title">Italian Grand Prix &bull; Autodromo Nazionale Monza</h1>
+      <div class="track-metrics-bar">
+        <div class="track-metric">
+          <span class="tm-label">CIRCUIT LENGTH</span>
+          <span class="tm-val">5.793 km</span>
+        </div>
+        <div class="track-metric">
+          <span class="tm-label">RACE DISTANCE</span>
+          <span class="tm-val">53 Laps (306.7 km)</span>
+        </div>
+        <div class="track-metric">
+          <span class="tm-label">LAP RECORD</span>
+          <span class="tm-val">1:21.046 (Barrichello)</span>
+        </div>
+        <div class="track-metric">
+          <span class="tm-label">DRS ZONES</span>
+          <span class="tm-val">2 (Main & Serraglio)</span>
+        </div>
+        <div class="track-metric">
+          <span class="tm-label">TIRE COMPOUNDS</span>
+          <span class="tm-val text-yellow">C3 Hard &bull; C4 Med &bull; C5 Soft</span>
+        </div>
       </div>
     </div>
 
-    <div class="countdown-card">
-      <div class="countdown-header">NEXT SESSION COUNTDOWN (FP1)</div>
-      <div class="countdown-clock" id="countdownClock">
-        <div class="time-block"><span class="number" id="cdDays">02</span><span class="unit">DAYS</span></div>
-        <div class="sep">:</div>
-        <div class="time-block"><span class="number" id="cdHours">14</span><span class="unit">HOURS</span></div>
-        <div class="sep">:</div>
-        <div class="time-block"><span class="number" id="cdMins">32</span><span class="unit">MINS</span></div>
-        <div class="sep">:</div>
-        <div class="time-block"><span class="number" id="cdSecs">48</span><span class="unit">SECS</span></div>
-      </div>
-      <div class="weather-brief">
-        <span>🌤️ Track: <strong>38.4°C</strong></span> •
-        <span>Air: <strong>27.1°C</strong></span> •
-        <span>Rain Risk: <strong>0%</strong></span>
+    <div class="hero-right">
+      <div class="countdown-panel">
+        <div class="countdown-title">NEXT TRACK SESSION (PRACTICE 1)</div>
+        <div class="countdown-clock" id="countdownClock">
+          <div class="clock-unit"><span class="clock-num" id="cdDays">02</span><span class="clock-txt">DAYS</span></div>
+          <div class="clock-sep">:</div>
+          <div class="clock-unit"><span class="clock-num" id="cdHours">14</span><span class="clock-txt">HRS</span></div>
+          <div class="clock-sep">:</div>
+          <div class="clock-unit"><span class="clock-num" id="cdMins">28</span><span class="clock-txt">MIN</span></div>
+          <div class="clock-sep">:</div>
+          <div class="clock-unit"><span class="clock-num" id="cdSecs">36</span><span class="clock-txt">SEC</span></div>
+        </div>
+        <div class="weather-strip">
+          <div class="w-item">🌡️ Track: <strong id="valTrackTemp">38.2°C</strong></div>
+          <div class="w-item">💨 Air: <strong>26.8°C</strong></div>
+          <div class="w-item">💨 Wind: <strong>8.4 km/h SW</strong></div>
+          <div class="w-item">🌧️ Rain Risk: <strong class="text-green">0%</strong></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Main Telemetry Grid -->
-  <main class="dashboard-grid">
-    <!-- Left Column: Live Car Telemetry -->
-    <section class="telemetry-section">
-      <div class="section-header">
-        <h2>Live Vehicle Telemetry (MCL38)</h2>
-        <div class="driver-tabs">
-          <button class="driver-tab active" id="tabLando" data-driver="norris">
-            <span class="driver-num">#4</span> Lando Norris <span class="driver-pos">P1</span>
+  <!-- Driver Selector & Live Timing Strip -->
+  <section class="driver-bar">
+    <div class="driver-tabs">
+      <button class="driver-btn active" id="btnLando" data-driver="norris">
+        <div class="d-avatar lando-avatar">LN</div>
+        <div class="d-info">
+          <span class="d-number">#4</span>
+          <strong class="d-name">Lando Norris</strong>
+          <span class="d-badge p1-badge">POS: P1</span>
+        </div>
+        <div class="d-times">
+          <span class="d-laptime">LAST: 1:21.432</span>
+          <span class="d-gap text-green">-0.184s vs LEC</span>
+        </div>
+      </button>
+
+      <button class="driver-btn" id="btnOscar" data-driver="piastri">
+        <div class="d-avatar oscar-avatar">OP</div>
+        <div class="d-info">
+          <span class="d-number">#81</span>
+          <strong class="d-name">Oscar Piastri</strong>
+          <span class="d-badge p2-badge">POS: P2</span>
+        </div>
+        <div class="d-times">
+          <span class="d-laptime">LAST: 1:21.589</span>
+          <span class="d-gap text-yellow">+0.157s vs NOR</span>
+        </div>
+      </button>
+    </div>
+
+    <!-- Live Lap Sector Times -->
+    <div class="sectors-ribbon">
+      <div class="sector-chip purple">
+        <span class="chip-sec">SECTOR 1</span>
+        <span class="chip-val" id="valS1">27.124s</span>
+        <span class="chip-flag">PURPLE (FASTEST)</span>
+      </div>
+      <div class="sector-chip green">
+        <span class="chip-sec">SECTOR 2</span>
+        <span class="chip-val" id="valS2">26.892s</span>
+        <span class="chip-flag">GREEN (PB)</span>
+      </div>
+      <div class="sector-chip green">
+        <span class="chip-sec">SECTOR 3</span>
+        <span class="chip-val" id="valS3">27.416s</span>
+        <span class="chip-flag">GREEN (PB)</span>
+      </div>
+      <div class="drs-status-box" id="drsBox">
+        <span class="drs-label">DRS STATUS</span>
+        <span class="drs-val active" id="drsState">AVAILABLE &bull; DEPLOYED</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Master Telemetry & Track Operations Grid -->
+  <main class="master-telemetry-grid">
+    <!-- Center Left: Live Car Cockpit & Dynamics -->
+    <div class="telemetry-column">
+      <!-- Main Digital Dashboard Card -->
+      <div class="card cockpit-card">
+        <div class="card-header">
+          <span class="card-title">MCL38 COCKPIT & LIVE TELEMETRY STREAM</span>
+          <span class="chip-live">LIVE 20Hz</span>
+        </div>
+
+        <div class="cockpit-center">
+          <!-- Big Speed & Gear Block -->
+          <div class="speed-gear-block">
+            <div class="gear-display">
+              <span class="gear-label">GEAR</span>
+              <span class="gear-num" id="teleGear">7</span>
+            </div>
+            <div class="speed-display">
+              <span class="speed-num" id="teleSpeed">324</span>
+              <span class="speed-unit">KM/H</span>
+            </div>
+            <div class="delta-display">
+              <span class="delta-label">DELTA TO POLE</span>
+              <span class="delta-val text-green" id="teleDelta">-0.184s</span>
+            </div>
+          </div>
+
+          <!-- Shift Lights / LED RPM Bar -->
+          <div class="rpm-strip-container">
+            <div class="rpm-hud-header">
+              <span>ENGINE RPM: <strong id="teleRpm">11,980</strong></span>
+              <span class="rev-limit">REV LIMIT: 12,500</span>
+            </div>
+            <div class="rpm-led-bar" id="rpmLedBar">
+              <!-- Dynamically generated LEDs via JS -->
+            </div>
+          </div>
+
+          <!-- Throttle, Brake & ERS Traces -->
+          <div class="pedals-grid">
+            <div class="pedal-box">
+              <div class="pedal-top">
+                <span class="pedal-name">THROTTLE</span>
+                <span class="pedal-pct text-green" id="valThrottle">96%</span>
+              </div>
+              <div class="gauge-track">
+                <div class="gauge-fill throttle-bar" id="fillThrottle" style="width: 96%;"></div>
+              </div>
+            </div>
+
+            <div class="pedal-box">
+              <div class="pedal-top">
+                <span class="pedal-name">BRAKE</span>
+                <span class="pedal-pct text-red" id="valBrake">0%</span>
+              </div>
+              <div class="gauge-track">
+                <div class="gauge-fill brake-bar" id="fillBrake" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="pedal-box">
+              <div class="pedal-top">
+                <span class="pedal-name">ERS BATTERY (SOC)</span>
+                <span class="pedal-pct text-blue" id="valErs">78%</span>
+              </div>
+              <div class="gauge-track">
+                <div class="gauge-fill ers-bar" id="fillErs" style="width: 78%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-Time Rolling Waveform Telemetry Chart -->
+      <div class="card waveform-card">
+        <div class="card-header">
+          <span class="card-title">ATLAS-GRADE ROLLING SPEED & THROTTLE TRACE</span>
+          <div class="waveform-legend">
+            <span class="legend-dot speed-dot"></span> Speed (km/h)
+            <span class="legend-dot throttle-dot"></span> Throttle (%)
+            <span class="legend-dot brake-dot"></span> Brake (%)
+          </div>
+        </div>
+        <div class="canvas-wrapper">
+          <canvas id="telemetryCanvas" width="760" height="150"></canvas>
+        </div>
+      </div>
+
+      <!-- Tire Temperatures, Pressure & Chassis Degradation -->
+      <div class="card tires-card">
+        <div class="card-header">
+          <span class="card-title">TIRE SURFACE TEMPERATURES & TREAD WEAR</span>
+          <span class="compound-badge">PIRELLI MEDIUM (YELLOW) &bull; 14 LAPS</span>
+        </div>
+        <div class="chassis-layout">
+          <div class="tire-widget" id="twFL">
+            <div class="tw-top"><span class="tw-pos">FRONT LEFT</span><span class="tw-wear">88% LIFE</span></div>
+            <div class="tw-temp" id="tempFL">102.4°C</div>
+            <div class="tw-bar"><div class="tw-fill" style="width: 88%;"></div></div>
+            <div class="tw-psi">23.2 PSI</div>
+          </div>
+
+          <div class="tire-widget" id="twFR">
+            <div class="tw-top"><span class="tw-pos">FRONT RIGHT</span><span class="tw-wear">86% LIFE</span></div>
+            <div class="tw-temp" id="tempFR">104.1°C</div>
+            <div class="tw-bar"><div class="tw-fill" style="width: 86%;"></div></div>
+            <div class="tw-psi">23.4 PSI</div>
+          </div>
+
+          <div class="tire-widget" id="twRL">
+            <div class="tw-top"><span class="tw-pos">REAR LEFT</span><span class="tw-wear">91% LIFE</span></div>
+            <div class="tw-temp" id="tempRL">98.6°C</div>
+            <div class="tw-bar"><div class="tw-fill" style="width: 91%;"></div></div>
+            <div class="tw-psi">21.8 PSI</div>
+          </div>
+
+          <div class="tire-widget" id="twRR">
+            <div class="tw-top"><span class="tw-pos">REAR RIGHT</span><span class="tw-wear">89% LIFE</span></div>
+            <div class="tw-temp" id="tempRR">99.2°C</div>
+            <div class="tw-bar"><div class="tw-fill" style="width: 89%;"></div></div>
+            <div class="tw-psi">21.9 PSI</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Right: Live Circuit GPS Map & Pit Wall Comms -->
+    <div class="operations-column">
+      <!-- Live Interactive GPS Circuit Map -->
+      <div class="card circuit-card">
+        <div class="card-header">
+          <span class="card-title">LIVE GPS TRACK POSITION & CORNERS (MONZA)</span>
+          <span class="track-status green-flag">GREEN FLAG</span>
+        </div>
+        <div class="circuit-canvas-box">
+          <canvas id="circuitCanvas" width="460" height="280"></canvas>
+          <div class="circuit-corner-pills">
+            <span class="cp">T1 Variante del Rettifilo</span>
+            <span class="cp">T4 Curva Grande</span>
+            <span class="cp">T8 Variante Ascari</span>
+            <span class="cp">T11 Curva Parabolica</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pit Wall Team Radio Comms Stream -->
+      <div class="card radio-card">
+        <div class="card-header">
+          <span class="card-title">PIT WALL TEAM RADIO INTERCEPT</span>
+          <button class="radio-ping-btn" id="btnPlayRadio" title="Play live radio communication">
+            <span>📻</span> PLAY TRANSMISSION
           </button>
-          <button class="driver-tab" id="tabOscar" data-driver="piastri">
-            <span class="driver-num">#81</span> Oscar Piastri <span class="driver-pos">P2</span>
-          </button>
         </div>
-      </div>
-
-      <!-- Core Telemetry Gauges -->
-      <div class="gauges-row">
-        <!-- Speed & Gear Gauge -->
-        <div class="telemetry-card speed-card">
-          <div class="card-label">CURRENT SPEED & GEAR</div>
-          <div class="speed-display">
-            <span class="speed-val" id="teleSpeed">318</span>
-            <span class="speed-unit">KM/H</span>
+        <div class="radio-transcript-log" id="radioLog">
+          <div class="radio-msg mclaren-msg">
+            <div class="rm-header">
+              <span class="rm-speaker">WILL JOSEPH (RACE ENGINEER) &rarr; LANDO</span>
+              <span class="rm-time">LAP 14 &bull; 13:42:18</span>
+            </div>
+            <p class="rm-body">"Lando, gap to Leclerc is 1.8 seconds. Mode overtake available out of Ascari. Strat 7 when ready."</p>
           </div>
-          <div class="gear-badge">
-            <span class="gear-sub">GEAR</span>
-            <span class="gear-val" id="teleGear">7</span>
+          <div class="radio-msg driver-msg">
+            <div class="rm-header">
+              <span class="rm-speaker">LANDO NORRIS &rarr; PIT WALL</span>
+              <span class="rm-time">LAP 14 &bull; 13:42:25</span>
+            </div>
+            <p class="rm-body">"Copy that. Balance feels strong. Front-left tire temp is coming right into the window."</p>
           </div>
-          <div class="rpm-container">
-            <div class="rpm-labels">
-              <span>RPM: <strong id="teleRpm">11,840</strong></span>
-              <span class="redline-label">REDLINE: 12,500</span>
+          <div class="radio-msg mclaren-msg">
+            <div class="rm-header">
+              <span class="rm-speaker">TOM STALLARD &rarr; OSCAR</span>
+              <span class="rm-time">LAP 13 &bull; 13:41:50</span>
             </div>
-            <div class="rpm-bar-track">
-              <div class="rpm-bar-fill" id="teleRpmFill" style="width: 88%;"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Pedals / Inputs -->
-        <div class="telemetry-card inputs-card">
-          <div class="card-label">DRIVER INPUT TRACES</div>
-          <div class="pedal-group">
-            <div class="pedal-label">THROTTLE <span id="valThrottle">94%</span></div>
-            <div class="pedal-bar-track">
-              <div class="pedal-bar-fill throttle-fill" id="fillThrottle" style="width: 94%;"></div>
-            </div>
-          </div>
-          <div class="pedal-group">
-            <div class="pedal-label">BRAKE <span id="valBrake">0%</span></div>
-            <div class="pedal-bar-track">
-              <div class="pedal-bar-fill brake-fill" id="fillBrake" style="width: 0%;"></div>
-            </div>
-          </div>
-          <div class="ers-group">
-            <div class="ers-header">
-              <span>ERS BATTERY DEPLOYMENT</span>
-              <span class="ers-status" id="ersStatus">HOT LAP (OVERTAKE)</span>
-            </div>
-            <div class="ers-bar-track">
-              <div class="ers-bar-fill" id="fillErs" style="width: 76%;"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tire Health & Temperatures -->
-        <div class="telemetry-card tires-card">
-          <div class="card-label">TIRE SURFACE TEMPS & DEGRADATION</div>
-          <div class="compound-tag">Pirelli P-Zero Medium (Yellow) • 14 Laps</div>
-          <div class="car-tire-chassis">
-            <div class="tire-node tire-fl" id="tireFL">
-              <span class="tire-id">FL</span>
-              <span class="tire-temp" id="tempFL">102°C</span>
-            </div>
-            <div class="tire-node tire-fr" id="tireFR">
-              <span class="tire-id">FR</span>
-              <span class="tire-temp" id="tempFR">104°C</span>
-            </div>
-            <div class="tire-node tire-rl" id="tireRL">
-              <span class="tire-id">RL</span>
-              <span class="tire-temp" id="tempRL">98°C</span>
-            </div>
-            <div class="tire-node tire-rr" id="tireRR">
-              <span class="tire-id">RR</span>
-              <span class="tire-temp" id="tempRR">99°C</span>
-            </div>
+            <p class="rm-body">"Oscar, good pace in sector 2. We are on Plan A, undercut window opens lap 31."</p>
           </div>
         </div>
       </div>
 
-      <!-- Sector Times & Lap Comparison -->
-      <div class="sectors-card">
-        <div class="sectors-header">
-          <span class="card-label">CURRENT LAP SECTOR DELTAS</span>
-          <span class="current-lap-time">BEST: <strong>1:21.432</strong> • DELTA: <span class="delta-neg">-0.184s</span></span>
+      <!-- Google Cloud Edge Systems & Vertex AI -->
+      <div class="card infra-card">
+        <div class="card-header">
+          <span class="card-title">GOOGLE CLOUD GDC EDGE TELEMETRY</span>
+          <span class="chip-healthy">ONLINE</span>
         </div>
-        <div class="sectors-row">
-          <div class="sector-block purple">
-            <span class="s-title">SECTOR 1</span>
-            <span class="s-time" id="s1Time">27.124s</span>
-            <span class="s-badge">OVERALL FASTEST</span>
+        <div class="edge-specs-grid">
+          <div class="edge-spec">
+            <span class="es-key">Pit Garage Edge Cluster</span>
+            <strong class="es-val text-green">GDC Rack 01 &bull; Active</strong>
           </div>
-          <div class="sector-block green">
-            <span class="s-title">SECTOR 2</span>
-            <span class="s-time" id="s2Time">26.892s</span>
-            <span class="s-badge">PERSONAL BEST</span>
+          <div class="edge-spec">
+            <span class="es-key">Telemetry Ingestion</span>
+            <strong class="es-val">300+ Sensors &bull; 2.4 GB/s</strong>
           </div>
-          <div class="sector-block green">
-            <span class="s-title">SECTOR 3</span>
-            <span class="s-time" id="s3Time">27.416s</span>
-            <span class="s-badge">PERSONAL BEST</span>
+          <div class="edge-spec">
+            <span class="es-key">Trackside Link Latency</span>
+            <strong class="es-val text-green" id="edgeLatencyVal">0.76 ms</strong>
+          </div>
+          <div class="edge-spec">
+            <span class="es-key">MTC Woking Encrypted Sync</span>
+            <strong class="es-val text-green">Dual 10G Bonded 5G</strong>
+          </div>
+          <div class="edge-spec">
+            <span class="es-key">Pit Wall Android Fleet</span>
+            <strong class="es-val">24/24 Online (Android 15)</strong>
+          </div>
+          <div class="edge-spec">
+            <span class="es-key">Vertex AI Strategy Models</span>
+            <strong class="es-val text-blue">148,000 sims/sec</strong>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- Right Column: Implementation Engineer & Google Cloud Edge Systems -->
-    <aside class="edge-systems-section">
-      <div class="section-header">
-        <h2>Trackside Edge & Infrastructure</h2>
-        <span class="role-tag">Implementation Engineer View</span>
-      </div>
-
-      <!-- Google Distributed Cloud Edge Node Status -->
-      <div class="infra-card">
-        <div class="infra-card-header">
-          <span class="node-title">GDC EDGE CLUSTER (PIT GARAGE RACK 01)</span>
-          <span class="chip-healthy">HEALTHY</span>
-        </div>
-        <ul class="infra-metrics-list">
-          <li>
-            <span class="m-key">Trackside Telemetry Latency:</span>
-            <span class="m-val text-green" id="netLatency">0.78 ms</span>
-          </li>
-          <li>
-            <span class="m-key">Ingestion Throughput:</span>
-            <span class="m-val">2.4 GB/s (300+ car sensors)</span>
-          </li>
-          <li>
-            <span class="m-key">Primary Uplink:</span>
-            <span class="m-val">Dual 10Gbps Bonded 5G / Satellite</span>
-          </li>
-          <li>
-            <span class="m-key">Failover Tunnel (MTC Woking):</span>
-            <span class="m-val text-green">SYNCHRONIZED</span>
-          </li>
-          <li>
-            <span class="m-key">Pit Wall Tablets (Android 15):</span>
-            <span class="m-val">24/24 Online</span>
-          </li>
-          <li>
-            <span class="m-key">Vertex AI Strategy Models:</span>
-            <span class="m-val">148,000 sims/sec active</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Race Strategy & AI Recommendations -->
-      <div class="infra-card">
-        <div class="infra-card-header">
-          <span class="node-title">GOOGLE CLOUD VERTEX AI STRATEGY</span>
-          <span class="chip-ai">PLAN A • OPTIMAL</span>
-        </div>
-        <div class="strategy-callout">
-          <div class="strat-metric">
-            <span class="strat-val">LAP 31</span>
-            <span class="strat-desc">Projected Pit Window (Box for Hards)</span>
-          </div>
-          <div class="strat-confidence">
-            <span class="strat-perc">94.8%</span>
-            <span class="strat-desc">Confidence Score vs Safety Car Offset</span>
-          </div>
-        </div>
-        <p class="strat-notes">
-          Tire deg models indicate +0.3s/lap delta degradation on rival cars. Undercut window opens in 3 laps. Maintain delta +1.4s to DRS range.
-        </p>
-      </div>
-
-      <!-- Formula 1 US Corridor & Target Grand Prix -->
-      <div class="infra-card">
-        <div class="infra-card-header">
-          <span class="node-title">US CORRIDOR IMPLEMENTATION TARGETS</span>
-          <span class="chip-field">FIELD OPS</span>
-        </div>
-        <div class="us-gp-list">
-          <div class="gp-item">
-            <span class="gp-flag">🌴</span>
-            <div class="gp-details">
-              <strong>Miami Grand Prix</strong>
-              <span>Miami International Autodrome • EFS Corridor</span>
-            </div>
-            <span class="gp-status target">Target 2027</span>
-          </div>
-          <div class="gp-item">
-            <span class="gp-flag">🤠</span>
-            <div class="gp-details">
-              <strong>United States Grand Prix</strong>
-              <span>Circuit of the Americas • Austin, TX</span>
-            </div>
-            <span class="gp-status">Target 2028</span>
-          </div>
-          <div class="gp-item">
-            <span class="gp-flag">🎰</span>
-            <div class="gp-details">
-              <strong>Las Vegas Grand Prix</strong>
-              <span>Las Vegas Strip Circuit • Nevada</span>
-            </div>
-            <span class="gp-status">Target 2028</span>
+        <!-- Strategy Box -->
+        <div class="strategy-banner">
+          <div class="sb-title">VERTEX AI RACE STRATEGY: PLAN A (OPTIMAL)</div>
+          <div class="sb-metrics">
+            <div class="sb-m"><span>TARGET PIT:</span> <strong>LAP 31</strong></div>
+            <div class="sb-m"><span>COMPOUND:</span> <strong class="text-white">HARD (WHITE)</strong></div>
+            <div class="sb-m"><span>WIN PROBABILITY:</span> <strong class="text-green">94.8%</strong></div>
           </div>
         </div>
       </div>
-    </aside>
+    </div>
   </main>
 
-  <!-- 2026 Season Calendar Strip -->
-  <section class="season-calendar">
-    <div class="calendar-header">
-      <h3>2026 FIA FORMULA ONE CALENDAR & TRACKSIDE SCHEDULE</h3>
-      <span class="cal-legend">🟠 McLaren Key Races • 🔵 Google Cloud Edge Priority</span>
+  <!-- Interactive Pit Strategy & Undercut Simulator -->
+  <section class="strategy-simulator-section">
+    <div class="sim-header">
+      <h3>PIT STRATEGY & UNDERCUT SIMULATOR</h3>
+      <span>Interactive model calculating pit stop loss and track rejoin position</span>
     </div>
-    <div class="calendar-cards-container">
-      <div class="cal-card active">
-        <div class="cal-round">R16</div>
-        <div class="cal-name">Italian GP</div>
-        <div class="cal-track">Monza</div>
-        <div class="cal-date">Sep 4–6</div>
-        <div class="cal-tag">LIVE TELEMETRY</div>
+    <div class="sim-grid">
+      <div class="sim-controls">
+        <div class="control-group">
+          <label for="pitLapInput">Pit Stop Lap Target: <strong id="pitLapDisplay">Lap 31</strong></label>
+          <input type="range" id="pitLapInput" min="15" max="45" value="31">
+        </div>
+        <div class="control-group">
+          <label>Starting Compound:</label>
+          <div class="btn-group">
+            <button class="pill-btn" data-compound="soft">Soft (C5)</button>
+            <button class="pill-btn active" data-compound="med">Medium (C4)</button>
+            <button class="pill-btn" data-compound="hard">Hard (C3)</button>
+          </div>
+        </div>
       </div>
-      <div class="cal-card">
-        <div class="cal-round">R17</div>
-        <div class="cal-name">Azerbaijan GP</div>
-        <div class="cal-track">Baku City</div>
-        <div class="cal-date">Sep 18–20</div>
-        <div class="cal-tag">UPCOMING</div>
-      </div>
-      <div class="cal-card">
-        <div class="cal-round">R18</div>
-        <div class="cal-name">Singapore GP</div>
-        <div class="cal-track">Marina Bay</div>
-        <div class="cal-date">Oct 2–4</div>
-        <div class="cal-tag">NIGHT RACE</div>
-      </div>
-      <div class="cal-card highlight">
-        <div class="cal-round">R19</div>
-        <div class="cal-name">United States GP</div>
-        <div class="cal-track">Austin (COTA)</div>
-        <div class="cal-date">Oct 16–18</div>
-        <div class="cal-tag us-tag">US ROUND</div>
-      </div>
-      <div class="cal-card">
-        <div class="cal-round">R20</div>
-        <div class="cal-name">Mexico City GP</div>
-        <div class="cal-track">Autódromo Hermanos Rodríguez</div>
-        <div class="cal-date">Oct 23–25</div>
-        <div class="cal-tag">HIGH ALTITUDE</div>
-      </div>
-      <div class="cal-card">
-        <div class="cal-round">R21</div>
-        <div class="cal-name">São Paulo GP</div>
-        <div class="cal-track">Interlagos</div>
-        <div class="cal-date">Nov 6–8</div>
-        <div class="cal-tag">SPRINT WEEKEND</div>
-      </div>
-      <div class="cal-card highlight">
-        <div class="cal-round">R22</div>
-        <div class="cal-name">Las Vegas GP</div>
-        <div class="cal-track">Las Vegas Strip</div>
-        <div class="cal-date">Nov 19–21</div>
-        <div class="cal-tag us-tag">US ROUND</div>
+      <div class="sim-results">
+        <div class="res-card">
+          <span class="rc-label">PIT DELTA LOSS</span>
+          <span class="rc-val">22.4s</span>
+          <span class="rc-sub">Pit Lane Speed Limit 80 km/h</span>
+        </div>
+        <div class="res-card">
+          <span class="rc-label">VSC / SAFETY CAR GAIN</span>
+          <span class="rc-val text-green">-11.2s</span>
+          <span class="rc-sub">Net pit loss reduced to 11.2s</span>
+        </div>
+        <div class="res-card">
+          <span class="rc-label">PROJECTED REJOIN POS</span>
+          <span class="rc-val text-yellow" id="rejoinPos">P3 (Clean Air)</span>
+          <span class="rc-sub">Gap to leader: +4.2s</span>
+        </div>
+        <div class="res-card">
+          <span class="rc-label">TIRE ADVANTAGE</span>
+          <span class="rc-val text-green">+0.42s/lap</span>
+          <span class="rc-sub">Fresh rubber delta against rival</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- 2026 World Championship Standings Bar -->
+  <section class="standings-section">
+    <div class="standings-header">
+      <h3>2026 FIA FORMULA ONE WORLD CHAMPIONSHIP STANDINGS</h3>
+      <span class="standings-sub">Round 16 of 24 &bull; Updated Live</span>
+    </div>
+    <div class="standings-grid">
+      <!-- Drivers -->
+      <div class="standings-card">
+        <h4>DRIVERS' WORLD CHAMPIONSHIP</h4>
+        <div class="standings-table">
+          <div class="st-row highlight">
+            <span class="st-pos">1</span>
+            <span class="st-name">Lando Norris</span>
+            <span class="st-team mclaren-text">McLaren</span>
+            <span class="st-pts"><strong>284</strong> PTS</span>
+          </div>
+          <div class="st-row">
+            <span class="st-pos">2</span>
+            <span class="st-name">Max Verstappen</span>
+            <span class="st-team">Red Bull Racing</span>
+            <span class="st-pts"><strong>276</strong> PTS</span>
+          </div>
+          <div class="st-row highlight">
+            <span class="st-pos">3</span>
+            <span class="st-name">Oscar Piastri</span>
+            <span class="st-team mclaren-text">McLaren</span>
+            <span class="st-pts"><strong>242</strong> PTS</span>
+          </div>
+          <div class="st-row">
+            <span class="st-pos">4</span>
+            <span class="st-name">Charles Leclerc</span>
+            <span class="st-team">Ferrari</span>
+            <span class="st-pts"><strong>218</strong> PTS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Constructors -->
+      <div class="standings-card">
+        <h4>CONSTRUCTORS' WORLD CHAMPIONSHIP</h4>
+        <div class="standings-table">
+          <div class="st-row highlight">
+            <span class="st-pos">1</span>
+            <span class="st-name mclaren-text">McLaren Formula 1 Team</span>
+            <span class="st-team">Google Cloud Partner</span>
+            <span class="st-pts"><strong>526</strong> PTS</span>
+          </div>
+          <div class="st-row">
+            <span class="st-pos">2</span>
+            <span class="st-name">Red Bull Racing</span>
+            <span class="st-team">Honda RBPT</span>
+            <span class="st-pts"><strong>498</strong> PTS</span>
+          </div>
+          <div class="st-row">
+            <span class="st-pos">3</span>
+            <span class="st-name">Scuderia Ferrari</span>
+            <span class="st-team">Ferrari</span>
+            <span class="st-pts"><strong>412</strong> PTS</span>
+          </div>
+          <div class="st-row">
+            <span class="st-pos">4</span>
+            <span class="st-name">Mercedes-AMG Petronas</span>
+            <span class="st-team">Mercedes</span>
+            <span class="st-pts"><strong>318</strong> PTS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2026 Season Calendar & US Corridor Focus -->
+  <section class="calendar-section">
+    <div class="cal-header">
+      <h3>2026 GRAND PRIX CALENDAR & IMPLEMENTATION TARGETS</h3>
+      <span class="cal-legend">🟠 McLaren Races &bull; 🔵 High-Priority US Grand Prix Corridor</span>
+    </div>
+    <div class="cal-cards-strip">
+      <div class="c-card active">
+        <span class="c-rnd">ROUND 16</span>
+        <strong class="c-name">Italian GP</strong>
+        <span class="c-circuit">Monza</span>
+        <span class="c-date">Sep 4–6</span>
+        <span class="c-badge live-badge">LIVE TELEMETRY</span>
+      </div>
+      <div class="c-card">
+        <span class="c-rnd">ROUND 17</span>
+        <strong class="c-name">Azerbaijan GP</strong>
+        <span class="c-circuit">Baku City</span>
+        <span class="c-date">Sep 18–20</span>
+        <span class="c-badge">STREET TRACK</span>
+      </div>
+      <div class="c-card">
+        <span class="c-rnd">ROUND 18</span>
+        <strong class="c-name">Singapore GP</strong>
+        <span class="c-circuit">Marina Bay</span>
+        <span class="c-date">Oct 2–4</span>
+        <span class="c-badge">NIGHT RACE</span>
+      </div>
+      <div class="c-card us-target">
+        <span class="c-rnd">ROUND 19</span>
+        <strong class="c-name">United States GP</strong>
+        <span class="c-circuit">Austin (COTA)</span>
+        <span class="c-date">Oct 16–18</span>
+        <span class="c-badge us-badge">US CORRIDOR</span>
+      </div>
+      <div class="c-card">
+        <span class="c-rnd">ROUND 20</span>
+        <strong class="c-name">Mexico City GP</strong>
+        <span class="c-circuit">Hermanos Rodríguez</span>
+        <span class="c-date">Oct 23–25</span>
+        <span class="c-badge">HIGH ALTITUDE</span>
+      </div>
+      <div class="c-card">
+        <span class="c-rnd">ROUND 21</span>
+        <strong class="c-name">São Paulo GP</strong>
+        <span class="c-circuit">Interlagos</span>
+        <span class="c-date">Nov 6–8</span>
+        <span class="c-badge">SPRINT WEEKEND</span>
+      </div>
+      <div class="c-card us-target">
+        <span class="c-rnd">ROUND 22</span>
+        <strong class="c-name">Las Vegas GP</strong>
+        <span class="c-circuit">Vegas Strip</span>
+        <span class="c-date">Nov 19–21</span>
+        <span class="c-badge us-badge">US CORRIDOR</span>
+      </div>
+      <div class="c-card us-target">
+        <span class="c-rnd">CORRIDOR</span>
+        <strong class="c-name">Miami Grand Prix</strong>
+        <span class="c-circuit">Miami Autodrome</span>
+        <span class="c-date">May 2027</span>
+        <span class="c-badge miami-badge">EFS TARGET</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Professional Footer -->
   <footer class="app-footer">
     <div class="footer-left">
-      <span>Architected & Maintained by <strong>Waleed Rahman</strong></span> •
-      <span>Google Technical Operations & Engineering Field Services (EFS)</span> •
-      <span>Internal go/link: <code>go/waleed-f1</code></span>
+      <span>Architected & Developed by <strong>Waleed Rahman</strong></span> &bull;
+      <span>Google Technical Operations / Engineering Field Services (EFS)</span> &bull;
+      <span>Internal Shortlink: <code>go/waleed-f1</code></span>
     </div>
     <div class="footer-right">
-      <span>Hardware Operations & Implementation Engineering Roadmap</span> •
+      <span>Live Production Site: <a href="https://waleedrahman-design.github.io/mclarentracker/" target="_blank">waleedrahman-design.github.io/mclarentracker</a></span> &bull;
       <span>Google Cloud Strategic Sports Partnerships</span>
     </div>
   </footer>

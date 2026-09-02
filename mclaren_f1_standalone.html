@@ -3,35 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="McLaren Formula 1 Team real-time trackside telemetry, race operations, and Google Distributed Cloud edge deployment dashboard. Internal go/link: go/waleed-f1.">
+  <meta name="description" content="McLaren Formula 1 Team Trackside Telemetry & Google Cloud Edge Pit Wall Dashboard. Live vehicle telemetry, circuit GPS tracker, team radio, and championship standings. go/waleed-f1.">
   <title>McLaren F1 • Google Cloud Trackside Telemetry (go/waleed-f1)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
 :root {
-  --bg-dark: #0B0E14;
-  --surface-1: #131722;
-  --surface-2: #1A202C;
-  --surface-hover: #222938;
-  --border-color: #232A3B;
-  --border-subtle: #1C2230;
+  --bg-dark: #080A0F;
+  --surface-0: #0E121A;
+  --surface-1: #141A24;
+  --surface-2: #1B2332;
+  --surface-3: #232D40;
+  --surface-hover: #29364C;
+  --border-color: #263147;
+  --border-subtle: #1C2433;
 
   --mclaren-papaya: #FF8000;
-  --mclaren-papaya-subtle: rgba(255, 128, 0, 0.12);
-  --anthracite: #1E2229;
+  --mclaren-papaya-glow: rgba(255, 128, 0, 0.25);
+  --mclaren-papaya-subtle: rgba(255, 128, 0, 0.08);
 
-  --google-blue: #1A73E8;
+  --google-blue: #4285F4;
   --google-green: #34A853;
   --google-red: #EA4335;
   --google-yellow: #FBBC04;
 
-  --f1-purple: #B5179E;
-  --f1-green: #00B4D8;
-  --f1-sector-fastest: #9D4EDD;
-  --f1-sector-pb: #10B981;
+  --f1-purple: #A855F7;
+  --f1-green: #10B981;
+  --f1-yellow: #F59E0B;
+  --f1-red: #EF4444;
 
-  --text-primary: #F3F4F6;
+  --text-primary: #F9FAFB;
   --text-secondary: #9CA3AF;
   --text-muted: #6B7280;
 
@@ -53,16 +55,22 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(255, 128, 0, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(66, 133, 244, 0.03) 0%, transparent 40%);
 }
 
-/* Top Navigation */
+/* Header */
 .top-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: var(--surface-1);
+  padding: 0.85rem 2rem;
+  background-color: var(--surface-0);
   border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .nav-left {
@@ -79,8 +87,8 @@ body {
 
 .mclaren-logo {
   font-weight: 700;
-  font-size: 1.25rem;
-  letter-spacing: -0.02em;
+  font-size: 1.35rem;
+  letter-spacing: -0.03em;
   color: var(--mclaren-papaya);
 }
 
@@ -116,9 +124,9 @@ body {
   margin-left: 0.25rem;
 }
 
-.sub-portal-name {
+.header-tagline {
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   border-left: 1px solid var(--border-color);
   padding-left: 1rem;
 }
@@ -126,30 +134,28 @@ body {
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
-.go-link-chip {
+.comms-toggle-btn {
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  transition: all 0.15s ease;
+}
+
+.comms-toggle-btn:hover {
   background-color: var(--surface-2);
-  border: 1px solid var(--border-color);
-  padding: 0.35rem 0.75rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.go-link-chip:hover {
-  background-color: var(--surface-hover);
-}
-
-.go-link-chip code {
-  color: var(--mclaren-papaya);
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  font-weight: 600;
+  border-color: var(--mclaren-papaya);
 }
 
 .system-status-indicator {
@@ -160,8 +166,8 @@ body {
   font-family: var(--font-mono);
   color: var(--google-green);
   font-weight: 600;
-  background-color: rgba(52, 168, 83, 0.1);
-  padding: 0.35rem 0.75rem;
+  background-color: rgba(52, 168, 83, 0.08);
+  padding: 0.4rem 0.85rem;
   border-radius: 6px;
   border: 1px solid rgba(52, 168, 83, 0.25);
 }
@@ -179,52 +185,84 @@ body {
 
 @keyframes pulse-ring {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 0.3; transform: scale(0.85); }
 }
 
-/* Race Hero Bar */
+.go-link-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.go-link-chip:hover {
+  background-color: var(--surface-hover);
+  border-color: var(--mclaren-papaya);
+}
+
+.go-link-chip code {
+  color: var(--mclaren-papaya);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* Hero Section */
 .race-hero {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: 1.6fr 1fr;
   gap: 1.5rem;
   padding: 1.5rem 2rem;
-  background-color: var(--surface-1);
+  background-color: var(--surface-0);
   border-bottom: 1px solid var(--border-color);
 }
 
-.round-indicator {
+.round-badge {
   font-size: 0.75rem;
   font-family: var(--font-mono);
   color: var(--mclaren-papaya);
   font-weight: 700;
-  letter-spacing: 0.08em;
-  margin-bottom: 0.25rem;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.35rem;
 }
 
-.race-title {
-  font-size: 1.6rem;
+.circuit-title {
+  font-size: 1.65rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.85rem;
 }
 
-.race-meta-pills {
+.track-metrics-bar {
   display: flex;
-  gap: 0.6rem;
+  gap: 1.25rem;
   flex-wrap: wrap;
 }
 
-.meta-pill {
-  font-size: 0.8rem;
-  background-color: var(--surface-2);
-  border: 1px solid var(--border-color);
-  padding: 0.25rem 0.65rem;
-  border-radius: 4px;
-  color: var(--text-secondary);
+.track-metric {
+  display: flex;
+  flex-direction: column;
 }
 
-.countdown-card {
-  background-color: var(--surface-2);
+.tm-label {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.tm-val {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.countdown-panel {
+  background-color: var(--surface-1);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 1rem 1.25rem;
@@ -233,7 +271,7 @@ body {
   justify-content: center;
 }
 
-.countdown-header {
+.countdown-title {
   font-size: 0.7rem;
   font-family: var(--font-mono);
   color: var(--text-muted);
@@ -245,174 +283,309 @@ body {
 .countdown-clock {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: 0.6rem;
   font-family: var(--font-mono);
 }
 
-.time-block {
+.clock-unit {
   display: flex;
   align-items: baseline;
   gap: 0.25rem;
 }
 
-.time-block .number {
-  font-size: 1.75rem;
+.clock-num {
+  font-size: 1.85rem;
   font-weight: 700;
   color: var(--text-primary);
 }
 
-.time-block .unit {
+.clock-txt {
   font-size: 0.65rem;
   color: var(--text-muted);
 }
 
-.sep {
+.clock-sep {
   color: var(--mclaren-papaya);
   font-size: 1.25rem;
   font-weight: 700;
 }
 
-.weather-brief {
-  margin-top: 0.5rem;
+.weather-strip {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.6rem;
   font-size: 0.75rem;
   color: var(--text-secondary);
 }
 
-/* Main Dashboard Grid */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+/* Driver Selector & Sectors Ribbon */
+.driver-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 2rem;
+  background-color: var(--surface-1);
+  border-bottom: 1px solid var(--border-color);
   gap: 1.5rem;
-  padding: 1.5rem 2rem;
-  flex: 1;
+  flex-wrap: wrap;
 }
 
-.section-header {
+.driver-tabs {
+  display: flex;
+  gap: 1rem;
+}
+
+.driver-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-color);
+  padding: 0.6rem 1.15rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.driver-btn:hover {
+  background-color: var(--surface-3);
+  border-color: var(--mclaren-papaya);
+}
+
+.driver-btn.active {
+  background-color: var(--mclaren-papaya-subtle);
+  border-color: var(--mclaren-papaya);
+  box-shadow: 0 0 16px rgba(255, 128, 0, 0.15);
+}
+
+.d-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: var(--anthracite);
+  color: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: 2px solid var(--border-color);
+}
+
+.lando-avatar { border-color: var(--mclaren-papaya); }
+.oscar-avatar { border-color: #FCD34D; }
+
+.d-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.d-number {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--mclaren-papaya);
+  font-weight: 700;
+}
+
+.d-name {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.d-badge {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  display: inline-block;
+  margin-top: 0.15rem;
+  width: fit-content;
+}
+
+.p1-badge { background-color: rgba(16, 185, 129, 0.2); color: #10B981; }
+.p2-badge { background-color: rgba(245, 158, 11, 0.2); color: #F59E0B; }
+
+.d-times {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: var(--font-mono);
+  margin-left: 0.5rem;
+}
+
+.d-laptime { font-size: 0.75rem; color: var(--text-muted); }
+.d-gap { font-size: 0.8rem; font-weight: 700; }
+
+.sectors-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.sector-chip {
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 0.85rem;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-mono);
+}
+
+.sector-chip.purple {
+  background-color: rgba(168, 85, 247, 0.1);
+  border-color: rgba(168, 85, 247, 0.4);
+}
+.sector-chip.purple .chip-flag { color: var(--f1-purple); }
+
+.sector-chip.green {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+.sector-chip.green .chip-flag { color: var(--f1-green); }
+
+.chip-sec { font-size: 0.65rem; color: var(--text-muted); }
+.chip-val { font-size: 1.05rem; font-weight: 700; }
+.chip-flag { font-size: 0.6rem; font-weight: 700; }
+
+.drs-status-box {
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 0.85rem;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-mono);
+}
+
+.drs-label { font-size: 0.65rem; color: var(--text-muted); }
+.drs-val.active { font-size: 0.8rem; font-weight: 700; color: #10B981; }
+
+/* Master Grid */
+.master-telemetry-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+}
+
+.telemetry-column, .operations-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Card Base */
+.card {
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+
+.card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
 }
 
-.section-header h2 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-}
-
-.driver-tabs {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.driver-tab {
-  background-color: var(--surface-1);
-  border: 1px solid var(--border-color);
-  color: var(--text-secondary);
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-family: var(--font-main);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.driver-tab:hover {
-  background-color: var(--surface-2);
-  color: var(--text-primary);
-}
-
-.driver-tab.active {
-  background-color: var(--mclaren-papaya-subtle);
-  border-color: var(--mclaren-papaya);
-  color: var(--mclaren-papaya);
-}
-
-.driver-num {
-  font-family: var(--font-mono);
-  font-weight: 700;
-}
-
-.driver-pos {
+.card-title {
   font-size: 0.75rem;
-  background-color: var(--surface-2);
-  padding: 0.1rem 0.35rem;
-  border-radius: 3px;
-  margin-left: 0.25rem;
-}
-
-/* Gauges Grid */
-.gauges-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1.2fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.telemetry-card {
-  background-color: var(--surface-1);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1.25rem;
-}
-
-.card-label {
-  font-size: 0.7rem;
   font-family: var(--font-mono);
   color: var(--text-muted);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.05em;
-  margin-bottom: 0.75rem;
 }
 
-/* Speed Card */
+.chip-live {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #EF4444;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Cockpit Card */
+.speed-gear-block {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.5rem 0 1rem;
+}
+
+.gear-display {
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.gear-label {
+  display: block;
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.gear-num {
+  font-size: 2.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--mclaren-papaya);
+  line-height: 1;
+}
+
 .speed-display {
   display: flex;
   align-items: baseline;
   gap: 0.5rem;
 }
 
-.speed-val {
-  font-size: 3.5rem;
+.speed-num {
+  font-size: 4.5rem;
   font-family: var(--font-mono);
   font-weight: 700;
-  line-height: 1;
-  color: var(--text-primary);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
 }
 
 .speed-unit {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-muted);
-}
-
-.gear-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background-color: var(--surface-2);
-  border: 1px solid var(--border-color);
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.gear-sub {
-  font-size: 0.65rem;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-}
-
-.gear-val {
   font-size: 1.1rem;
   font-weight: 700;
-  font-family: var(--font-mono);
-  color: var(--mclaren-papaya);
+  color: var(--text-muted);
 }
 
-.rpm-labels {
+.delta-display {
+  text-align: right;
+  font-family: var(--font-mono);
+}
+
+.delta-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  display: block;
+}
+
+.delta-val {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* RPM Strip LEDs */
+.rpm-strip-container {
+  margin-bottom: 1.25rem;
+}
+
+.rpm-hud-header {
   display: flex;
   justify-content: space-between;
   font-size: 0.7rem;
@@ -421,395 +594,523 @@ body {
   margin-bottom: 0.35rem;
 }
 
-.redline-label {
-  color: var(--google-red);
-}
+.rev-limit { color: var(--google-red); }
 
-.rpm-bar-track, .pedal-bar-track, .ers-bar-track {
-  height: 8px;
+.rpm-led-bar {
+  display: flex;
+  gap: 4px;
+  height: 12px;
   background-color: var(--surface-2);
+  padding: 2px;
   border-radius: 4px;
-  overflow: hidden;
 }
 
-.rpm-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #34A853 60%, #FBBC04 85%, #EA4335 100%);
-  transition: width 0.2s ease;
+.rpm-led {
+  flex: 1;
+  border-radius: 2px;
+  background-color: #263147;
+  transition: background-color 0.05s ease;
 }
 
-/* Pedal Traces */
-.pedal-group {
-  margin-bottom: 0.75rem;
-}
+.rpm-led.green.active { background-color: #10B981; box-shadow: 0 0 6px #10B981; }
+.rpm-led.yellow.active { background-color: #F59E0B; box-shadow: 0 0 6px #F59E0B; }
+.rpm-led.red.active { background-color: #EF4444; box-shadow: 0 0 6px #EF4444; }
+.rpm-led.blue.active { background-color: #3B82F6; box-shadow: 0 0 8px #3B82F6; }
 
-.pedal-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  font-family: var(--font-mono);
-  color: var(--text-secondary);
-  margin-bottom: 0.25rem;
-}
-
-.throttle-fill {
-  background-color: #10B981;
-  transition: width 0.15s ease;
-}
-
-.brake-fill {
-  background-color: #EF4444;
-  transition: width 0.15s ease;
-}
-
-.ers-group {
-  margin-top: 1rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--border-color);
-}
-
-.ers-header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.7rem;
-  font-family: var(--font-mono);
-  color: var(--text-muted);
-  margin-bottom: 0.35rem;
-}
-
-.ers-status {
-  color: var(--mclaren-papaya);
-  font-weight: 700;
-}
-
-.ers-bar-fill {
-  background-color: #3B82F6;
-  transition: width 0.2s ease;
-}
-
-/* Tires Card */
-.compound-tag {
-  font-size: 0.75rem;
-  color: #FCD34D;
-  margin-bottom: 1rem;
-  font-family: var(--font-mono);
-}
-
-.car-tire-chassis {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-}
-
-.tire-node {
-  background-color: var(--surface-2);
-  border: 1px solid var(--border-color);
-  padding: 0.6rem;
-  border-radius: 6px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: var(--font-mono);
-}
-
-.tire-id {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--text-muted);
-}
-
-.tire-temp {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #10B981;
-}
-
-/* Sectors Card */
-.sectors-card {
-  background-color: var(--surface-1);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1.25rem;
-}
-
-.sectors-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.current-lap-time {
-  font-size: 0.85rem;
-  font-family: var(--font-mono);
-}
-
-.delta-neg {
-  color: #10B981;
-  font-weight: 700;
-}
-
-.sectors-row {
+/* Pedals Grid */
+.pedals-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 1rem;
 }
 
-.sector-block {
-  padding: 0.85rem;
-  border-radius: 6px;
+.pedal-box {
   background-color: var(--surface-2);
   border: 1px solid var(--border-color);
+  padding: 0.75rem;
+  border-radius: 6px;
+}
+
+.pedal-top {
   display: flex;
-  flex-direction: column;
-}
-
-.sector-block.purple {
-  border-color: rgba(157, 78, 221, 0.4);
-  background-color: rgba(157, 78, 221, 0.08);
-}
-
-.sector-block.purple .s-badge {
-  color: var(--f1-sector-fastest);
-}
-
-.sector-block.green {
-  border-color: rgba(16, 185, 129, 0.4);
-  background-color: rgba(16, 185, 129, 0.08);
-}
-
-.sector-block.green .s-badge {
-  color: var(--f1-sector-pb);
-}
-
-.s-title {
+  justify-content: space-between;
   font-size: 0.7rem;
   font-family: var(--font-mono);
-  color: var(--text-muted);
+  margin-bottom: 0.35rem;
 }
 
-.s-time {
-  font-size: 1.25rem;
-  font-weight: 700;
+.pedal-name { color: var(--text-muted); }
+.pedal-pct { font-weight: 700; }
+
+.gauge-track {
+  height: 8px;
+  background-color: var(--surface-0);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.gauge-fill { height: 100%; transition: width 0.15s ease; }
+.throttle-bar { background-color: #10B981; }
+.brake-bar { background-color: #EF4444; }
+.ers-bar { background-color: #3B82F6; }
+
+/* Rolling Waveform Canvas */
+.waveform-legend {
+  font-size: 0.7rem;
   font-family: var(--font-mono);
-  margin: 0.2rem 0;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
 }
 
-.s-badge {
+.legend-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 0.25rem;
+}
+
+.speed-dot { background-color: var(--mclaren-papaya); }
+.throttle-dot { background-color: #10B981; }
+.brake-dot { background-color: #EF4444; }
+
+.canvas-wrapper {
+  background-color: var(--surface-0);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+  height: 150px;
+}
+
+#telemetryCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Tires Card */
+.compound-badge {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: #FCD34D;
+  background-color: rgba(252, 211, 77, 0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.chassis-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.tire-widget {
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-color);
+  padding: 0.85rem;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+}
+
+.tw-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.tw-temp {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #10B981;
+  margin-bottom: 0.35rem;
+}
+
+.tw-bar {
+  height: 4px;
+  background-color: var(--surface-0);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 0.35rem;
+}
+
+.tw-fill {
+  height: 100%;
+  background-color: #10B981;
+}
+
+.tw-psi {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+/* Circuit Card */
+.track-status {
   font-size: 0.65rem;
   font-family: var(--font-mono);
   font-weight: 700;
-}
-
-/* Edge Systems Section */
-.role-tag {
-  font-size: 0.75rem;
-  font-family: var(--font-mono);
-  color: var(--google-blue);
-  background-color: rgba(26, 115, 232, 0.1);
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
 }
 
-.infra-card {
-  background-color: var(--surface-1);
+.green-flag { background-color: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+.circuit-canvas-box {
+  background-color: var(--surface-0);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1.25rem;
-  margin-bottom: 1rem;
+  border-radius: 6px;
+  padding: 0.75rem;
+  position: relative;
 }
 
-.infra-card-header {
+#circuitCanvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.circuit-corner-pills {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
 }
 
-.node-title {
-  font-size: 0.75rem;
+.cp {
+  font-size: 0.65rem;
   font-family: var(--font-mono);
-  color: var(--text-muted);
-  font-weight: 700;
-}
-
-.chip-healthy {
-  font-size: 0.7rem;
-  font-family: var(--font-mono);
-  font-weight: 700;
-  color: var(--google-green);
-  background-color: rgba(52, 168, 83, 0.12);
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-color);
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
-}
-
-.chip-ai {
-  font-size: 0.7rem;
-  font-family: var(--font-mono);
-  font-weight: 700;
-  color: var(--google-blue);
-  background-color: rgba(26, 115, 232, 0.12);
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-}
-
-.chip-field {
-  font-size: 0.7rem;
-  font-family: var(--font-mono);
-  font-weight: 700;
-  color: var(--mclaren-papaya);
-  background-color: var(--mclaren-papaya-subtle);
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-}
-
-.infra-metrics-list {
-  list-style: none;
-}
-
-.infra-metrics-list li {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  padding: 0.35rem 0;
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.infra-metrics-list li:last-child {
-  border-bottom: none;
-}
-
-.m-key {
   color: var(--text-secondary);
 }
 
-.m-val {
+/* Radio Comms Card */
+.radio-ping-btn {
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-color);
+  color: var(--mclaren-papaya);
   font-family: var(--font-mono);
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.15s ease;
 }
 
-.text-green {
+.radio-ping-btn:hover {
+  background-color: var(--surface-hover);
+  border-color: var(--mclaren-papaya);
+}
+
+.radio-transcript-log {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.radio-msg {
+  background-color: var(--surface-2);
+  border-left: 3px solid var(--border-color);
+  padding: 0.65rem 0.85rem;
+  border-radius: 0 6px 6px 0;
+}
+
+.mclaren-msg { border-left-color: var(--mclaren-papaya); }
+.driver-msg { border-left-color: #3B82F6; }
+
+.rm-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  margin-bottom: 0.25rem;
+}
+
+.rm-speaker { font-weight: 700; color: var(--text-muted); }
+.rm-time { color: var(--text-muted); }
+
+.rm-body {
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+  font-family: var(--font-mono);
+}
+
+/* Edge Infra Card */
+.chip-healthy {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  background-color: rgba(52, 168, 83, 0.15);
   color: var(--google-green);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
 }
 
-.strategy-callout {
+.edge-specs-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.edge-spec {
   background-color: var(--surface-2);
+  border: 1px solid var(--border-color);
+  padding: 0.65rem;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+.es-key {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.es-val {
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  margin-top: 0.2rem;
+}
+
+.strategy-banner {
+  background-color: var(--surface-2);
+  border: 1px solid rgba(66, 133, 244, 0.3);
   padding: 0.85rem;
   border-radius: 6px;
-  margin-bottom: 0.75rem;
 }
 
-.strat-metric, .strat-confidence {
-  display: flex;
-  flex-direction: column;
-}
-
-.strat-val, .strat-perc {
-  font-size: 1.25rem;
+.sb-title {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--google-blue);
   font-weight: 700;
-  font-family: var(--font-mono);
-  color: var(--mclaren-papaya);
+  margin-bottom: 0.5rem;
 }
 
-.strat-desc {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-}
-
-.strat-notes {
+.sb-metrics {
+  display: flex;
+  justify-content: space-between;
   font-size: 0.75rem;
-  color: var(--text-secondary);
-  line-height: 1.4;
-}
-
-/* US Grand Prix Targets */
-.us-gp-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.gp-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  background-color: var(--surface-2);
-  padding: 0.65rem 0.85rem;
-  border-radius: 6px;
-}
-
-.gp-flag {
-  font-size: 1.25rem;
-}
-
-.gp-details {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.gp-details strong {
-  font-size: 0.85rem;
-  color: var(--text-primary);
-}
-
-.gp-details span {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-}
-
-.gp-status {
-  font-size: 0.7rem;
   font-family: var(--font-mono);
-  font-weight: 600;
+}
+
+.sb-m { display: flex; flex-direction: column; }
+.sb-m span { font-size: 0.65rem; color: var(--text-muted); }
+.sb-m strong { font-size: 0.95rem; }
+
+/* Interactive Strategy Simulator */
+.strategy-simulator-section {
+  padding: 1.5rem 2rem;
+  background-color: var(--surface-0);
+  border-top: 1px solid var(--border-color);
+}
+
+.sim-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1rem;
+}
+
+.sim-header h3 {
+  font-size: 0.9rem;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+.sim-header span {
+  font-size: 0.75rem;
   color: var(--text-muted);
+}
+
+.sim-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem;
+}
+
+.sim-controls {
   background-color: var(--surface-1);
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  padding: 1.25rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.gp-status.target {
+.control-group label {
+  display: block;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.control-group input[type=range] {
+  width: 100%;
+  accent-color: var(--mclaren-papaya);
+}
+
+.btn-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pill-btn {
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pill-btn.active {
+  background-color: var(--mclaren-papaya-subtle);
+  border-color: var(--mclaren-papaya);
   color: var(--mclaren-papaya);
-  border: 1px solid rgba(255, 128, 0, 0.3);
+  font-weight: 700;
 }
 
-/* Season Calendar Strip */
-.season-calendar {
+.sim-results {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.res-card {
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: var(--font-mono);
+}
+
+.rc-label { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; }
+.rc-val { font-size: 1.4rem; font-weight: 700; margin: 0.25rem 0; }
+.rc-sub { font-size: 0.65rem; color: var(--text-secondary); line-height: 1.3; }
+
+/* Standings Section */
+.standings-section {
   padding: 1.5rem 2rem;
   background-color: var(--surface-1);
   border-top: 1px solid var(--border-color);
 }
 
-.calendar-header {
+.standings-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
 }
 
-.calendar-header h3 {
+.standings-header h3 {
+  font-size: 0.9rem;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+.standings-sub { font-size: 0.75rem; color: var(--text-muted); }
+
+.standings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.standings-card {
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.standings-card h4 {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.standings-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.st-row {
+  display: grid;
+  grid-template-columns: 24px 1.5fr 1fr auto;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  background-color: var(--surface-1);
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+}
+
+.st-row.highlight {
+  border-left: 3px solid var(--mclaren-papaya);
+  background-color: rgba(255, 128, 0, 0.05);
+}
+
+.st-pos { font-weight: 700; color: var(--text-muted); }
+.st-name { font-weight: 600; color: var(--text-primary); }
+.st-team { color: var(--text-secondary); font-size: 0.75rem; }
+.mclaren-text { color: var(--mclaren-papaya) !important; font-weight: 700; }
+.st-pts { font-weight: 700; }
+
+/* Calendar Section */
+.calendar-section {
+  padding: 1.5rem 2rem;
+  background-color: var(--surface-0);
+  border-top: 1px solid var(--border-color);
+}
+
+.cal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.cal-header h3 {
   font-size: 0.85rem;
   font-family: var(--font-mono);
   color: var(--text-secondary);
-  letter-spacing: 0.05em;
 }
 
-.cal-legend {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
+.cal-legend { font-size: 0.75rem; color: var(--text-muted); }
 
-.calendar-cards-container {
+.cal-cards-strip {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 0.75rem;
 }
 
-.cal-card {
-  background-color: var(--surface-2);
+.c-card {
+  background-color: var(--surface-1);
   border: 1px solid var(--border-color);
   padding: 0.75rem;
   border-radius: 6px;
@@ -818,59 +1119,33 @@ body {
   transition: transform 0.15s ease;
 }
 
-.cal-card:hover {
-  transform: translateY(-2px);
-}
+.c-card:hover { transform: translateY(-2px); }
 
-.cal-card.active {
+.c-card.active {
   border-color: var(--mclaren-papaya);
   background-color: var(--mclaren-papaya-subtle);
 }
 
-.cal-card.highlight {
+.c-card.us-target {
   border-color: rgba(66, 133, 244, 0.4);
 }
 
-.cal-round {
-  font-size: 0.65rem;
-  font-family: var(--font-mono);
-  color: var(--mclaren-papaya);
-  font-weight: 700;
-}
+.c-rnd { font-size: 0.65rem; font-family: var(--font-mono); color: var(--mclaren-papaya); font-weight: 700; }
+.c-name { font-size: 0.85rem; margin: 0.15rem 0; }
+.c-circuit { font-size: 0.7rem; color: var(--text-muted); }
+.c-date { font-size: 0.7rem; font-family: var(--font-mono); color: var(--text-secondary); margin-top: 0.35rem; }
+.c-badge { font-size: 0.6rem; font-family: var(--font-mono); font-weight: 700; margin-top: 0.5rem; color: var(--text-muted); }
 
-.cal-name {
-  font-size: 0.85rem;
-  font-weight: 700;
-  margin: 0.2rem 0;
-}
+.live-badge { color: var(--mclaren-papaya) !important; }
+.us-badge { color: #60A5FA !important; }
+.miami-badge { color: #34D399 !important; }
 
-.cal-track {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-}
-
-.cal-date {
-  font-size: 0.7rem;
-  font-family: var(--font-mono);
-  color: var(--text-secondary);
-  margin-top: 0.35rem;
-}
-
-.cal-tag {
-  font-size: 0.6rem;
-  font-family: var(--font-mono);
-  font-weight: 700;
-  margin-top: 0.5rem;
-  color: var(--text-muted);
-}
-
-.cal-card.active .cal-tag {
-  color: var(--mclaren-papaya);
-}
-
-.us-tag {
-  color: #60A5FA !important;
-}
+/* Utilities */
+.text-green { color: #10B981 !important; }
+.text-yellow { color: #F59E0B !important; }
+.text-red { color: #EF4444 !important; }
+.text-blue { color: #3B82F6 !important; }
+.text-white { color: #FFFFFF !important; }
 
 /* Footer */
 .app-footer {
@@ -884,29 +1159,31 @@ body {
   color: var(--text-muted);
 }
 
-.app-footer strong {
-  color: var(--text-secondary);
+.app-footer a {
+  color: var(--google-blue);
+  text-decoration: none;
 }
 
-.app-footer code {
-  color: var(--mclaren-papaya);
-  font-family: var(--font-mono);
+.app-footer a:hover {
+  text-decoration: underline;
 }
+
+.app-footer strong { color: var(--text-secondary); }
+.app-footer code { color: var(--mclaren-papaya); font-family: var(--font-mono); }
 
 /* Responsive */
-@media (max-width: 1024px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-  .race-hero {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 1100px) {
+  .master-telemetry-grid { grid-template-columns: 1fr; }
+  .race-hero { grid-template-columns: 1fr; }
+  .sim-grid { grid-template-columns: 1fr; }
+  .standings-grid { grid-template-columns: 1fr; }
+  .sim-results { grid-template-columns: 1fr 1fr; }
 }
 
 </style>
 </head>
 <body>
-  <!-- Header Bar -->
+  <!-- Top Navigation & Global Ops Bar -->
   <header class="top-nav">
     <div class="nav-left">
       <div class="brand-badge">
@@ -918,392 +1195,666 @@ body {
         <span class="g-color-b">G</span><span class="g-color-r">o</span><span class="g-color-y">o</span><span class="g-color-b">g</span><span class="g-color-g">l</span><span class="g-color-r">e</span>
         <span class="cloud-text">Cloud</span>
       </div>
-      <span class="sub-portal-name">Trackside Telemetry & Edge Operations</span>
+      <div class="header-tagline">Trackside Engineering & Telemetry Operations</div>
     </div>
 
     <div class="nav-right">
+      <!-- Audio Comms Toggle -->
+      <button class="comms-toggle-btn" id="radioMuteBtn" title="Toggle Pit Wall Audio Comms">
+        <span id="radioIcon">🔊</span>
+        <span id="radioLabel">PIT COMMS: ON</span>
+      </button>
+
+      <!-- Live Edge Indicator -->
+      <div class="system-status-indicator" title="GDC Edge Pit Garage Cluster">
+        <span class="status-dot pulse"></span>
+        <span class="status-label" id="latencyDisplay">GDC EDGE &bull; 0.76ms</span>
+      </div>
+
+      <!-- go/link Chip -->
       <div class="go-link-chip" id="goLinkChip" title="Click to copy internal go/link">
         <span class="link-icon">🔗</span>
         <code>go/waleed-f1</code>
       </div>
-      <div class="system-status-indicator">
-        <span class="status-dot pulse"></span>
-        <span class="status-label">GDC EDGE ONLINE • 0.8ms</span>
-      </div>
     </div>
   </header>
 
-  <!-- Hero: Grand Prix Countdown & Circuit Overview -->
+  <!-- Hero Banner: Grand Prix Countdown, Weather & Track Evolution -->
   <section class="race-hero">
-    <div class="race-info-card">
-      <div class="round-indicator">ROUND 16 • FIA FORMULA ONE WORLD CHAMPIONSHIP</div>
-      <h1 class="race-title" id="raceName">Italian Grand Prix • Autodromo Nazionale Monza</h1>
-      <div class="race-meta-pills">
-        <span class="meta-pill">🏁 5.793 km</span>
-        <span class="meta-pill">⏱️ 53 Laps</span>
-        <span class="meta-pill">⚡ 2 DRS Zones</span>
-        <span class="meta-pill">🛞 C3 / C4 / C5 Compounds</span>
+    <div class="hero-left">
+      <div class="round-badge">ROUND 16 &bull; FIA FORMULA ONE WORLD CHAMPIONSHIP</div>
+      <h1 class="circuit-title">Italian Grand Prix &bull; Autodromo Nazionale Monza</h1>
+      <div class="track-metrics-bar">
+        <div class="track-metric">
+          <span class="tm-label">CIRCUIT LENGTH</span>
+          <span class="tm-val">5.793 km</span>
+        </div>
+        <div class="track-metric">
+          <span class="tm-label">RACE DISTANCE</span>
+          <span class="tm-val">53 Laps (306.7 km)</span>
+        </div>
+        <div class="track-metric">
+          <span class="tm-label">LAP RECORD</span>
+          <span class="tm-val">1:21.046 (Barrichello)</span>
+        </div>
+        <div class="track-metric">
+          <span class="tm-label">DRS ZONES</span>
+          <span class="tm-val">2 (Main & Serraglio)</span>
+        </div>
+        <div class="track-metric">
+          <span class="tm-label">TIRE COMPOUNDS</span>
+          <span class="tm-val text-yellow">C3 Hard &bull; C4 Med &bull; C5 Soft</span>
+        </div>
       </div>
     </div>
 
-    <div class="countdown-card">
-      <div class="countdown-header">NEXT SESSION COUNTDOWN (FP1)</div>
-      <div class="countdown-clock" id="countdownClock">
-        <div class="time-block"><span class="number" id="cdDays">02</span><span class="unit">DAYS</span></div>
-        <div class="sep">:</div>
-        <div class="time-block"><span class="number" id="cdHours">14</span><span class="unit">HOURS</span></div>
-        <div class="sep">:</div>
-        <div class="time-block"><span class="number" id="cdMins">32</span><span class="unit">MINS</span></div>
-        <div class="sep">:</div>
-        <div class="time-block"><span class="number" id="cdSecs">48</span><span class="unit">SECS</span></div>
-      </div>
-      <div class="weather-brief">
-        <span>🌤️ Track: <strong>38.4°C</strong></span> •
-        <span>Air: <strong>27.1°C</strong></span> •
-        <span>Rain Risk: <strong>0%</strong></span>
+    <div class="hero-right">
+      <div class="countdown-panel">
+        <div class="countdown-title">NEXT TRACK SESSION (PRACTICE 1)</div>
+        <div class="countdown-clock" id="countdownClock">
+          <div class="clock-unit"><span class="clock-num" id="cdDays">02</span><span class="clock-txt">DAYS</span></div>
+          <div class="clock-sep">:</div>
+          <div class="clock-unit"><span class="clock-num" id="cdHours">14</span><span class="clock-txt">HRS</span></div>
+          <div class="clock-sep">:</div>
+          <div class="clock-unit"><span class="clock-num" id="cdMins">28</span><span class="clock-txt">MIN</span></div>
+          <div class="clock-sep">:</div>
+          <div class="clock-unit"><span class="clock-num" id="cdSecs">36</span><span class="clock-txt">SEC</span></div>
+        </div>
+        <div class="weather-strip">
+          <div class="w-item">🌡️ Track: <strong id="valTrackTemp">38.2°C</strong></div>
+          <div class="w-item">💨 Air: <strong>26.8°C</strong></div>
+          <div class="w-item">💨 Wind: <strong>8.4 km/h SW</strong></div>
+          <div class="w-item">🌧️ Rain Risk: <strong class="text-green">0%</strong></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Main Telemetry Grid -->
-  <main class="dashboard-grid">
-    <!-- Left Column: Live Car Telemetry -->
-    <section class="telemetry-section">
-      <div class="section-header">
-        <h2>Live Vehicle Telemetry (MCL38)</h2>
-        <div class="driver-tabs">
-          <button class="driver-tab active" id="tabLando" data-driver="norris">
-            <span class="driver-num">#4</span> Lando Norris <span class="driver-pos">P1</span>
+  <!-- Driver Selector & Live Timing Strip -->
+  <section class="driver-bar">
+    <div class="driver-tabs">
+      <button class="driver-btn active" id="btnLando" data-driver="norris">
+        <div class="d-avatar lando-avatar">LN</div>
+        <div class="d-info">
+          <span class="d-number">#4</span>
+          <strong class="d-name">Lando Norris</strong>
+          <span class="d-badge p1-badge">POS: P1</span>
+        </div>
+        <div class="d-times">
+          <span class="d-laptime">LAST: 1:21.432</span>
+          <span class="d-gap text-green">-0.184s vs LEC</span>
+        </div>
+      </button>
+
+      <button class="driver-btn" id="btnOscar" data-driver="piastri">
+        <div class="d-avatar oscar-avatar">OP</div>
+        <div class="d-info">
+          <span class="d-number">#81</span>
+          <strong class="d-name">Oscar Piastri</strong>
+          <span class="d-badge p2-badge">POS: P2</span>
+        </div>
+        <div class="d-times">
+          <span class="d-laptime">LAST: 1:21.589</span>
+          <span class="d-gap text-yellow">+0.157s vs NOR</span>
+        </div>
+      </button>
+    </div>
+
+    <!-- Live Lap Sector Times -->
+    <div class="sectors-ribbon">
+      <div class="sector-chip purple">
+        <span class="chip-sec">SECTOR 1</span>
+        <span class="chip-val" id="valS1">27.124s</span>
+        <span class="chip-flag">PURPLE (FASTEST)</span>
+      </div>
+      <div class="sector-chip green">
+        <span class="chip-sec">SECTOR 2</span>
+        <span class="chip-val" id="valS2">26.892s</span>
+        <span class="chip-flag">GREEN (PB)</span>
+      </div>
+      <div class="sector-chip green">
+        <span class="chip-sec">SECTOR 3</span>
+        <span class="chip-val" id="valS3">27.416s</span>
+        <span class="chip-flag">GREEN (PB)</span>
+      </div>
+      <div class="drs-status-box" id="drsBox">
+        <span class="drs-label">DRS STATUS</span>
+        <span class="drs-val active" id="drsState">AVAILABLE &bull; DEPLOYED</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Master Telemetry & Track Operations Grid -->
+  <main class="master-telemetry-grid">
+    <!-- Center Left: Live Car Cockpit & Dynamics -->
+    <div class="telemetry-column">
+      <!-- Main Digital Dashboard Card -->
+      <div class="card cockpit-card">
+        <div class="card-header">
+          <span class="card-title">MCL38 COCKPIT & LIVE TELEMETRY STREAM</span>
+          <span class="chip-live">LIVE 20Hz</span>
+        </div>
+
+        <div class="cockpit-center">
+          <!-- Big Speed & Gear Block -->
+          <div class="speed-gear-block">
+            <div class="gear-display">
+              <span class="gear-label">GEAR</span>
+              <span class="gear-num" id="teleGear">7</span>
+            </div>
+            <div class="speed-display">
+              <span class="speed-num" id="teleSpeed">324</span>
+              <span class="speed-unit">KM/H</span>
+            </div>
+            <div class="delta-display">
+              <span class="delta-label">DELTA TO POLE</span>
+              <span class="delta-val text-green" id="teleDelta">-0.184s</span>
+            </div>
+          </div>
+
+          <!-- Shift Lights / LED RPM Bar -->
+          <div class="rpm-strip-container">
+            <div class="rpm-hud-header">
+              <span>ENGINE RPM: <strong id="teleRpm">11,980</strong></span>
+              <span class="rev-limit">REV LIMIT: 12,500</span>
+            </div>
+            <div class="rpm-led-bar" id="rpmLedBar">
+              <!-- Dynamically generated LEDs via JS -->
+            </div>
+          </div>
+
+          <!-- Throttle, Brake & ERS Traces -->
+          <div class="pedals-grid">
+            <div class="pedal-box">
+              <div class="pedal-top">
+                <span class="pedal-name">THROTTLE</span>
+                <span class="pedal-pct text-green" id="valThrottle">96%</span>
+              </div>
+              <div class="gauge-track">
+                <div class="gauge-fill throttle-bar" id="fillThrottle" style="width: 96%;"></div>
+              </div>
+            </div>
+
+            <div class="pedal-box">
+              <div class="pedal-top">
+                <span class="pedal-name">BRAKE</span>
+                <span class="pedal-pct text-red" id="valBrake">0%</span>
+              </div>
+              <div class="gauge-track">
+                <div class="gauge-fill brake-bar" id="fillBrake" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="pedal-box">
+              <div class="pedal-top">
+                <span class="pedal-name">ERS BATTERY (SOC)</span>
+                <span class="pedal-pct text-blue" id="valErs">78%</span>
+              </div>
+              <div class="gauge-track">
+                <div class="gauge-fill ers-bar" id="fillErs" style="width: 78%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-Time Rolling Waveform Telemetry Chart -->
+      <div class="card waveform-card">
+        <div class="card-header">
+          <span class="card-title">ATLAS-GRADE ROLLING SPEED & THROTTLE TRACE</span>
+          <div class="waveform-legend">
+            <span class="legend-dot speed-dot"></span> Speed (km/h)
+            <span class="legend-dot throttle-dot"></span> Throttle (%)
+            <span class="legend-dot brake-dot"></span> Brake (%)
+          </div>
+        </div>
+        <div class="canvas-wrapper">
+          <canvas id="telemetryCanvas" width="760" height="150"></canvas>
+        </div>
+      </div>
+
+      <!-- Tire Temperatures, Pressure & Chassis Degradation -->
+      <div class="card tires-card">
+        <div class="card-header">
+          <span class="card-title">TIRE SURFACE TEMPERATURES & TREAD WEAR</span>
+          <span class="compound-badge">PIRELLI MEDIUM (YELLOW) &bull; 14 LAPS</span>
+        </div>
+        <div class="chassis-layout">
+          <div class="tire-widget" id="twFL">
+            <div class="tw-top"><span class="tw-pos">FRONT LEFT</span><span class="tw-wear">88% LIFE</span></div>
+            <div class="tw-temp" id="tempFL">102.4°C</div>
+            <div class="tw-bar"><div class="tw-fill" style="width: 88%;"></div></div>
+            <div class="tw-psi">23.2 PSI</div>
+          </div>
+
+          <div class="tire-widget" id="twFR">
+            <div class="tw-top"><span class="tw-pos">FRONT RIGHT</span><span class="tw-wear">86% LIFE</span></div>
+            <div class="tw-temp" id="tempFR">104.1°C</div>
+            <div class="tw-bar"><div class="tw-fill" style="width: 86%;"></div></div>
+            <div class="tw-psi">23.4 PSI</div>
+          </div>
+
+          <div class="tire-widget" id="twRL">
+            <div class="tw-top"><span class="tw-pos">REAR LEFT</span><span class="tw-wear">91% LIFE</span></div>
+            <div class="tw-temp" id="tempRL">98.6°C</div>
+            <div class="tw-bar"><div class="tw-fill" style="width: 91%;"></div></div>
+            <div class="tw-psi">21.8 PSI</div>
+          </div>
+
+          <div class="tire-widget" id="twRR">
+            <div class="tw-top"><span class="tw-pos">REAR RIGHT</span><span class="tw-wear">89% LIFE</span></div>
+            <div class="tw-temp" id="tempRR">99.2°C</div>
+            <div class="tw-bar"><div class="tw-fill" style="width: 89%;"></div></div>
+            <div class="tw-psi">21.9 PSI</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Right: Live Circuit GPS Map & Pit Wall Comms -->
+    <div class="operations-column">
+      <!-- Live Interactive GPS Circuit Map -->
+      <div class="card circuit-card">
+        <div class="card-header">
+          <span class="card-title">LIVE GPS TRACK POSITION & CORNERS (MONZA)</span>
+          <span class="track-status green-flag">GREEN FLAG</span>
+        </div>
+        <div class="circuit-canvas-box">
+          <canvas id="circuitCanvas" width="460" height="280"></canvas>
+          <div class="circuit-corner-pills">
+            <span class="cp">T1 Variante del Rettifilo</span>
+            <span class="cp">T4 Curva Grande</span>
+            <span class="cp">T8 Variante Ascari</span>
+            <span class="cp">T11 Curva Parabolica</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pit Wall Team Radio Comms Stream -->
+      <div class="card radio-card">
+        <div class="card-header">
+          <span class="card-title">PIT WALL TEAM RADIO INTERCEPT</span>
+          <button class="radio-ping-btn" id="btnPlayRadio" title="Play live radio communication">
+            <span>📻</span> PLAY TRANSMISSION
           </button>
-          <button class="driver-tab" id="tabOscar" data-driver="piastri">
-            <span class="driver-num">#81</span> Oscar Piastri <span class="driver-pos">P2</span>
-          </button>
         </div>
-      </div>
-
-      <!-- Core Telemetry Gauges -->
-      <div class="gauges-row">
-        <!-- Speed & Gear Gauge -->
-        <div class="telemetry-card speed-card">
-          <div class="card-label">CURRENT SPEED & GEAR</div>
-          <div class="speed-display">
-            <span class="speed-val" id="teleSpeed">318</span>
-            <span class="speed-unit">KM/H</span>
+        <div class="radio-transcript-log" id="radioLog">
+          <div class="radio-msg mclaren-msg">
+            <div class="rm-header">
+              <span class="rm-speaker">WILL JOSEPH (RACE ENGINEER) &rarr; LANDO</span>
+              <span class="rm-time">LAP 14 &bull; 13:42:18</span>
+            </div>
+            <p class="rm-body">"Lando, gap to Leclerc is 1.8 seconds. Mode overtake available out of Ascari. Strat 7 when ready."</p>
           </div>
-          <div class="gear-badge">
-            <span class="gear-sub">GEAR</span>
-            <span class="gear-val" id="teleGear">7</span>
+          <div class="radio-msg driver-msg">
+            <div class="rm-header">
+              <span class="rm-speaker">LANDO NORRIS &rarr; PIT WALL</span>
+              <span class="rm-time">LAP 14 &bull; 13:42:25</span>
+            </div>
+            <p class="rm-body">"Copy that. Balance feels strong. Front-left tire temp is coming right into the window."</p>
           </div>
-          <div class="rpm-container">
-            <div class="rpm-labels">
-              <span>RPM: <strong id="teleRpm">11,840</strong></span>
-              <span class="redline-label">REDLINE: 12,500</span>
+          <div class="radio-msg mclaren-msg">
+            <div class="rm-header">
+              <span class="rm-speaker">TOM STALLARD &rarr; OSCAR</span>
+              <span class="rm-time">LAP 13 &bull; 13:41:50</span>
             </div>
-            <div class="rpm-bar-track">
-              <div class="rpm-bar-fill" id="teleRpmFill" style="width: 88%;"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Pedals / Inputs -->
-        <div class="telemetry-card inputs-card">
-          <div class="card-label">DRIVER INPUT TRACES</div>
-          <div class="pedal-group">
-            <div class="pedal-label">THROTTLE <span id="valThrottle">94%</span></div>
-            <div class="pedal-bar-track">
-              <div class="pedal-bar-fill throttle-fill" id="fillThrottle" style="width: 94%;"></div>
-            </div>
-          </div>
-          <div class="pedal-group">
-            <div class="pedal-label">BRAKE <span id="valBrake">0%</span></div>
-            <div class="pedal-bar-track">
-              <div class="pedal-bar-fill brake-fill" id="fillBrake" style="width: 0%;"></div>
-            </div>
-          </div>
-          <div class="ers-group">
-            <div class="ers-header">
-              <span>ERS BATTERY DEPLOYMENT</span>
-              <span class="ers-status" id="ersStatus">HOT LAP (OVERTAKE)</span>
-            </div>
-            <div class="ers-bar-track">
-              <div class="ers-bar-fill" id="fillErs" style="width: 76%;"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tire Health & Temperatures -->
-        <div class="telemetry-card tires-card">
-          <div class="card-label">TIRE SURFACE TEMPS & DEGRADATION</div>
-          <div class="compound-tag">Pirelli P-Zero Medium (Yellow) • 14 Laps</div>
-          <div class="car-tire-chassis">
-            <div class="tire-node tire-fl" id="tireFL">
-              <span class="tire-id">FL</span>
-              <span class="tire-temp" id="tempFL">102°C</span>
-            </div>
-            <div class="tire-node tire-fr" id="tireFR">
-              <span class="tire-id">FR</span>
-              <span class="tire-temp" id="tempFR">104°C</span>
-            </div>
-            <div class="tire-node tire-rl" id="tireRL">
-              <span class="tire-id">RL</span>
-              <span class="tire-temp" id="tempRL">98°C</span>
-            </div>
-            <div class="tire-node tire-rr" id="tireRR">
-              <span class="tire-id">RR</span>
-              <span class="tire-temp" id="tempRR">99°C</span>
-            </div>
+            <p class="rm-body">"Oscar, good pace in sector 2. We are on Plan A, undercut window opens lap 31."</p>
           </div>
         </div>
       </div>
 
-      <!-- Sector Times & Lap Comparison -->
-      <div class="sectors-card">
-        <div class="sectors-header">
-          <span class="card-label">CURRENT LAP SECTOR DELTAS</span>
-          <span class="current-lap-time">BEST: <strong>1:21.432</strong> • DELTA: <span class="delta-neg">-0.184s</span></span>
+      <!-- Google Cloud Edge Systems & Vertex AI -->
+      <div class="card infra-card">
+        <div class="card-header">
+          <span class="card-title">GOOGLE CLOUD GDC EDGE TELEMETRY</span>
+          <span class="chip-healthy">ONLINE</span>
         </div>
-        <div class="sectors-row">
-          <div class="sector-block purple">
-            <span class="s-title">SECTOR 1</span>
-            <span class="s-time" id="s1Time">27.124s</span>
-            <span class="s-badge">OVERALL FASTEST</span>
+        <div class="edge-specs-grid">
+          <div class="edge-spec">
+            <span class="es-key">Pit Garage Edge Cluster</span>
+            <strong class="es-val text-green">GDC Rack 01 &bull; Active</strong>
           </div>
-          <div class="sector-block green">
-            <span class="s-title">SECTOR 2</span>
-            <span class="s-time" id="s2Time">26.892s</span>
-            <span class="s-badge">PERSONAL BEST</span>
+          <div class="edge-spec">
+            <span class="es-key">Telemetry Ingestion</span>
+            <strong class="es-val">300+ Sensors &bull; 2.4 GB/s</strong>
           </div>
-          <div class="sector-block green">
-            <span class="s-title">SECTOR 3</span>
-            <span class="s-time" id="s3Time">27.416s</span>
-            <span class="s-badge">PERSONAL BEST</span>
+          <div class="edge-spec">
+            <span class="es-key">Trackside Link Latency</span>
+            <strong class="es-val text-green" id="edgeLatencyVal">0.76 ms</strong>
+          </div>
+          <div class="edge-spec">
+            <span class="es-key">MTC Woking Encrypted Sync</span>
+            <strong class="es-val text-green">Dual 10G Bonded 5G</strong>
+          </div>
+          <div class="edge-spec">
+            <span class="es-key">Pit Wall Android Fleet</span>
+            <strong class="es-val">24/24 Online (Android 15)</strong>
+          </div>
+          <div class="edge-spec">
+            <span class="es-key">Vertex AI Strategy Models</span>
+            <strong class="es-val text-blue">148,000 sims/sec</strong>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- Right Column: Implementation Engineer & Google Cloud Edge Systems -->
-    <aside class="edge-systems-section">
-      <div class="section-header">
-        <h2>Trackside Edge & Infrastructure</h2>
-        <span class="role-tag">Implementation Engineer View</span>
-      </div>
-
-      <!-- Google Distributed Cloud Edge Node Status -->
-      <div class="infra-card">
-        <div class="infra-card-header">
-          <span class="node-title">GDC EDGE CLUSTER (PIT GARAGE RACK 01)</span>
-          <span class="chip-healthy">HEALTHY</span>
-        </div>
-        <ul class="infra-metrics-list">
-          <li>
-            <span class="m-key">Trackside Telemetry Latency:</span>
-            <span class="m-val text-green" id="netLatency">0.78 ms</span>
-          </li>
-          <li>
-            <span class="m-key">Ingestion Throughput:</span>
-            <span class="m-val">2.4 GB/s (300+ car sensors)</span>
-          </li>
-          <li>
-            <span class="m-key">Primary Uplink:</span>
-            <span class="m-val">Dual 10Gbps Bonded 5G / Satellite</span>
-          </li>
-          <li>
-            <span class="m-key">Failover Tunnel (MTC Woking):</span>
-            <span class="m-val text-green">SYNCHRONIZED</span>
-          </li>
-          <li>
-            <span class="m-key">Pit Wall Tablets (Android 15):</span>
-            <span class="m-val">24/24 Online</span>
-          </li>
-          <li>
-            <span class="m-key">Vertex AI Strategy Models:</span>
-            <span class="m-val">148,000 sims/sec active</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Race Strategy & AI Recommendations -->
-      <div class="infra-card">
-        <div class="infra-card-header">
-          <span class="node-title">GOOGLE CLOUD VERTEX AI STRATEGY</span>
-          <span class="chip-ai">PLAN A • OPTIMAL</span>
-        </div>
-        <div class="strategy-callout">
-          <div class="strat-metric">
-            <span class="strat-val">LAP 31</span>
-            <span class="strat-desc">Projected Pit Window (Box for Hards)</span>
-          </div>
-          <div class="strat-confidence">
-            <span class="strat-perc">94.8%</span>
-            <span class="strat-desc">Confidence Score vs Safety Car Offset</span>
-          </div>
-        </div>
-        <p class="strat-notes">
-          Tire deg models indicate +0.3s/lap delta degradation on rival cars. Undercut window opens in 3 laps. Maintain delta +1.4s to DRS range.
-        </p>
-      </div>
-
-      <!-- Formula 1 US Corridor & Target Grand Prix -->
-      <div class="infra-card">
-        <div class="infra-card-header">
-          <span class="node-title">US CORRIDOR IMPLEMENTATION TARGETS</span>
-          <span class="chip-field">FIELD OPS</span>
-        </div>
-        <div class="us-gp-list">
-          <div class="gp-item">
-            <span class="gp-flag">🌴</span>
-            <div class="gp-details">
-              <strong>Miami Grand Prix</strong>
-              <span>Miami International Autodrome • EFS Corridor</span>
-            </div>
-            <span class="gp-status target">Target 2027</span>
-          </div>
-          <div class="gp-item">
-            <span class="gp-flag">🤠</span>
-            <div class="gp-details">
-              <strong>United States Grand Prix</strong>
-              <span>Circuit of the Americas • Austin, TX</span>
-            </div>
-            <span class="gp-status">Target 2028</span>
-          </div>
-          <div class="gp-item">
-            <span class="gp-flag">🎰</span>
-            <div class="gp-details">
-              <strong>Las Vegas Grand Prix</strong>
-              <span>Las Vegas Strip Circuit • Nevada</span>
-            </div>
-            <span class="gp-status">Target 2028</span>
+        <!-- Strategy Box -->
+        <div class="strategy-banner">
+          <div class="sb-title">VERTEX AI RACE STRATEGY: PLAN A (OPTIMAL)</div>
+          <div class="sb-metrics">
+            <div class="sb-m"><span>TARGET PIT:</span> <strong>LAP 31</strong></div>
+            <div class="sb-m"><span>COMPOUND:</span> <strong class="text-white">HARD (WHITE)</strong></div>
+            <div class="sb-m"><span>WIN PROBABILITY:</span> <strong class="text-green">94.8%</strong></div>
           </div>
         </div>
       </div>
-    </aside>
+    </div>
   </main>
 
-  <!-- 2026 Season Calendar Strip -->
-  <section class="season-calendar">
-    <div class="calendar-header">
-      <h3>2026 FIA FORMULA ONE CALENDAR & TRACKSIDE SCHEDULE</h3>
-      <span class="cal-legend">🟠 McLaren Key Races • 🔵 Google Cloud Edge Priority</span>
+  <!-- Interactive Pit Strategy & Undercut Simulator -->
+  <section class="strategy-simulator-section">
+    <div class="sim-header">
+      <h3>PIT STRATEGY & UNDERCUT SIMULATOR</h3>
+      <span>Interactive model calculating pit stop loss and track rejoin position</span>
     </div>
-    <div class="calendar-cards-container">
-      <div class="cal-card active">
-        <div class="cal-round">R16</div>
-        <div class="cal-name">Italian GP</div>
-        <div class="cal-track">Monza</div>
-        <div class="cal-date">Sep 4–6</div>
-        <div class="cal-tag">LIVE TELEMETRY</div>
+    <div class="sim-grid">
+      <div class="sim-controls">
+        <div class="control-group">
+          <label for="pitLapInput">Pit Stop Lap Target: <strong id="pitLapDisplay">Lap 31</strong></label>
+          <input type="range" id="pitLapInput" min="15" max="45" value="31">
+        </div>
+        <div class="control-group">
+          <label>Starting Compound:</label>
+          <div class="btn-group">
+            <button class="pill-btn" data-compound="soft">Soft (C5)</button>
+            <button class="pill-btn active" data-compound="med">Medium (C4)</button>
+            <button class="pill-btn" data-compound="hard">Hard (C3)</button>
+          </div>
+        </div>
       </div>
-      <div class="cal-card">
-        <div class="cal-round">R17</div>
-        <div class="cal-name">Azerbaijan GP</div>
-        <div class="cal-track">Baku City</div>
-        <div class="cal-date">Sep 18–20</div>
-        <div class="cal-tag">UPCOMING</div>
-      </div>
-      <div class="cal-card">
-        <div class="cal-round">R18</div>
-        <div class="cal-name">Singapore GP</div>
-        <div class="cal-track">Marina Bay</div>
-        <div class="cal-date">Oct 2–4</div>
-        <div class="cal-tag">NIGHT RACE</div>
-      </div>
-      <div class="cal-card highlight">
-        <div class="cal-round">R19</div>
-        <div class="cal-name">United States GP</div>
-        <div class="cal-track">Austin (COTA)</div>
-        <div class="cal-date">Oct 16–18</div>
-        <div class="cal-tag us-tag">US ROUND</div>
-      </div>
-      <div class="cal-card">
-        <div class="cal-round">R20</div>
-        <div class="cal-name">Mexico City GP</div>
-        <div class="cal-track">Autódromo Hermanos Rodríguez</div>
-        <div class="cal-date">Oct 23–25</div>
-        <div class="cal-tag">HIGH ALTITUDE</div>
-      </div>
-      <div class="cal-card">
-        <div class="cal-round">R21</div>
-        <div class="cal-name">São Paulo GP</div>
-        <div class="cal-track">Interlagos</div>
-        <div class="cal-date">Nov 6–8</div>
-        <div class="cal-tag">SPRINT WEEKEND</div>
-      </div>
-      <div class="cal-card highlight">
-        <div class="cal-round">R22</div>
-        <div class="cal-name">Las Vegas GP</div>
-        <div class="cal-track">Las Vegas Strip</div>
-        <div class="cal-date">Nov 19–21</div>
-        <div class="cal-tag us-tag">US ROUND</div>
+      <div class="sim-results">
+        <div class="res-card">
+          <span class="rc-label">PIT DELTA LOSS</span>
+          <span class="rc-val">22.4s</span>
+          <span class="rc-sub">Pit Lane Speed Limit 80 km/h</span>
+        </div>
+        <div class="res-card">
+          <span class="rc-label">VSC / SAFETY CAR GAIN</span>
+          <span class="rc-val text-green">-11.2s</span>
+          <span class="rc-sub">Net pit loss reduced to 11.2s</span>
+        </div>
+        <div class="res-card">
+          <span class="rc-label">PROJECTED REJOIN POS</span>
+          <span class="rc-val text-yellow" id="rejoinPos">P3 (Clean Air)</span>
+          <span class="rc-sub">Gap to leader: +4.2s</span>
+        </div>
+        <div class="res-card">
+          <span class="rc-label">TIRE ADVANTAGE</span>
+          <span class="rc-val text-green">+0.42s/lap</span>
+          <span class="rc-sub">Fresh rubber delta against rival</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- 2026 World Championship Standings Bar -->
+  <section class="standings-section">
+    <div class="standings-header">
+      <h3>2026 FIA FORMULA ONE WORLD CHAMPIONSHIP STANDINGS</h3>
+      <span class="standings-sub">Round 16 of 24 &bull; Updated Live</span>
+    </div>
+    <div class="standings-grid">
+      <!-- Drivers -->
+      <div class="standings-card">
+        <h4>DRIVERS' WORLD CHAMPIONSHIP</h4>
+        <div class="standings-table">
+          <div class="st-row highlight">
+            <span class="st-pos">1</span>
+            <span class="st-name">Lando Norris</span>
+            <span class="st-team mclaren-text">McLaren</span>
+            <span class="st-pts"><strong>284</strong> PTS</span>
+          </div>
+          <div class="st-row">
+            <span class="st-pos">2</span>
+            <span class="st-name">Max Verstappen</span>
+            <span class="st-team">Red Bull Racing</span>
+            <span class="st-pts"><strong>276</strong> PTS</span>
+          </div>
+          <div class="st-row highlight">
+            <span class="st-pos">3</span>
+            <span class="st-name">Oscar Piastri</span>
+            <span class="st-team mclaren-text">McLaren</span>
+            <span class="st-pts"><strong>242</strong> PTS</span>
+          </div>
+          <div class="st-row">
+            <span class="st-pos">4</span>
+            <span class="st-name">Charles Leclerc</span>
+            <span class="st-team">Ferrari</span>
+            <span class="st-pts"><strong>218</strong> PTS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Constructors -->
+      <div class="standings-card">
+        <h4>CONSTRUCTORS' WORLD CHAMPIONSHIP</h4>
+        <div class="standings-table">
+          <div class="st-row highlight">
+            <span class="st-pos">1</span>
+            <span class="st-name mclaren-text">McLaren Formula 1 Team</span>
+            <span class="st-team">Google Cloud Partner</span>
+            <span class="st-pts"><strong>526</strong> PTS</span>
+          </div>
+          <div class="st-row">
+            <span class="st-pos">2</span>
+            <span class="st-name">Red Bull Racing</span>
+            <span class="st-team">Honda RBPT</span>
+            <span class="st-pts"><strong>498</strong> PTS</span>
+          </div>
+          <div class="st-row">
+            <span class="st-pos">3</span>
+            <span class="st-name">Scuderia Ferrari</span>
+            <span class="st-team">Ferrari</span>
+            <span class="st-pts"><strong>412</strong> PTS</span>
+          </div>
+          <div class="st-row">
+            <span class="st-pos">4</span>
+            <span class="st-name">Mercedes-AMG Petronas</span>
+            <span class="st-team">Mercedes</span>
+            <span class="st-pts"><strong>318</strong> PTS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2026 Season Calendar & US Corridor Focus -->
+  <section class="calendar-section">
+    <div class="cal-header">
+      <h3>2026 GRAND PRIX CALENDAR & IMPLEMENTATION TARGETS</h3>
+      <span class="cal-legend">🟠 McLaren Races &bull; 🔵 High-Priority US Grand Prix Corridor</span>
+    </div>
+    <div class="cal-cards-strip">
+      <div class="c-card active">
+        <span class="c-rnd">ROUND 16</span>
+        <strong class="c-name">Italian GP</strong>
+        <span class="c-circuit">Monza</span>
+        <span class="c-date">Sep 4–6</span>
+        <span class="c-badge live-badge">LIVE TELEMETRY</span>
+      </div>
+      <div class="c-card">
+        <span class="c-rnd">ROUND 17</span>
+        <strong class="c-name">Azerbaijan GP</strong>
+        <span class="c-circuit">Baku City</span>
+        <span class="c-date">Sep 18–20</span>
+        <span class="c-badge">STREET TRACK</span>
+      </div>
+      <div class="c-card">
+        <span class="c-rnd">ROUND 18</span>
+        <strong class="c-name">Singapore GP</strong>
+        <span class="c-circuit">Marina Bay</span>
+        <span class="c-date">Oct 2–4</span>
+        <span class="c-badge">NIGHT RACE</span>
+      </div>
+      <div class="c-card us-target">
+        <span class="c-rnd">ROUND 19</span>
+        <strong class="c-name">United States GP</strong>
+        <span class="c-circuit">Austin (COTA)</span>
+        <span class="c-date">Oct 16–18</span>
+        <span class="c-badge us-badge">US CORRIDOR</span>
+      </div>
+      <div class="c-card">
+        <span class="c-rnd">ROUND 20</span>
+        <strong class="c-name">Mexico City GP</strong>
+        <span class="c-circuit">Hermanos Rodríguez</span>
+        <span class="c-date">Oct 23–25</span>
+        <span class="c-badge">HIGH ALTITUDE</span>
+      </div>
+      <div class="c-card">
+        <span class="c-rnd">ROUND 21</span>
+        <strong class="c-name">São Paulo GP</strong>
+        <span class="c-circuit">Interlagos</span>
+        <span class="c-date">Nov 6–8</span>
+        <span class="c-badge">SPRINT WEEKEND</span>
+      </div>
+      <div class="c-card us-target">
+        <span class="c-rnd">ROUND 22</span>
+        <strong class="c-name">Las Vegas GP</strong>
+        <span class="c-circuit">Vegas Strip</span>
+        <span class="c-date">Nov 19–21</span>
+        <span class="c-badge us-badge">US CORRIDOR</span>
+      </div>
+      <div class="c-card us-target">
+        <span class="c-rnd">CORRIDOR</span>
+        <strong class="c-name">Miami Grand Prix</strong>
+        <span class="c-circuit">Miami Autodrome</span>
+        <span class="c-date">May 2027</span>
+        <span class="c-badge miami-badge">EFS TARGET</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Professional Footer -->
   <footer class="app-footer">
     <div class="footer-left">
-      <span>Architected & Maintained by <strong>Waleed Rahman</strong></span> •
-      <span>Google Technical Operations & Engineering Field Services (EFS)</span> •
-      <span>Internal go/link: <code>go/waleed-f1</code></span>
+      <span>Architected & Developed by <strong>Waleed Rahman</strong></span> &bull;
+      <span>Google Technical Operations / Engineering Field Services (EFS)</span> &bull;
+      <span>Internal Shortlink: <code>go/waleed-f1</code></span>
     </div>
     <div class="footer-right">
-      <span>Hardware Operations & Implementation Engineering Roadmap</span> •
+      <span>Live Production Site: <a href="https://waleedrahman-design.github.io/mclarentracker/" target="_blank">waleedrahman-design.github.io/mclarentracker</a></span> &bull;
       <span>Google Cloud Strategic Sports Partnerships</span>
     </div>
   </footer>
 
   <script>
-// McLaren F1 x Google Cloud Trackside Telemetry Engine (go/waleed-f1)
+// McLaren Formula 1 x Google Cloud Trackside Telemetry Portal (go/waleed-f1)
+// Architect: Waleed Rahman (EFS / Implementation Engineering)
 
-// Driver Profiles & State
-const driverProfiles = {
+// 1. Driver Telemetry Data
+const driverState = {
   norris: {
     name: "Lando Norris",
     number: "4",
-    position: "P1",
-    baseSpeed: 318,
+    pos: "P1",
+    speed: 324,
     gear: 7,
-    rpm: 11840,
-    throttle: 94,
-    brake: 0,
-    ers: 76,
-    bestLap: "1:21.432",
+    rpm: 11980,
     delta: "-0.184s",
+    throttle: 96,
+    brake: 0,
+    ers: 78,
     s1: "27.124s",
     s2: "26.892s",
     s3: "27.416s",
-    tires: { fl: 102, fr: 104, rl: 98, rr: 99 }
+    tires: { fl: 102.4, fr: 104.1, rl: 98.6, rr: 99.2, wearFL: 88, wearFR: 86, wearRL: 91, wearRR: 89 },
+    trackProgress: 0.12
   },
   piastri: {
     name: "Oscar Piastri",
     number: "81",
-    position: "P2",
-    baseSpeed: 315,
+    pos: "P2",
+    speed: 319,
     gear: 7,
-    rpm: 11720,
-    throttle: 91,
-    brake: 0,
-    ers: 82,
-    bestLap: "1:21.589",
+    rpm: 11820,
     delta: "+0.157s",
+    throttle: 92,
+    brake: 0,
+    ers: 83,
     s1: "27.210s",
     s2: "26.945s",
     s3: "27.434s",
-    tires: { fl: 101, fr: 103, rl: 97, rr: 98 }
+    tires: { fl: 101.8, fr: 103.5, rl: 97.9, rr: 98.4, wearFL: 89, wearFR: 87, wearRL: 92, wearRR: 90 },
+    trackProgress: 0.08
   }
 };
 
-let currentDriver = 'norris';
+let activeDriverKey = 'norris';
+let audioEnabled = true;
 
-// DOM Elements
+// 2. Audio Comms Engine (Web Audio API Synthesizer)
+let audioCtx = null;
+
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+}
+
+function playF1RadioChirp() {
+  if (!audioEnabled) return;
+  try {
+    initAudio();
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'sine';
+    const now = audioCtx.currentTime;
+
+    // Iconic Formula 1 pit radio dual-frequency squelch tone
+    osc.frequency.setValueAtTime(1950, now);
+    osc.frequency.setValueAtTime(2400, now + 0.04);
+    osc.frequency.setValueAtTime(1750, now + 0.08);
+
+    gain.gain.setValueAtTime(0.06, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.18);
+  } catch (e) {
+    console.log("Audio not allowed yet:", e);
+  }
+}
+
+// 3. Shift Lights / RPM LEDs Generator
+const rpmLedBar = document.getElementById('rpmLedBar');
+const TOTAL_LEDS = 18;
+if (rpmLedBar) {
+  for (let i = 0; i < TOTAL_LEDS; i++) {
+    const led = document.createElement('div');
+    led.classList.add('rpm-led');
+    if (i < 6) led.classList.add('green');
+    else if (i < 12) led.classList.add('yellow');
+    else if (i < 16) led.classList.add('red');
+    else led.classList.add('blue');
+    rpmLedBar.appendChild(led);
+  }
+}
+
+// 4. DOM References
 const teleSpeed = document.getElementById('teleSpeed');
 const teleGear = document.getElementById('teleGear');
 const teleRpm = document.getElementById('teleRpm');
-const teleRpmFill = document.getElementById('teleRpmFill');
+const teleDelta = document.getElementById('teleDelta');
 const valThrottle = document.getElementById('valThrottle');
 const fillThrottle = document.getElementById('fillThrottle');
 const valBrake = document.getElementById('valBrake');
 const fillBrake = document.getElementById('fillBrake');
+const valErs = document.getElementById('valErs');
 const fillErs = document.getElementById('fillErs');
 
 const tempFL = document.getElementById('tempFL');
@@ -1311,131 +1862,438 @@ const tempFR = document.getElementById('tempFR');
 const tempRL = document.getElementById('tempRL');
 const tempRR = document.getElementById('tempRR');
 
-const netLatency = document.getElementById('netLatency');
-const goLinkChip = document.getElementById('goLinkChip');
+const valS1 = document.getElementById('valS1');
+const valS2 = document.getElementById('valS2');
+const valS3 = document.getElementById('valS3');
+const drsState = document.getElementById('drsState');
+const edgeLatencyVal = document.getElementById('edgeLatencyVal');
+const latencyDisplay = document.getElementById('latencyDisplay');
 
-// Driver Tabs
-const tabLando = document.getElementById('tabLando');
-const tabOscar = document.getElementById('tabOscar');
+// Driver Buttons
+const btnLando = document.getElementById('btnLando');
+const btnOscar = document.getElementById('btnOscar');
 
-function switchDriver(driverKey) {
-  currentDriver = driverKey;
-  if (driverKey === 'norris') {
-    tabLando.classList.add('active');
-    tabOscar.classList.remove('active');
+function switchDriver(driver) {
+  activeDriverKey = driver;
+  if (driver === 'norris') {
+    btnLando.classList.add('active');
+    btnOscar.classList.remove('active');
   } else {
-    tabOscar.classList.add('active');
-    tabLando.classList.remove('active');
+    btnOscar.classList.add('active');
+    btnLando.classList.remove('active');
   }
-  updateTelemetryUI(driverProfiles[driverKey]);
+  playF1RadioChirp();
 }
 
-tabLando.addEventListener('click', () => switchDriver('norris'));
-tabOscar.addEventListener('click', () => switchDriver('piastri'));
+btnLando.addEventListener('click', () => switchDriver('norris'));
+btnOscar.addEventListener('click', () => switchDriver('piastri'));
 
-function updateTelemetryUI(data) {
-  teleSpeed.textContent = data.baseSpeed;
-  teleGear.textContent = data.gear;
-  teleRpm.textContent = Number(data.rpm).toLocaleString();
-  teleRpmFill.style.width = `${(data.rpm / 12500) * 100}%`;
+// Radio Comms Button
+const btnPlayRadio = document.getElementById('btnPlayRadio');
+const radioLog = document.getElementById('radioLog');
 
-  valThrottle.textContent = `${data.throttle}%`;
-  fillThrottle.style.width = `${data.throttle}%`;
+const radioArchive = [
+  {
+    speaker: "WILL JOSEPH (RACE ENG) → LANDO",
+    time: "LAP 16 • 13:44:02",
+    msg: "Lando, radio check. DRS available down the main straight. Push to pass mode 8 is primed.",
+    type: "mclaren-msg"
+  },
+  {
+    speaker: "TOM STALLARD → OSCAR",
+    time: "LAP 16 • 13:44:15",
+    msg: "Oscar, tire delta to Verstappen is +0.4s. Great exit out of Parabolica. Maintain strat 3.",
+    type: "mclaren-msg"
+  },
+  {
+    speaker: "LANDO NORRIS → PIT WALL",
+    time: "LAP 17 • 13:45:10",
+    msg: "Understood Will. Front wing balance is spot on. Rear tires are in the sweet spot.",
+    type: "driver-msg"
+  },
+  {
+    speaker: "ANDREA STELLA (TEAM PRINCIPAL)",
+    time: "LAP 18 • 13:46:22",
+    msg: "Both cars are running P1 and P2 with clean air. Google Cloud simulations show 95% victory window.",
+    type: "mclaren-msg"
+  }
+];
 
-  valBrake.textContent = `${data.brake}%`;
-  fillBrake.style.width = `${data.brake}%`;
+let radioIndex = 0;
+function triggerRadioBroadcast() {
+  playF1RadioChirp();
+  const comm = radioArchive[radioIndex % radioArchive.length];
+  radioIndex++;
 
-  fillErs.style.width = `${data.ers}%`;
+  const entry = document.createElement('div');
+  entry.className = `radio-msg ${comm.type}`;
+  entry.innerHTML = `
+    <div class="rm-header">
+      <span class="rm-speaker">${comm.speaker}</span>
+      <span class="rm-time">${comm.time}</span>
+    </div>
+    <p class="rm-body">"${comm.msg}"</p>
+  `;
 
-  tempFL.textContent = `${data.tires.fl}°C`;
-  tempFR.textContent = `${data.tires.fr}°C`;
-  tempRL.textContent = `${data.tires.rl}°C`;
-  tempRR.textContent = `${data.tires.rr}°C`;
+  if (radioLog) {
+    radioLog.insertBefore(entry, radioLog.firstChild);
+    while (radioLog.children.length > 5) {
+      radioLog.removeChild(radioLog.lastChild);
+    }
+  }
 }
 
-// Live Realistic Telemetry Simulation Tick
-let telemetryStep = 0;
+if (btnPlayRadio) {
+  btnPlayRadio.addEventListener('click', triggerRadioBroadcast);
+}
+
+// Comms Audio Toggle
+const radioMuteBtn = document.getElementById('radioMuteBtn');
+const radioIcon = document.getElementById('radioIcon');
+const radioLabel = document.getElementById('radioLabel');
+
+if (radioMuteBtn) {
+  radioMuteBtn.addEventListener('click', () => {
+    audioEnabled = !audioEnabled;
+    if (audioEnabled) {
+      radioIcon.textContent = '🔊';
+      radioLabel.textContent = 'PIT COMMS: ON';
+      playF1RadioChirp();
+    } else {
+      radioIcon.textContent = '🔇';
+      radioLabel.textContent = 'PIT COMMS: MUTED';
+    }
+  });
+}
+
+// 5. Real-Time Rolling Waveform Canvas (ATLAS-Style Telemetry)
+const teleCanvas = document.getElementById('telemetryCanvas');
+let teleCtx = null;
+if (teleCanvas) {
+  teleCtx = teleCanvas.getContext('2d');
+}
+
+const HISTORY_LENGTH = 120;
+const speedHistory = new Array(HISTORY_LENGTH).fill(315);
+const throttleHistory = new Array(HISTORY_LENGTH).fill(90);
+const brakeHistory = new Array(HISTORY_LENGTH).fill(0);
+
+function drawTelemetryWaveform() {
+  if (!teleCtx || !teleCanvas) return;
+  const w = teleCanvas.width;
+  const h = teleCanvas.height;
+
+  teleCtx.clearRect(0, 0, w, h);
+
+  // Background Grid Lines
+  teleCtx.strokeStyle = '#1C2433';
+  teleCtx.lineWidth = 1;
+  for (let y = 30; y < h; y += 35) {
+    teleCtx.beginPath();
+    teleCtx.moveTo(0, y);
+    teleCtx.lineTo(w, y);
+    teleCtx.stroke();
+  }
+
+  // Draw Speed (Papaya) - Normalized 0 to 350 km/h
+  teleCtx.strokeStyle = '#FF8000';
+  teleCtx.lineWidth = 2;
+  teleCtx.beginPath();
+  for (let i = 0; i < HISTORY_LENGTH; i++) {
+    const x = (i / (HISTORY_LENGTH - 1)) * w;
+    const y = h - ((speedHistory[i] / 350) * (h - 20) + 10);
+    if (i === 0) teleCtx.moveTo(x, y);
+    else teleCtx.lineTo(x, y);
+  }
+  teleCtx.stroke();
+
+  // Draw Throttle (Green) - Normalized 0 to 100%
+  teleCtx.strokeStyle = '#10B981';
+  teleCtx.lineWidth = 1.5;
+  teleCtx.beginPath();
+  for (let i = 0; i < HISTORY_LENGTH; i++) {
+    const x = (i / (HISTORY_LENGTH - 1)) * w;
+    const y = h - ((throttleHistory[i] / 100) * (h * 0.4) + 10);
+    if (i === 0) teleCtx.moveTo(x, y);
+    else teleCtx.lineTo(x, y);
+  }
+  teleCtx.stroke();
+
+  // Draw Brake (Red)
+  teleCtx.strokeStyle = '#EF4444';
+  teleCtx.lineWidth = 2;
+  teleCtx.beginPath();
+  for (let i = 0; i < HISTORY_LENGTH; i++) {
+    const x = (i / (HISTORY_LENGTH - 1)) * w;
+    const y = h - ((brakeHistory[i] / 100) * (h * 0.4) + 10);
+    if (i === 0) teleCtx.moveTo(x, y);
+    else teleCtx.lineTo(x, y);
+  }
+  teleCtx.stroke();
+}
+
+// 6. Interactive 2D Monza Circuit GPS Tracker
+const circuitCanvas = document.getElementById('circuitCanvas');
+let cCtx = null;
+if (circuitCanvas) {
+  cCtx = circuitCanvas.getContext('2d');
+}
+
+// Monza Circuit Coordinates (Normalized Path)
+const monzaPath = [
+  { x: 50, y: 70 },    // Start/Finish Straight
+  { x: 380, y: 70 },   // End of Main Straight
+  { x: 400, y: 95 },   // Variante del Rettifilo Chicane T1/T2
+  { x: 410, y: 140 },  // Curva Biassono / Curva Grande T4
+  { x: 390, y: 190 },  // Variante della Roggia T5
+  { x: 360, y: 220 },  // Lesmo 1 T6
+  { x: 300, y: 245 },  // Lesmo 2 T7
+  { x: 220, y: 220 },  // Curva del Serraglio T8
+  { x: 150, y: 200 },  // Variante Ascari Entrance
+  { x: 110, y: 175 },  // Ascari Exit
+  { x: 70, y: 130 },   // Parabolica (Curva Alboreto)
+  { x: 50, y: 70 }     // Back to Start/Finish
+];
+
+function getPointOnTrack(progress) {
+  const numSegments = monzaPath.length - 1;
+  const scaled = (progress % 1) * numSegments;
+  const index = Math.floor(scaled);
+  const frac = scaled - index;
+
+  const p1 = monzaPath[index];
+  const p2 = monzaPath[index + 1] || monzaPath[0];
+
+  return {
+    x: p1.x + (p2.x - p1.x) * frac,
+    y: p1.y + (p2.y - p1.y) * frac
+  };
+}
+
+function drawMonzaCircuit() {
+  if (!cCtx || !circuitCanvas) return;
+  const w = circuitCanvas.width;
+  const h = circuitCanvas.height;
+
+  cCtx.clearRect(0, 0, w, h);
+
+  // Draw Circuit Road
+  cCtx.strokeStyle = '#263147';
+  cCtx.lineWidth = 14;
+  cCtx.lineCap = 'round';
+  cCtx.lineJoin = 'round';
+  cCtx.beginPath();
+  monzaPath.forEach((pt, idx) => {
+    if (idx === 0) cCtx.moveTo(pt.x, pt.y);
+    else cCtx.lineTo(pt.x, pt.y);
+  });
+  cCtx.closePath();
+  cCtx.stroke();
+
+  // Draw Racing Line (Subtle Gray Inner Line)
+  cCtx.strokeStyle = '#374663';
+  cCtx.lineWidth = 2;
+  cCtx.stroke();
+
+  // DRS Zones Highlighting (Main Straight: x=50 to 380, y=70)
+  cCtx.strokeStyle = '#10B981';
+  cCtx.lineWidth = 4;
+  cCtx.beginPath();
+  cCtx.moveTo(70, 70);
+  cCtx.lineTo(360, 70);
+  cCtx.stroke();
+
+  // Start / Finish Line Checkered Bar
+  cCtx.strokeStyle = '#FFFFFF';
+  cCtx.lineWidth = 4;
+  cCtx.beginPath();
+  cCtx.moveTo(50, 60);
+  cCtx.lineTo(50, 80);
+  cCtx.stroke();
+
+  // Draw Car Markers
+  const landoPos = getPointOnTrack(driverState.norris.trackProgress);
+  const oscarPos = getPointOnTrack(driverState.piastri.trackProgress);
+
+  // Draw Oscar #81 (Yellow)
+  cCtx.fillStyle = '#FCD34D';
+  cCtx.beginPath();
+  cCtx.arc(oscarPos.x, oscarPos.y, 7, 0, Math.PI * 2);
+  cCtx.fill();
+  cCtx.fillStyle = '#080A0F';
+  cCtx.font = 'bold 8px JetBrains Mono';
+  cCtx.textAlign = 'center';
+  cCtx.textBaseline = 'middle';
+  cCtx.fillText('81', oscarPos.x, oscarPos.y);
+
+  // Draw Lando #4 (McLaren Papaya)
+  cCtx.fillStyle = '#FF8000';
+  cCtx.beginPath();
+  cCtx.arc(landoPos.x, landoPos.y, 8, 0, Math.PI * 2);
+  cCtx.fill();
+  cCtx.fillStyle = '#FFFFFF';
+  cCtx.font = 'bold 9px JetBrains Mono';
+  cCtx.textAlign = 'center';
+  cCtx.textBaseline = 'middle';
+  cCtx.fillText('4', landoPos.x, landoPos.y);
+}
+
+// 7. Master Simulation Loop (20Hz Telemetry Tick)
+let tickCounter = 0;
 setInterval(() => {
-  telemetryStep++;
-  const active = driverProfiles[currentDriver];
+  tickCounter++;
+  const active = driverState[activeDriverKey];
 
-  // Dynamic fluctuations simulating high-speed straight vs braking zone
-  const isBrakingZone = (telemetryStep % 35) > 28;
+  // Move cars on track
+  driverState.norris.trackProgress += 0.0035;
+  driverState.piastri.trackProgress += 0.0034;
 
-  if (isBrakingZone) {
-    active.baseSpeed = Math.max(120, active.baseSpeed - 18);
-    active.gear = active.baseSpeed > 200 ? 5 : 3;
-    active.rpm = Math.max(7800, 8400 + Math.floor(Math.random() * 800));
+  // Telemetry physics state machine
+  const cyclePos = tickCounter % 40;
+  const isHeavyBraking = cyclePos > 32;
+
+  if (isHeavyBraking) {
+    active.speed = Math.max(110, active.speed - 22);
+    active.gear = active.speed > 220 ? 5 : active.speed > 160 ? 4 : 3;
+    active.rpm = Math.max(7600, 8400 + Math.floor(Math.random() * 900));
     active.throttle = 0;
-    active.brake = 95 - Math.floor(Math.random() * 15);
-    active.ers = Math.min(95, active.ers + 0.4);
+    active.brake = 96 - Math.floor(Math.random() * 12);
+    active.ers = Math.min(96, active.ers + 0.3);
+    if (drsState) {
+      drsState.textContent = "CLOSED • BRAKING ZONE";
+      drsState.classList.remove('active');
+    }
   } else {
-    active.baseSpeed = Math.min(342, active.baseSpeed + Math.floor(Math.random() * 4) - 1);
-    if (active.baseSpeed < 220) active.baseSpeed = 312;
-    active.gear = active.baseSpeed > 300 ? 8 : 7;
-    active.rpm = Math.min(12400, 11400 + Math.floor(Math.random() * 900));
+    active.speed = Math.min(348, active.speed + Math.floor(Math.random() * 6) - 1);
+    if (active.speed < 230) active.speed = 318;
+    active.gear = active.speed > 310 ? 8 : 7;
+    active.rpm = Math.min(12450, 11500 + Math.floor(Math.random() * 850));
     active.throttle = 94 + Math.floor(Math.random() * 6);
     active.brake = 0;
-    active.ers = Math.max(45, active.ers - 0.2);
+    active.ers = Math.max(48, active.ers - 0.25);
+    if (drsState) {
+      drsState.textContent = "AVAILABLE • DEPLOYED";
+      drsState.classList.add('active');
+    }
   }
 
-  // Micro-fluctuations on tire temps
-  active.tires.fl = Math.round((102 + Math.sin(telemetryStep * 0.1) * 2) * 10) / 10;
-  active.tires.fr = Math.round((104 + Math.cos(telemetryStep * 0.1) * 2) * 10) / 10;
-  active.tires.rl = Math.round((98 + Math.sin(telemetryStep * 0.08) * 1.5) * 10) / 10;
-  active.tires.rr = Math.round((99 + Math.cos(telemetryStep * 0.08) * 1.5) * 10) / 10;
+  // Rolling history update
+  speedHistory.push(active.speed);
+  speedHistory.shift();
+  throttleHistory.push(active.throttle);
+  throttleHistory.shift();
+  brakeHistory.push(active.brake);
+  brakeHistory.shift();
 
-  // Trackside GDC Edge Latency Jitter (sub-millisecond)
-  if (netLatency) {
-    const lat = (0.74 + Math.random() * 0.12).toFixed(2);
-    netLatency.textContent = `${lat} ms`;
+  // Dynamic tire temperatures
+  active.tires.fl = Math.round((102.4 + Math.sin(tickCounter * 0.15) * 2.2) * 10) / 10;
+  active.tires.fr = Math.round((104.1 + Math.cos(tickCounter * 0.15) * 2.4) * 10) / 10;
+  active.tires.rl = Math.round((98.6 + Math.sin(tickCounter * 0.1) * 1.6) * 10) / 10;
+  active.tires.rr = Math.round((99.2 + Math.cos(tickCounter * 0.1) * 1.8) * 10) / 10;
+
+  // Sub-millisecond latency jitter
+  if (edgeLatencyVal && latencyDisplay) {
+    const lat = (0.72 + Math.random() * 0.09).toFixed(2);
+    edgeLatencyVal.textContent = `${lat} ms`;
+    latencyDisplay.textContent = `GDC EDGE • ${lat}ms`;
   }
 
-  updateTelemetryUI(active);
-}, 250);
+  // Update UI Elements
+  if (teleSpeed) teleSpeed.textContent = active.speed;
+  if (teleGear) teleGear.textContent = active.gear;
+  if (teleRpm) teleRpm.textContent = Number(active.rpm).toLocaleString();
+  if (teleDelta) teleDelta.textContent = active.delta;
 
-// Grand Prix Countdown Clock (Monza GP / Next Session)
-function updateCountdown() {
-  const targetDate = new Date();
-  targetDate.setDate(targetDate.getDate() + 2);
-  targetDate.setHours(13, 30, 0, 0);
+  if (valThrottle) valThrottle.textContent = `${active.throttle}%`;
+  if (fillThrottle) fillThrottle.style.width = `${active.throttle}%`;
 
-  function tick() {
+  if (valBrake) valBrake.textContent = `${active.brake}%`;
+  if (fillBrake) fillBrake.style.width = `${active.brake}%`;
+
+  if (valErs) valErs.textContent = `${Math.round(active.ers)}%`;
+  if (fillErs) fillErs.style.width = `${active.ers}%`;
+
+  if (tempFL) tempFL.textContent = `${active.tires.fl}°C`;
+  if (tempFR) tempFR.textContent = `${active.tires.fr}°C`;
+  if (tempRL) tempRL.textContent = `${active.tires.rl}°C`;
+  if (tempRR) tempRR.textContent = `${active.tires.rr}°C`;
+
+  // Update Shift Lights (LEDs)
+  if (rpmLedBar) {
+    const pct = (active.rpm - 7500) / (12500 - 7500);
+    const activeLeds = Math.floor(pct * TOTAL_LEDS);
+    const leds = rpmLedBar.children;
+    for (let i = 0; i < leds.length; i++) {
+      if (i <= activeLeds) leds[i].classList.add('active');
+      else leds[i].classList.remove('active');
+    }
+  }
+
+  // Render Graphics
+  drawTelemetryWaveform();
+  drawMonzaCircuit();
+}, 200);
+
+// 8. Grand Prix Countdown Timer
+function startCountdown() {
+  const target = new Date();
+  target.setDate(target.getDate() + 2);
+  target.setHours(13, 30, 0, 0);
+
+  function update() {
     const now = new Date();
-    const diff = targetDate - now;
-
+    const diff = target - now;
     if (diff <= 0) return;
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const mins = Math.floor((diff / (1000 * 60)) % 60);
-    const secs = Math.floor((diff / 1000) % 60);
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const m = Math.floor((diff / (1000 * 60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
 
     const pad = (n) => String(n).padStart(2, '0');
-    const dElem = document.getElementById('cdDays');
-    const hElem = document.getElementById('cdHours');
-    const mElem = document.getElementById('cdMins');
-    const sElem = document.getElementById('cdSecs');
+    const cdD = document.getElementById('cdDays');
+    const cdH = document.getElementById('cdHours');
+    const cdM = document.getElementById('cdMins');
+    const cdS = document.getElementById('cdSecs');
 
-    if (dElem) dElem.textContent = pad(days);
-    if (hElem) hElem.textContent = pad(hours);
-    if (mElem) mElem.textContent = pad(mins);
-    if (sElem) sElem.textContent = pad(secs);
+    if (cdD) cdD.textContent = pad(d);
+    if (cdH) cdH.textContent = pad(h);
+    if (cdM) cdM.textContent = pad(m);
+    if (cdS) cdS.textContent = pad(s);
   }
 
-  tick();
-  setInterval(tick, 1000);
+  update();
+  setInterval(update, 1000);
 }
-updateCountdown();
+startCountdown();
 
-// Click to Copy go/waleed-f1
+// 9. Interactive Strategy Simulator Logic
+const pitLapInput = document.getElementById('pitLapInput');
+const pitLapDisplay = document.getElementById('pitLapDisplay');
+const rejoinPos = document.getElementById('rejoinPos');
+
+if (pitLapInput) {
+  pitLapInput.addEventListener('input', (e) => {
+    const lap = e.target.value;
+    if (pitLapDisplay) pitLapDisplay.textContent = `Lap ${lap}`;
+    if (rejoinPos) {
+      if (lap < 25) rejoinPos.textContent = "P5 (Traffic / Dirty Air)";
+      else if (lap <= 34) rejoinPos.textContent = "P3 (Clean Air / Optimal)";
+      else rejoinPos.textContent = "P2 (Overcut / Risk of Deg)";
+    }
+  });
+}
+
+// 10. Copy go/waleed-f1 Chip
+const goLinkChip = document.getElementById('goLinkChip');
 if (goLinkChip) {
   goLinkChip.addEventListener('click', () => {
     navigator.clipboard.writeText('http://go/waleed-f1').then(() => {
-      const originalHtml = goLinkChip.innerHTML;
+      const original = goLinkChip.innerHTML;
       goLinkChip.innerHTML = '<span>✅ Copied!</span>';
+      playF1RadioChirp();
       setTimeout(() => {
-        goLinkChip.innerHTML = originalHtml;
+        goLinkChip.innerHTML = original;
       }, 1500);
     });
   });
