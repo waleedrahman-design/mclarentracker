@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="McLaren Formula 1 Team Trackside Telemetry & Google Cloud Edge Pit Wall Dashboard. Live vehicle telemetry, circuit GPS tracker, team radio, and championship standings. go/waleed-f1.">
+  <meta name="description" content="McLaren Formula 1 Team Trackside Telemetry & Google Cloud Edge Pit Wall Dashboard. Live vehicle telemetry, circuit GPS tracker, broadcast streaming links, championship odds, and team radio. go/waleed-f1.">
   <title>McLaren F1 • Google Cloud Trackside Telemetry (go/waleed-f1)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,6 +27,14 @@
     </div>
 
     <div class="nav-right">
+      <!-- Quick Portal Launcher Dropdown/Links -->
+      <a href="https://www.mclaren.com/racing/formula-1/" target="_blank" rel="noopener" class="header-link-chip" title="McLaren Official Site">
+        <span>🏎️ McLaren.com</span>
+      </a>
+      <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="header-link-chip watch-chip" title="Watch on F1 TV Pro">
+        <span>🔴 F1 TV PRO</span>
+      </a>
+
       <!-- Audio Comms Toggle -->
       <button class="comms-toggle-btn" id="radioMuteBtn" title="Toggle Pit Wall Audio Comms">
         <span id="radioIcon">🔊</span>
@@ -186,9 +194,7 @@
               <span>ENGINE RPM: <strong id="teleRpm">11,980</strong></span>
               <span class="rev-limit">REV LIMIT: 12,500</span>
             </div>
-            <div class="rpm-led-bar" id="rpmLedBar">
-              <!-- Dynamically generated LEDs via JS -->
-            </div>
+            <div class="rpm-led-bar" id="rpmLedBar"></div>
           </div>
 
           <!-- Throttle, Brake & ERS Traces -->
@@ -364,7 +370,6 @@
           </div>
         </div>
 
-        <!-- Strategy Box -->
         <div class="strategy-banner">
           <div class="sb-title">VERTEX AI RACE STRATEGY: PLAN A (OPTIMAL)</div>
           <div class="sb-metrics">
@@ -376,6 +381,413 @@
       </div>
     </div>
   </main>
+
+  <!-- Broadcast Center: Where to Watch & Official Streams -->
+  <section class="broadcast-section">
+    <div class="broadcast-header">
+      <div class="bh-left">
+        <h3>📺 RACE WEEKEND BROADCAST CENTER &bull; WHERE TO WATCH</h3>
+        <span>Official live broadcast feeds, track session schedules, and streaming portals</span>
+      </div>
+      <div class="bh-badge">OFFICIAL BROADCAST PARTNERS</div>
+    </div>
+
+    <div class="broadcast-grid">
+      <!-- Session Schedule with Watch Links -->
+      <div class="broadcast-schedule-card">
+        <h4>SESSION TIMES & CHANNELS (MONZA)</h4>
+        <div class="schedule-table">
+          <div class="sch-row active-session">
+            <div class="sch-left">
+              <span class="sch-dot live-pulse"></span>
+              <strong>Practice 1 (FP1)</strong>
+            </div>
+            <span class="sch-time">Fri 07:30 EDT / 13:30 CEST</span>
+            <span class="sch-channel">ESPN2 &bull; F1 TV Pro</span>
+            <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sch-btn">WATCH &rarr;</a>
+          </div>
+          <div class="sch-row">
+            <div class="sch-left">
+              <span class="sch-dot"></span>
+              <strong>Practice 2 (FP2)</strong>
+            </div>
+            <span class="sch-time">Fri 11:00 EDT / 17:00 CEST</span>
+            <span class="sch-channel">ESPN2 &bull; F1 TV Pro</span>
+            <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sch-btn">WATCH &rarr;</a>
+          </div>
+          <div class="sch-row">
+            <div class="sch-left">
+              <span class="sch-dot"></span>
+              <strong>Practice 3 (FP3)</strong>
+            </div>
+            <span class="sch-time">Sat 06:30 EDT / 12:30 CEST</span>
+            <span class="sch-channel">ESPN2 &bull; F1 TV Pro</span>
+            <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sch-btn">WATCH &rarr;</a>
+          </div>
+          <div class="sch-row">
+            <div class="sch-left">
+              <span class="sch-dot"></span>
+              <strong>Qualifying</strong>
+            </div>
+            <span class="sch-time">Sat 10:00 EDT / 16:00 CEST</span>
+            <span class="sch-channel">ESPN &bull; F1 TV Pro</span>
+            <a href="https://www.espn.com/watch/" target="_blank" rel="noopener" class="sch-btn espn-btn">ESPN+ &rarr;</a>
+          </div>
+          <div class="sch-row highlight-race">
+            <div class="sch-left">
+              <span class="sch-dot race-dot"></span>
+              <strong>Italian Grand Prix (Race)</strong>
+            </div>
+            <span class="sch-time">Sun 09:00 EDT / 15:00 CEST</span>
+            <span class="sch-channel">ESPN / ABC &bull; F1 TV</span>
+            <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="sch-btn live-race-btn">STREAM LIVE &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Streaming Portals -->
+      <div class="broadcast-links-card">
+        <h4>DIRECT STREAMING HUBS</h4>
+        <div class="stream-portals-grid">
+          <a href="https://f1tv.formula1.com/" target="_blank" rel="noopener" class="portal-card f1tv-portal">
+            <div class="pc-icon">🔴</div>
+            <div class="pc-content">
+              <strong>F1 TV Pro</strong>
+              <span>Onboard cameras, team radio, live pit wall timing & multi-screen</span>
+            </div>
+            <span class="pc-arrow">&rarr;</span>
+          </a>
+
+          <a href="https://www.espn.com/watch/f1" target="_blank" rel="noopener" class="portal-card espn-portal">
+            <div class="pc-icon">📺</div>
+            <div class="pc-content">
+              <strong>ESPN / ESPN+ (US)</strong>
+              <span>Sky Sports F1 broadcast feed & 4K live coverage</span>
+            </div>
+            <span class="pc-arrow">&rarr;</span>
+          </a>
+
+          <a href="https://www.skysports.com/f1" target="_blank" rel="noopener" class="portal-card skysports-portal">
+            <div class="pc-icon">🇬🇧</div>
+            <div class="pc-content">
+              <strong>Sky Sports F1 (UK)</strong>
+              <span>Martin Brundle pit walks, Ted's notebook & paddock analysis</span>
+            </div>
+            <span class="pc-arrow">&rarr;</span>
+          </a>
+
+          <a href="https://www.formula1.com/en/f1-live.html" target="_blank" rel="noopener" class="portal-card timing-portal">
+            <div class="pc-icon">⏱️</div>
+            <div class="pc-content">
+              <strong>Formula 1 Live Timing</strong>
+              <span>Official sector speed traps, mini-sectors & tire age</span>
+            </div>
+            <span class="pc-arrow">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Championship Standings & Vertex AI World Title Odds -->
+  <section class="standings-odds-section">
+    <div class="section-title-bar">
+      <div>
+        <h3>2026 WORLD CHAMPIONSHIP STANDINGS & VERTEX AI TITLE ODDS</h3>
+        <span>Real-time championship leaderboard and Monte Carlo championship probability engine</span>
+      </div>
+      <div class="odds-model-badge">VERTEX AI &bull; 100,000 MONTE CARLO SIMS</div>
+    </div>
+
+    <div class="standings-odds-grid">
+      <!-- Drivers Leaderboard & Odds -->
+      <div class="so-card">
+        <div class="so-card-header">
+          <h4>DRIVERS' WORLD CHAMPIONSHIP (WDC)</h4>
+          <span class="so-sub">Points &bull; Betting Odds &bull; Win Probability</span>
+        </div>
+        <div class="so-table">
+          <div class="so-row highlight-norris">
+            <div class="so-pos-col">
+              <span class="pos-badge">1</span>
+              <div class="driver-lead">
+                <strong>Lando Norris</strong>
+                <span class="mclaren-text">McLaren &bull; #4</span>
+              </div>
+            </div>
+            <div class="so-stat-col">
+              <span class="stat-label">POINTS</span>
+              <strong class="stat-num">284</strong>
+            </div>
+            <div class="so-odds-col">
+              <span class="stat-label">ODDS</span>
+              <span class="odds-val text-green">-140 (1.71)</span>
+            </div>
+            <div class="so-prob-col">
+              <span class="stat-label">TITLE PROBABILITY</span>
+              <div class="prob-bar-container">
+                <div class="prob-fill mclaren-fill" style="width: 58.4%;"></div>
+              </div>
+              <span class="prob-pct">58.4%</span>
+            </div>
+          </div>
+
+          <div class="so-row">
+            <div class="so-pos-col">
+              <span class="pos-badge">2</span>
+              <div class="driver-lead">
+                <strong>Max Verstappen</strong>
+                <span>Red Bull &bull; #1</span>
+              </div>
+            </div>
+            <div class="so-stat-col">
+              <span class="stat-label">POINTS</span>
+              <strong class="stat-num">276</strong>
+            </div>
+            <div class="so-odds-col">
+              <span class="stat-label">ODDS</span>
+              <span class="odds-val text-yellow">+160 (2.60)</span>
+            </div>
+            <div class="so-prob-col">
+              <span class="stat-label">TITLE PROBABILITY</span>
+              <div class="prob-bar-container">
+                <div class="prob-fill rb-fill" style="width: 26.8%;"></div>
+              </div>
+              <span class="prob-pct">26.8%</span>
+            </div>
+          </div>
+
+          <div class="so-row highlight-piastri">
+            <div class="so-pos-col">
+              <span class="pos-badge">3</span>
+              <div class="driver-lead">
+                <strong>Oscar Piastri</strong>
+                <span class="mclaren-text">McLaren &bull; #81</span>
+              </div>
+            </div>
+            <div class="so-stat-col">
+              <span class="stat-label">POINTS</span>
+              <strong class="stat-num">242</strong>
+            </div>
+            <div class="so-odds-col">
+              <span class="stat-label">ODDS</span>
+              <span class="odds-val text-yellow">+450 (5.50)</span>
+            </div>
+            <div class="so-prob-col">
+              <span class="stat-label">TITLE PROBABILITY</span>
+              <div class="prob-bar-container">
+                <div class="prob-fill mclaren-fill" style="width: 11.2%;"></div>
+              </div>
+              <span class="prob-pct">11.2%</span>
+            </div>
+          </div>
+
+          <div class="so-row">
+            <div class="so-pos-col">
+              <span class="pos-badge">4</span>
+              <div class="driver-lead">
+                <strong>Charles Leclerc</strong>
+                <span>Ferrari &bull; #16</span>
+              </div>
+            </div>
+            <div class="so-stat-col">
+              <span class="stat-label">POINTS</span>
+              <strong class="stat-num">218</strong>
+            </div>
+            <div class="so-odds-col">
+              <span class="stat-label">ODDS</span>
+              <span class="odds-val text-muted">+1200 (13.0)</span>
+            </div>
+            <div class="so-prob-col">
+              <span class="stat-label">TITLE PROBABILITY</span>
+              <div class="prob-bar-container">
+                <div class="prob-fill ferrari-fill" style="width: 3.6%;"></div>
+              </div>
+              <span class="prob-pct">3.6%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Constructors Leaderboard & Odds -->
+      <div class="so-card">
+        <div class="so-card-header">
+          <h4>CONSTRUCTORS' WORLD CHAMPIONSHIP (WCC)</h4>
+          <span class="so-sub">Points &bull; Title Odds &bull; Championship Probability</span>
+        </div>
+        <div class="so-table">
+          <div class="so-row highlight-norris">
+            <div class="so-pos-col">
+              <span class="pos-badge">1</span>
+              <div class="driver-lead">
+                <strong class="mclaren-text">McLaren Formula 1 Team</strong>
+                <span>Google Cloud Strategic Partner</span>
+              </div>
+            </div>
+            <div class="so-stat-col">
+              <span class="stat-label">POINTS</span>
+              <strong class="stat-num">526</strong>
+            </div>
+            <div class="so-odds-col">
+              <span class="stat-label">ODDS</span>
+              <span class="odds-val text-green">-450 (1.22)</span>
+            </div>
+            <div class="so-prob-col">
+              <span class="stat-label">TITLE PROBABILITY</span>
+              <div class="prob-bar-container">
+                <div class="prob-fill mclaren-fill" style="width: 84.2%;"></div>
+              </div>
+              <span class="prob-pct">84.2%</span>
+            </div>
+          </div>
+
+          <div class="so-row">
+            <div class="so-pos-col">
+              <span class="pos-badge">2</span>
+              <div class="driver-lead">
+                <strong>Red Bull Racing</strong>
+                <span>Honda RBPT</span>
+              </div>
+            </div>
+            <div class="so-stat-col">
+              <span class="stat-label">POINTS</span>
+              <strong class="stat-num">498</strong>
+            </div>
+            <div class="so-odds-col">
+              <span class="stat-label">ODDS</span>
+              <span class="odds-val text-yellow">+380 (4.80)</span>
+            </div>
+            <div class="so-prob-col">
+              <span class="stat-label">TITLE PROBABILITY</span>
+              <div class="prob-bar-container">
+                <div class="prob-fill rb-fill" style="width: 12.5%;"></div>
+              </div>
+              <span class="prob-pct">12.5%</span>
+            </div>
+          </div>
+
+          <div class="so-row">
+            <div class="so-pos-col">
+              <span class="pos-badge">3</span>
+              <div class="driver-lead">
+                <strong>Scuderia Ferrari</strong>
+                <span>Ferrari Power Unit</span>
+              </div>
+            </div>
+            <div class="so-stat-col">
+              <span class="stat-label">POINTS</span>
+              <strong class="stat-num">412</strong>
+            </div>
+            <div class="so-odds-col">
+              <span class="stat-label">ODDS</span>
+              <span class="odds-val text-muted">+900 (10.0)</span>
+            </div>
+            <div class="so-prob-col">
+              <span class="stat-label">TITLE PROBABILITY</span>
+              <div class="prob-bar-container">
+                <div class="prob-fill ferrari-fill" style="width: 3.3%;"></div>
+              </div>
+              <span class="prob-pct">3.3%</span>
+            </div>
+          </div>
+
+          <div class="so-row">
+            <div class="so-pos-col">
+              <span class="pos-badge">4</span>
+              <div class="driver-lead">
+                <strong>Mercedes-AMG Petronas</strong>
+                <span>Mercedes Power Unit</span>
+              </div>
+            </div>
+            <div class="so-stat-col">
+              <span class="stat-label">POINTS</span>
+              <strong class="stat-num">318</strong>
+            </div>
+            <div class="so-odds-col">
+              <span class="stat-label">ODDS</span>
+              <span class="odds-val text-muted">+3500 (36.0)</span>
+            </div>
+            <div class="so-prob-col">
+              <span class="stat-label">TITLE PROBABILITY</span>
+              <div class="prob-bar-container">
+                <div class="prob-fill" style="width: 0.8%; background-color: #06B6D4;"></div>
+              </div>
+              <span class="prob-pct">&lt; 1%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Official McLaren Racing & Google Cloud Portals Dock -->
+  <section class="mclaren-portals-section">
+    <div class="portals-header">
+      <div class="ph-left">
+        <h3>🏎️ McLAREN RACING & GOOGLE STRATEGIC PARTNERSHIP DOCK</h3>
+        <span>Official portals, fan memberships, team merchandise, and enterprise case studies</span>
+      </div>
+      <div class="ph-right">
+        <code>go/mclaren</code> &bull; <code>go/waleed-f1</code>
+      </div>
+    </div>
+
+    <div class="portals-grid">
+      <a href="https://www.mclaren.com/racing/formula-1/" target="_blank" rel="noopener" class="dock-card">
+        <div class="dock-icon">🏁</div>
+        <div class="dock-meta">
+          <strong>McLaren.com Official Hub</strong>
+          <span>Latest race reports, driver interviews & car specs</span>
+        </div>
+        <span class="dock-external">&nearr;</span>
+      </a>
+
+      <a href="https://www.mclaren.com/racing/mclaren-plus/" target="_blank" rel="noopener" class="dock-card">
+        <div class="dock-icon">🧡</div>
+        <div class="dock-meta">
+          <strong>McLaren Plus Fan Hub</strong>
+          <span>Exclusive fan giveaways, paddock passes & race access</span>
+        </div>
+        <span class="dock-external">&nearr;</span>
+      </a>
+
+      <a href="https://www.mclarenstore.com/" target="_blank" rel="noopener" class="dock-card">
+        <div class="dock-icon">👕</div>
+        <div class="dock-meta">
+          <strong>McLaren F1 Team Store</strong>
+          <span>Official 2026 driver caps, team wear & scale models</span>
+        </div>
+        <span class="dock-external">&nearr;</span>
+      </a>
+
+      <a href="https://www.mclaren.com/racing/app/" target="_blank" rel="noopener" class="dock-card">
+        <div class="dock-icon">📱</div>
+        <div class="dock-meta">
+          <strong>Official McLaren App</strong>
+          <span>Pit wall commentary, driver radio & live telemetry</span>
+        </div>
+        <span class="dock-external">&nearr;</span>
+      </a>
+
+      <a href="https://www.mclaren.com/racing/partners/google/" target="_blank" rel="noopener" class="dock-card partner-card">
+        <div class="dock-icon">☁️</div>
+        <div class="dock-meta">
+          <strong>Google &bull; McLaren Partnership</strong>
+          <span>Android on the pit wall & Chrome speed at trackside</span>
+        </div>
+        <span class="dock-external">&nearr;</span>
+      </a>
+
+      <a href="https://cloud.google.com/customers/mclaren-racing" target="_blank" rel="noopener" class="dock-card partner-card">
+        <div class="dock-icon">🚀</div>
+        <div class="dock-meta">
+          <strong>Google Cloud Enterprise Case Study</strong>
+          <span>How McLaren uses Google Distributed Cloud & Vertex AI</span>
+        </div>
+        <span class="dock-external">&nearr;</span>
+      </a>
+    </div>
+  </section>
 
   <!-- Interactive Pit Strategy & Undercut Simulator -->
   <section class="strategy-simulator-section">
@@ -418,77 +830,6 @@
           <span class="rc-label">TIRE ADVANTAGE</span>
           <span class="rc-val text-green">+0.42s/lap</span>
           <span class="rc-sub">Fresh rubber delta against rival</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 2026 World Championship Standings Bar -->
-  <section class="standings-section">
-    <div class="standings-header">
-      <h3>2026 FIA FORMULA ONE WORLD CHAMPIONSHIP STANDINGS</h3>
-      <span class="standings-sub">Round 16 of 24 &bull; Updated Live</span>
-    </div>
-    <div class="standings-grid">
-      <!-- Drivers -->
-      <div class="standings-card">
-        <h4>DRIVERS' WORLD CHAMPIONSHIP</h4>
-        <div class="standings-table">
-          <div class="st-row highlight">
-            <span class="st-pos">1</span>
-            <span class="st-name">Lando Norris</span>
-            <span class="st-team mclaren-text">McLaren</span>
-            <span class="st-pts"><strong>284</strong> PTS</span>
-          </div>
-          <div class="st-row">
-            <span class="st-pos">2</span>
-            <span class="st-name">Max Verstappen</span>
-            <span class="st-team">Red Bull Racing</span>
-            <span class="st-pts"><strong>276</strong> PTS</span>
-          </div>
-          <div class="st-row highlight">
-            <span class="st-pos">3</span>
-            <span class="st-name">Oscar Piastri</span>
-            <span class="st-team mclaren-text">McLaren</span>
-            <span class="st-pts"><strong>242</strong> PTS</span>
-          </div>
-          <div class="st-row">
-            <span class="st-pos">4</span>
-            <span class="st-name">Charles Leclerc</span>
-            <span class="st-team">Ferrari</span>
-            <span class="st-pts"><strong>218</strong> PTS</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Constructors -->
-      <div class="standings-card">
-        <h4>CONSTRUCTORS' WORLD CHAMPIONSHIP</h4>
-        <div class="standings-table">
-          <div class="st-row highlight">
-            <span class="st-pos">1</span>
-            <span class="st-name mclaren-text">McLaren Formula 1 Team</span>
-            <span class="st-team">Google Cloud Partner</span>
-            <span class="st-pts"><strong>526</strong> PTS</span>
-          </div>
-          <div class="st-row">
-            <span class="st-pos">2</span>
-            <span class="st-name">Red Bull Racing</span>
-            <span class="st-team">Honda RBPT</span>
-            <span class="st-pts"><strong>498</strong> PTS</span>
-          </div>
-          <div class="st-row">
-            <span class="st-pos">3</span>
-            <span class="st-name">Scuderia Ferrari</span>
-            <span class="st-team">Ferrari</span>
-            <span class="st-pts"><strong>412</strong> PTS</span>
-          </div>
-          <div class="st-row">
-            <span class="st-pos">4</span>
-            <span class="st-name">Mercedes-AMG Petronas</span>
-            <span class="st-team">Mercedes</span>
-            <span class="st-pts"><strong>318</strong> PTS</span>
-          </div>
         </div>
       </div>
     </div>
