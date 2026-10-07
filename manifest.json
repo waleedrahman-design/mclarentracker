@@ -1,0 +1,13 @@
+{
+  "name": "McLaren F1 Tracker (unofficial)",
+  "short_name": "F1 Tracker",
+  "description": "Unofficial fan dashboard with live Formula 1 data from Jolpica-F1 and OpenF1.",
+  "start_url": "./#/overview",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0e1013",
+  "theme_color": "#16181d",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

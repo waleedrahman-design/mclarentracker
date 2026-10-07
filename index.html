@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>McLaren F1 Tracker (unofficial)</title>
+  <meta name="description" content="Unofficial fan dashboard following the McLaren Formula 1 team with live standings, results, schedule, timing and telemetry from the open Jolpica-F1 and OpenF1 APIs.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#121316">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://api.jolpi.ca" crossorigin>
+  <link rel="preconnect" href="https://api.openf1.org" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('mft-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { /* storage unavailable */ }
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <button type="button" class="icon-btn burger" id="menu-btn" aria-label="Open navigation" aria-expanded="false" aria-controls="drawer">
+      <span class="burger-box" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+    <a class="wordmark" href="#/overview" aria-label="McLaren F1 Tracker, unofficial - overview">
+      <span class="wm-team">McLaren</span><span class="wm-cut" aria-hidden="true"></span><span class="wm-rest">F1 Tracker</span>
+    </a>
+    <span class="route-label" id="route-label" aria-live="polite"></span>
+    <button type="button" class="theme-btn" id="theme-btn" aria-label="Colour theme">
+      <svg class="theme-icon" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>
+      <span data-theme-label>Auto</span>
+    </button>
+  </header>
+
+  <div class="scrim" id="scrim" aria-hidden="true"></div>
+  <nav class="drawer" id="drawer" aria-label="Main navigation" aria-hidden="true" inert>
+    <div class="drawer-head">
+      <div class="wordmark small"><span class="wm-team">McLaren</span><span class="wm-cut" aria-hidden="true"></span><span class="wm-rest">F1 Tracker</span></div>
+      <button type="button" class="icon-btn" id="drawer-close" aria-label="Close navigation">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+      </button>
+    </div>
+    <div class="nav-group">
+      <p class="nav-label" id="nav-weekend">Race weekend</p>
+      <ul class="nav-list" aria-labelledby="nav-weekend">
+        <li><a href="#/overview" data-route="overview"><span class="nav-num">01</span><span class="nav-title">Overview</span><span class="nav-desc">Next session, drivers, latest results</span></a></li>
+        <li><a href="#/live" data-route="live"><span class="nav-num">02</span><span class="nav-title">Live Session</span><span class="nav-desc">Timing, telemetry, radio, tyres</span></a></li>
+        <li><a href="#/schedule" data-route="schedule"><span class="nav-num">03</span><span class="nav-title">Schedule</span><span class="nav-desc">Full calendar in your time zone</span></a></li>
+      </ul>
+    </div>
+    <div class="nav-group">
+      <p class="nav-label" id="nav-champ">Championship</p>
+      <ul class="nav-list" aria-labelledby="nav-champ">
+        <li><a href="#/standings" data-route="standings"><span class="nav-num">04</span><span class="nav-title">Standings</span><span class="nav-desc">Drivers and constructors</span></a></li>
+        <li><a href="#/title" data-route="title"><span class="nav-num">05</span><span class="nav-title">Title Fight</span><span class="nav-desc">Championship mathematics</span></a></li>
+      </ul>
+    </div>
+    <div class="nav-group">
+      <p class="nav-label" id="nav-analysis">Analysis</p>
+      <ul class="nav-list" aria-labelledby="nav-analysis">
+        <li><a href="#/compare" data-route="compare"><span class="nav-num">06</span><span class="nav-title">Compare</span><span class="nav-desc">Head-to-head and lap times</span></a></li>
+        <li><a href="#/archive" data-route="archive"><span class="nav-num">07</span><span class="nav-title">Seasons Archive</span><span class="nav-desc">Every season, every round</span></a></li>
+        <li><a href="#/links" data-route="links"><span class="nav-num">08</span><span class="nav-title">Watch &amp; Links</span><span class="nav-desc">Where to watch and follow</span></a></li>
+      </ul>
+    </div>
+    <section class="drawer-status" id="drawer-status" aria-label="Session status" aria-live="off">
+      <p class="ds-label"><span class="ds-dot" aria-hidden="true"></span><span data-ds-label>Session status</span></p>
+      <p class="ds-title" data-ds-title>Loading</p>
+      <p class="ds-sub" data-ds-sub></p>
+      <div class="ds-cd" data-ds-cd></div>
+      <p class="ds-meta" data-ds-meta>Source: Jolpica + OpenF1</p>
+    </section>
+    <p class="drawer-foot">Unofficial fan project. Not affiliated with McLaren, Formula 1 or Google.</p>
+  </nav>
+
+  <main id="main" class="main" tabindex="-1">
+    <noscript><p class="state">This dashboard needs JavaScript to load live data.</p></noscript>
+  </main>
+
+  <footer class="site-foot">
+    <div class="foot-inner">
+      <div class="wordmark"><span class="wm-team">McLaren</span><span class="wm-cut" aria-hidden="true"></span><span class="wm-rest">F1 Tracker</span></div>
+      <p><strong>Unofficial fan project.</strong> Not affiliated with, endorsed by, or connected to McLaren Racing, Formula 1, the FIA, or Google. F1, FORMULA 1 and related marks are trademarks of Formula One Licensing B.V. All other names and marks belong to their respective owners.</p>
+      <p>Data: <a href="https://github.com/jolpica/jolpica-f1" target="_blank" rel="noopener noreferrer">Jolpica-F1</a> and <a href="https://openf1.org/" target="_blank" rel="noopener noreferrer">OpenF1</a>, fetched live in your browser. Times shown in your local time zone.</p>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
